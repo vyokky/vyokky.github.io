@@ -172,7 +172,7 @@ function App() {
             <div className="bg-gray-50 p-6 rounded-lg">
               <h3 className="text-xl font-semibold text-gray-800">Ph.D. in Informatics</h3>
               <p className="text-[#81D8D0] font-medium">School of Informatics, University of Edinburgh | 2016 - 2020</p>
-              <p className="text-gray-600 mt-2">Focues on deep learning for mobile networking.</p>
+              <p className="text-gray-600 mt-2">Focused on deep learning for mobile networking.</p>
             </div>
             <div className="bg-gray-50 p-6 rounded-lg">
               <h3 className="text-xl font-semibold text-gray-800">MSc in Artificial Intelligence</h3>
