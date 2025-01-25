@@ -7,5 +7,5 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
-  base: '/vyokky/personal/your-repo-name', // Replace with your repository name
+  base: '/personal/', // Updated to match your repository name
 });
