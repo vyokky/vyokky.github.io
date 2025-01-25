@@ -176,7 +176,7 @@ function App() {
             </div>
             <div className="bg-gray-50 p-6 rounded-lg">
               <h3 className="text-xl font-semibold text-gray-800">MSc in Artificial Intelligence</h3>
-              <p className="text-[#81D8D0] font-medium">School of Informatics, University of Edinburgh | 2015 - 2026</p>
+              <p className="text-[#81D8D0] font-medium">School of Informatics, University of Edinburgh | 2015 - 2016</p>
               <p className="text-gray-600 mt-2">Worked on non-intrusive load monitoring for appliance power consumption.</p>
             </div>
             <div className="bg-gray-50 p-6 rounded-lg">
