@@ -83,8 +83,8 @@ function App() {
           <h2 className="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b-2 border-[#81D8D0]">About Me</h2>
           <div className="text-gray-600 leading-relaxed space-y-4">
         <p>
-          I am a Senior Researcher in the Data, Knowledge and Intelligence (DKI) group at Microsoft. 
-          My current research focuses on GUI agents powered by large language models to enhance user 
+          I am a Senior Researcher in the Data, Knowledge and Intelligence <strong>(DKI)</strong> group at Microsoft. 
+          My current research focuses on <strong>GUI agents</strong> powered by large language models to enhance user 
           experiences on computer systems. Before this, I worked on various AIOps projects, leveraging 
           both traditional and large language model-based approaches, to drive innovation and technology 
           transfer at Microsoft. You can explore my
@@ -92,7 +92,7 @@ function App() {
           href="https://scholar.google.com/citations?hl=zh-CN&user=5h9KUFIAAAAJ&view_op=list_works" 
           target="_blank" 
           rel="noopener noreferrer" 
-          className="text-[#81D8D0] underline ml-1 mr-1 hover:text-[#5fb5ae]"
+          className="text-[#81D8D0] underline ml-1 mr-1 hover:text-[#5fb5ae] font-bold"
         >
           Google Scholar 
         </a>
@@ -100,7 +100,7 @@ function App() {
       </p>
 
         <p>
-          Previously, I served as a research scientist at Lightspeed and Quantum Studio, Tencent, 
+          Previously, I served as a research scientist at Lightspeed and Quantum Studio <strong>(光子工作室)</strong>, Tencent, 
           where I developed matchmaking systems for the game <i>League of Legends: Wild Rift</i>. 
           I hold a PhD from the School of Informatics at the University of Edinburgh, where I was 
           supervised by 
@@ -108,7 +108,7 @@ function App() {
           href="https://homepages.inf.ed.ac.uk/ppatras/" 
           target="_blank" 
           rel="noopener noreferrer" 
-          className="text-[#81D8D0] underline ml-1 mr-1 hover:text-[#5fb5ae]"
+          className="text-[#81D8D0] underline ml-1 mr-1 hover:text-[#5fb5ae] font-bold"
         >
           Prof. Paul Patras.
           </a>
@@ -123,7 +123,7 @@ function App() {
           href="https://github.com/microsoft/UFO/" 
           target="_blank" 
           rel="noopener noreferrer" 
-          className="text-[#81D8D0] underline ml-1 mr-1 hover:text-[#5fb5ae]"
+          className="text-[#81D8D0] underline ml-1 mr-1 hover:text-[#5fb5ae] font-bold"
         >
           UFO
           </a>
@@ -133,7 +133,7 @@ function App() {
           href="https://arxiv.org/pdf/2411.18279?" 
           target="_blank" 
           rel="noopener noreferrer" 
-          className="text-[#81D8D0] underline ml-1 mr-1 hover:text-[#5fb5ae]"
+          className="text-[#81D8D0] underline ml-1 mr-1 hover:text-[#5fb5ae] font-bold"
         >
           survey
           </a>
@@ -143,7 +143,7 @@ function App() {
           href="https://vyokky.github.io/LLM-Brained-GUI-Agents-Survey/" 
           target="_blank" 
           rel="noopener noreferrer" 
-          className="text-[#81D8D0] underline hover:text-[#5fb5ae]"
+          className="text-[#81D8D0] underline hover:text-[#5fb5ae] font-bold"
         >
         Website
           </a>
@@ -166,7 +166,7 @@ function App() {
             </div>
             <div className="bg-gray-50 p-6 rounded-lg">
               <h3 className="text-xl font-semibold text-gray-800">Applied Research Scientist</h3>
-              <p className="text-[#81D8D0] font-medium">Lightspeed and Quantum Studio, Tencent | 2020 - 2022</p>
+              <p className="text-[#81D8D0] font-medium">Lightspeed and Quantum Studio (光子工作室), Tencent | 2020 - 2022</p>
               <p className="text-gray-600 mt-2">Worked on matchmaking systems for <strong>League of Legends: Wild Rift</strong>, a popular mobile MOBA game.</p>
             </div>
             <div className="bg-gray-50 p-6 rounded-lg">
@@ -1323,7 +1323,7 @@ function App() {
             <div className="bg-gray-50 p-6 rounded-lg">
               <h3 className="text-xl font-semibold text-gray-800 mb-4">Conference Program Committee and Reviewing</h3>
               <ul className="space-y-2 text-gray-600">
-                <li>• FSE 2025 - Program Committee</li>
+                <li>• FSE 2025 Industry Track - Program Committee</li>
                 <li>• ICML 2025 - Reviewer</li>
                 <li>• ICLR 2025 - Reviewer</li>
                 <li>• ACL ARR - Reviewer</li>
