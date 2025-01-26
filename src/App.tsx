@@ -83,7 +83,7 @@ function App() {
           <h2 className="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b-2 border-[#81D8D0]">About Me</h2>
           <div className="text-gray-600 leading-relaxed space-y-4">
         <p>
-          I am a Senior Researcher in the Data, Knowledge and Intelligence <strong>(DKI)</strong> group at Microsoft. 
+          I am a Senior Researcher in the Data, Knowledge and Intelligence <strong>(DKI)</strong> group at <strong>Microsoft</strong>. 
           My current research focuses on <strong>GUI agents</strong> powered by large language models to enhance user 
           experiences on computer systems. Before this, I worked on various AIOps projects, leveraging 
           both traditional and large language model-based approaches, to drive innovation and technology 
