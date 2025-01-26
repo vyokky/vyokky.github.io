@@ -537,6 +537,7 @@ function App() {
                     <span className="ml-4 space-x-2">
                       <a href="https://arxiv.org/pdf/2412.10047" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
                       <a href="https://github.com/microsoft/UFO/tree/main/dataflow" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Code]</a>
+                      <a href="https://microsoft.github.io/UFO/dataflow/overview/" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Documentation]</a>
                     </span>
                   </h4>
                   <p className="text-gray-600 mt-2 leading-relaxed">
@@ -628,6 +629,7 @@ function App() {
                     <span className="ml-4 space-x-2">
                       <a href="https://arxiv.org/pdf/2402.07939" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
                       <a href="https://github.com/microsoft/UFO/" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Code]</a>
+                      <a href="https://microsoft.github.io/UFO/" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Documentation]</a>
                     </span>
                   </h4>
                   <p className="text-gray-600 mt-2 leading-relaxed">
