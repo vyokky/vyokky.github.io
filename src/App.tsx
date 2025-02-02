@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Github, LinkedinIcon, BookOpenCheck, Newspaper, Mail } from 'lucide-react';
 import profileImage from './image/Image.jpg';
 import ufoImage from './image/UFO.png';
