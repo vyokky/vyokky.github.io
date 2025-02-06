@@ -381,6 +381,16 @@ function App() {
                   </li>
                   <li>
                     <a 
+                      href="https://news.qq.com/rain/a/20241224A07J3R00" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="text-[#81D8D0] hover:underline"
+                    >
+                      Agent操纵手机/电脑屏幕的全面综述
+                    </a>
+                  </li>
+                  <li>
+                    <a 
                       href="https://medium.com/advancedai/survey-gui-agents-revolutionizing-human-computer-interaction-a-comprehensive-survey-on-27ae2b4a8965" 
                       target="_blank" 
                       rel="noopener noreferrer" 
