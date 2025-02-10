@@ -194,7 +194,7 @@ function App() {
               <Newspaper className="text-[#81D8D0] flex-shrink-0" />
               <div>
                 <p className="text-gray-400 text-sm">January 2025</p>
-                <p className="text-gray-700">Two papers accepted at <strong>ICLR 2025</strong> and <strong>NAACL 2025</strong>! 🎉</p>
+                <p className="text-gray-700">Two papers accepted at <strong>ICLR 2025</strong> and one paper accepted at <strong>NAACL 2025</strong>! 🎉</p>
               </div>
             </div>
             <div className="flex gap-4 items-start">
