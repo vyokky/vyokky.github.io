@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Github, LinkedinIcon, BookOpenCheck, Newspaper, Mail } from 'lucide-react';
 import profileImage from './image/Image.jpg';
 import ufoImage from './image/UFO.png';
+import agentosImage from './image/agentos.png';
 import surveyImage from './image/survey.png';
 import lamImage from './image/lam.png';
 
@@ -278,7 +279,7 @@ function App() {
               </p>
               <div className="mb-4">
                 <img 
-                  src={ufoImage}
+                  src={agentosImage}
                   alt="UFO Project Screenshot" 
                   className="w-full rounded-lg shadow-md"
                 />
