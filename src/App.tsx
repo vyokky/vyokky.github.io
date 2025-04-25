@@ -161,7 +161,7 @@ function App() {
           <div className="space-y-6">
             <div className="bg-gray-50 p-6 rounded-lg">
               <h3 className="text-xl font-semibold text-gray-800">Senior Researcher</h3>
-              <p className="text-[#81D8D0] font-medium">Microsoft | 2022 - Present</p>
+              <p className="text-[#81D8D0] font-medium">Microsoft Research Asia/Microsoft AI | 2022 - Present</p>
               <p className="text-gray-600 mt-2"> GUI agents, large language models, and AIOps.</p>
             </div>
             <div className="bg-gray-50 p-6 rounded-lg">
@@ -268,14 +268,14 @@ function App() {
             {/* UFO Project */}
             <div className="bg-gray-50 shadow-md p-6 rounded-lg transition-transform transform hover:scale-105">
               <h3 className="text-xl font-semibold text-gray-800 mb-4">
-                UFO: The Windows Desktop AgentOS
+              UFO²: The Desktop AgentOS
               </h3>
               <p className="text-gray-600 mb-4">
-              UFO is a groundbreaking multi-agent framework for Windows OS. It features a <b>HostAgent</b> for task decomposition and a set of <b>AppAgents</b> for interacting with applications.
-              Designed for GUI operations, UFO utilizes mouse and keyboard inputs to seamlessly interact with the Windows environment. It also supports command-line interfaces and custom APIs for advanced application control.
-              Its knowledge expands through human demonstrations, self-exploration, help documents, and real-time Bing searches.
+              UFO² a next-generation AgentOS designed to bring deeply integrated, system-level intelligence to Windows desktop automation. 
+              It features a centralized <b>HostAgent</b> for natural language task orchestration and application-specialized <b>AppAgents</b> that combine GUI actions with native APIs. 
+              It leverages a hybrid control detection pipeline (vision + UI Automation), speculative multi-action planning, 
+              and a non-disruptive Picture-in-Picture interface to deliver robust, efficient, and user-aligned automation.
               </p>
-              {/* Image Section */}
               <div className="mb-4">
                 <img 
                   src={ufoImage}
@@ -338,12 +338,20 @@ function App() {
                   Documentation
                 </a>
                 <a 
+                  href="https://arxiv.org/pdf/2504.14603" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="bg-[#81D8D0] text-white px-4 py-2 rounded-lg shadow-md hover:bg-[#70c1b3] transition"
+                >
+                  UFO² Paper
+                </a>
+                <a 
                   href="https://arxiv.org/pdf/2402.07939" 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="bg-[#81D8D0] text-white px-4 py-2 rounded-lg shadow-md hover:bg-[#70c1b3] transition"
                 >
-                  Paper (NAACL 2025)
+                  UFO Paper (NAACL 2025)
                 </a>
               </div>
             </div>
@@ -353,7 +361,7 @@ function App() {
                 LLM-Brained GUI Agent Survey
               </h3>
               <p className="text-gray-600 mb-4">
-              We present a comprehensive survey on <b>large language model-powered GUI agents</b>—AI agents that interact with graphical user interfaces (GUIs) on digital devices using natural language instructions via LLMs. 
+              We present a comprehensive (90+ pages) survey on <b>large language model-powered GUI agents</b>—AI agents that interact with graphical user interfaces (GUIs) on digital devices using natural language instructions via LLMs. 
               This survey is the most extensive to date, encompassing over 500 research papers. 
               Both the paper and its accompanying website are periodically updated to reflect the latest advancements in this rapidly evolving field.
               </p>
@@ -524,12 +532,28 @@ function App() {
             <h3 className="text-2xl font-bold text-gray-800 mb-6">Preprints</h3>
               <div className="space-y-6">
 
+                {/* 19. Zhang et al., arXiv 2024 */}
+                <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
+                  <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                    UFO2: The Desktop AgentOS
+                    <span className="ml-4 space-x-2">
+                      <a href="https://arxiv.org/pdf/2504.14603" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
+                      <a href="https://github.com/microsoft/UFO/" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Code]</a>
+                      <a href="https://microsoft.github.io/UFO/" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Documentation]</a>
+                    </span>
+                  </h4>
+                  <p className="text-gray-600 mt-2 leading-relaxed">
+                    <b><u>Chaoyun Zhang</u></b>, He Huang, Chiming Ni, Jian Mu, Si Qin, Shilin He, and others
+                  </p>
+                  <p className="text-[#81D8D0] font-medium mt-2">arXiv preprint (2025)</p>
+                </div>
+
                 {/* 18. Zhang et al., arXiv 2024 */}
                 <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
                   <h4 className="text-lg font-semibold text-gray-800 mb-2">
                     Large Language Model-Brained GUI Agents: A Survey
                     <span className="ml-4 space-x-2">
-                      <a href="#" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
+                      <a href="https://arxiv.org/pdf/2411.18279" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
                       <a href="https://github.com/vyokky/LLM-Brained-GUI-Agents-Survey" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Code]</a>
                       <a href="https://vyokky.github.io/LLM-Brained-GUI-Agents-Survey/" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Website]</a>
                     </span>
@@ -554,6 +578,50 @@ function App() {
                     Lu Wang, Fangkai Yang, <b><u>Chaoyun Zhang</u></b>, Junting Lu, Jiaxu Qian, Shilin He, Pu Zhao, Bo Qiao, Ray Huang, Si Qin, and others
                   </p>
                   <p className="text-[#81D8D0] font-medium mt-2">arXiv preprint (2024)</p>
+                </div>
+
+                {/* 18. Zhang et al., arXiv 2024 */}
+                <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
+                  <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                    API Agents vs. GUI Agents: Divergence and Convergence
+                    <span className="ml-4 space-x-2">
+                      <a href="https://arxiv.org/pdf/2503.11069?" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
+                    </span>
+                  </h4>
+                  <p className="text-gray-600 mt-2 leading-relaxed">
+                    <b><u>Chaoyun Zhang</u></b>, Shilin He, Liqun Li, Si Qin, Yu Kang, Qingwei Lin, Dongmei Zhang
+                  </p>
+                  <p className="text-[#81D8D0] font-medium mt-2">arXiv preprint (2025)</p>
+                </div>
+
+                {/* Zhang et al., arXiv 2025 */}
+                <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
+                  <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                    VEM: Environment-Free Exploration for Training GUI Agent with Value Environment Model
+                    <span className="ml-4 space-x-2">
+                      <a href="#" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
+                      <a href="https://github.com/microsoft/GUI-Agent-RL" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Code]</a>
+                      <a href="https://microsoft.github.io/GUI-Agent-RL/" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Website]</a>
+                    </span>
+                  </h4>
+                  <p className="text-gray-600 mt-2 leading-relaxed">
+                    Jiani Zheng, Lu Wang, Fangkai Yang, <b><u>Chaoyun Zhang</u></b>, Lingrui Mei, Wenjie Yin, Qingwei Lin, Dongmei Zhang, Saravan Rajmohan, Qi Zhang
+                  </p>
+                  <p className="text-[#81D8D0] font-medium mt-2">arXiv preprint (2025)</p>
+                </div>
+
+                {/* 19. Zhang et al., arXiv 2025 */}
+                <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
+                  <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                    An Empirical Study of Production Incidents in Generative AI Cloud Services
+                    <span className="ml-4 space-x-2">
+                      <a href="https://arxiv.org/pdf/2504.08865" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
+                    </span>
+                  </h4>
+                  <p className="text-gray-600 mt-2 leading-relaxed">
+                  Haoran Yan, Yinfang Chen, Minghua Ma, Ming Wen, Shan Lu, Shenglin Zhang, Tianyin Xu, Rujia Wang, Chetan Bansal, Saravan Rajmohan, <b><u>Chaoyun Zhang</u></b>, Dongmei Zhang
+                  </p>
+                  <p className="text-[#81D8D0] font-medium mt-2">arXiv preprint (2025)</p>
                 </div>
 
                 {/* Zhang et al., arXiv 2025 */}
@@ -1336,7 +1404,7 @@ function App() {
               <h3 className="text-xl font-semibold text-gray-800 mb-4">Conference Program Committee and Reviewing</h3>
               <ul className="space-y-2 text-gray-600">
                 <li>• FSE 2025 Industry Track - Program Committee</li>
-                <li>• ICML 2025 - Reviewer</li>
+                <li>• KDD ASD Track 2025 - Reviewer</li>
                 <li>• ICLR 2025 - Reviewer</li>
                 <li>• ACL ARR - Reviewer</li>
               </ul>
