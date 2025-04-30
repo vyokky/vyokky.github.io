@@ -686,19 +686,33 @@ function App() {
             <h3 className="text-2xl font-bold text-gray-800 mb-6">2025 </h3>
               <div className="space-y-6">
 
-                {/* 17. Zhang et al., arXiv 2024 */}
+                {/* 18. Xu et al., ICLR 2025 */}
+              <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
+                <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                OpenRCA: Can Large Language Models Locate the Root Cause of Software Failures?
+                  <span className="ml-4 space-x-2">
+                    <a href="https://openreview.net/pdf?id=M4qNIzQYpd" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
+                    <a href="https://github.com/microsoft/OpenRCA" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Code]</a>
+                  </span>
+                </h4>
+                <p className="text-gray-600 mt-2 leading-relaxed">
+                  Junjielong Xu, Qinan Zhang, Zhiqing Zhong, Shilin He, <b><u>Chaoyun Zhang</u></b>, Qingwei Lin, Dan Pei, Pinjia He, Dongmei Zhang, Qi Zhang
+                </p>
+                <p className="text-[#81D8D0] font-medium mt-2">ICLR 2025</p>
+              </div>
+
+                {/* 17. Zhang et al., ICLR 2025 */}
               <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
                 <h4 className="text-lg font-semibold text-gray-800 mb-2">
                   RuAG: Learned-Rule-Augmented Generation for Large Language Models
                   <span className="ml-4 space-x-2">
-                    <a href="#" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
-                    <a href="#" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Code]</a>
+                  <a href="https://arxiv.org/pdf/2411.03349" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
                   </span>
                 </h4>
                 <p className="text-gray-600 mt-2 leading-relaxed">
                   Yudi Zhang, Pei Xiao, Lu Wang, <b><u>Chaoyun Zhang</u></b>, Meng Fang, Yali Du, Yevgeniy Puzyrev, Randolph Yao, Si Qin, Qingwei Lin, and others
                 </p>
-                <p className="text-[#81D8D0] font-medium mt-2">To appear in ICLR 2025</p>
+                <p className="text-[#81D8D0] font-medium mt-2">ICLR 2025</p>
               </div>
 
                 {/* 9. Zhang et al., arXiv 2024 */}
