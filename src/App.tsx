@@ -194,6 +194,15 @@ function App() {
             <div className="flex gap-4 items-start">
               <Newspaper className="text-[#81D8D0] flex-shrink-0" />
               <div>
+                <p className="text-gray-400 text-sm">May 2025</p>
+                <p className="text-gray-700"> One paper accepted at <strong>ACL 2025</strong>, and one paper accepted at <strong>KDD ADS 2025</strong>! 🎉</p>
+              </div>
+            </div>  
+                
+
+            <div className="flex gap-4 items-start">
+              <Newspaper className="text-[#81D8D0] flex-shrink-0" />
+              <div>
                 <p className="text-gray-400 text-sm">January 2025</p>
                 <p className="text-gray-700">Two papers accepted at <strong>ICLR 2025</strong> and one paper accepted at <strong>NAACL 2025</strong>! 🎉</p>
               </div>
@@ -288,6 +297,16 @@ function App() {
               <div className="mb-4">
                 <h4 className="text-lg font-semibold text-gray-800 mb-2">Media Coverage</h4>
                 <ul className="list-disc list-inside text-gray-600">
+                  <li>
+                    <a 
+                      href="https://www.jiqizhixin.com/articles/2025-05-06-13" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="text-[#81D8D0] hover:underline"
+                    >
+                      微软正式开源UFO²，Windows桌面迈入「AgentOS 时代」
+                    </a>
+                  </li>
                   <li>
                     <a 
                       href="https://baijiahao.baidu.com/s?id=1790938358152188625&wfr=spider&for=pc" 
