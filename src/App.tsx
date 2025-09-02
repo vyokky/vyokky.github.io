@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Github, LinkedinIcon, BookOpenCheck, Newspaper, Mail } from 'lucide-react';
+import { Github, LinkedinIcon, BookOpenCheck, Newspaper, Mail, ChevronDown, Users, FileText, Award } from 'lucide-react';
 import profileImage from './image/Image.jpg';
 import ufoImage from './image/UFO.png';
 import agentosImage from './image/agentos.png';
@@ -16,6 +16,28 @@ function App() {
     { id: "publications", title: "Publications" },
     { id: "service", title: "Service" }
   ];
+
+  // State for collapsible publication sections
+  const [collapsedSections, setCollapsedSections] = useState({
+    preprints: false, // Start with preprints expanded
+    "2025": false,    // Start with 2025 expanded
+    "2024": true,     // Start with 2024 collapsed
+    "2023": true,
+    "2022": true,
+    "2021": true,
+    "2020": true,
+    "2019": true,
+    "2018": true,
+    "2017": true,
+    "2015": true
+  });
+
+  const toggleSection = (section: string) => {
+    setCollapsedSections(prev => ({
+      ...prev,
+      [section]: !prev[section as keyof typeof prev]
+    }));
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -49,7 +71,7 @@ function App() {
             </div>
             <div className="flex-1">
               <h1 className="text-4xl font-bold text-gray-800 mb-4">Chaoyun Zhang (张朝运)</h1>
-              <p className="text-xl text-gray-600 mb-6">Senior Researcher at Microsoft</p>
+              <p className="text-xl text-gray-600 mb-6">Principal Researcher at Microsoft</p>
               <div className="flex flex-wrap gap-6">
                 <a href="https://github.com/vyokky" target="_blank" rel="noopener noreferrer" 
                    className="flex items-center gap-2 text-gray-600 hover:text-[#81D8D0] transition-colors group">
@@ -84,8 +106,8 @@ function App() {
           <h2 className="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b-2 border-[#81D8D0]">About Me</h2>
           <div className="text-gray-600 leading-relaxed space-y-4">
         <p>
-          I am a Senior Researcher in the Data, Knowledge and Intelligence <strong>(DKI)</strong> group at <strong>Microsoft</strong>. 
-          My current research focuses on <strong>GUI agents</strong> powered by large language models to enhance user 
+          I am a <strong>Principal Researcher</strong> in the Data, Knowledge and Intelligence <strong>(DKI)</strong> group at <strong>Microsoft</strong>. 
+          My current research focuses on <strong>GUI Agents</strong> and <strong>Computer-Using Agents (CUAs)</strong> powered by large language models to enhance user 
           experiences on computer systems. Before this, I worked on various AIOps projects, leveraging 
           both traditional and large language model-based approaches, to drive innovation and technology 
           transfer at Microsoft. You can explore my
@@ -161,8 +183,8 @@ function App() {
           <h2 className="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b-2 border-[#81D8D0]">Experience</h2>
           <div className="space-y-6">
             <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold text-gray-800">Senior Researcher</h3>
-              <p className="text-[#81D8D0] font-medium">Microsoft Research Asia/Microsoft AI | 2022 - Present</p>
+              <h3 className="text-xl font-semibold text-gray-800">Principal Researcher</h3>
+              <p className="text-[#81D8D0] font-medium">Microsoft Research Asia/Microsoft AI/STCA | 2022 - Present</p>
               <p className="text-gray-600 mt-2"> GUI agents, large language models, and AIOps.</p>
             </div>
             <div className="bg-gray-50 p-6 rounded-lg">
@@ -549,8 +571,20 @@ function App() {
 
             {/* Preprint */}
             <div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-6">Preprints</h3>
-              <div className="space-y-6">
+              <button
+                onClick={() => toggleSection('preprints')}
+                className="flex items-center gap-2 w-full text-left mb-6 hover:text-[#81D8D0] transition-colors"
+              >
+                <h3 className="text-2xl font-bold text-gray-800">Preprints</h3>
+                <ChevronDown 
+                  className={`transition-transform duration-200 ${
+                    collapsedSections.preprints ? 'rotate-180' : ''
+                  }`} 
+                  size={24} 
+                />
+              </button>
+              {!collapsedSections.preprints && (
+                <div className="space-y-6">
 
                 {/* 19. Zhang et al., arXiv 2024 */}
                 <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
@@ -568,48 +602,19 @@ function App() {
                   <p className="text-[#81D8D0] font-medium mt-2">arXiv preprint (2025)</p>
                 </div>
 
-                {/* 18. Zhang et al., arXiv 2024 */}
+                {/**/}
                 <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
                   <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                    Large Language Model-Brained GUI Agents: A Survey
-                    <span className="ml-4 space-x-2">
-                      <a href="https://arxiv.org/pdf/2411.18279" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
-                      <a href="https://github.com/vyokky/LLM-Brained-GUI-Agents-Survey" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Code]</a>
-                      <a href="https://vyokky.github.io/LLM-Brained-GUI-Agents-Survey/" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Website]</a>
-                    </span>
+                  SWE-bench Goes Live!
+                  <span className="ml-4 space-x-2">
+                    <a href="https://arxiv.org/pdf/2505.23419" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
+                    <a href="https://github.com/microsoft/SWE-bench-Live" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Code]</a>
+                    <a href="https://swe-bench-live.github.io/" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Leaderboard]</a>
+                    <a href="https://huggingface.co/SWE-bench-Live" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[HuggingFace]</a>
+                  </span>
                   </h4>
                   <p className="text-gray-600 mt-2 leading-relaxed">
-                    <b><u>Chaoyun Zhang</u></b>, Shilin He, Jiaxu Qian, Bowen Li, Liqun Li, Si Qin, Yu Kang, Minghua Ma, Qingwei Lin, Saravan Rajmohan, and others
-                  </p>
-                  <p className="text-[#81D8D0] font-medium mt-2">arXiv preprint (2024)</p>
-                </div>
-
-                {/* 19. Wang et al., arXiv 2024 */}
-                <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                  <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                    Large Action Models: From Inception to Implementation
-                    <span className="ml-4 space-x-2">
-                      <a href="https://arxiv.org/pdf/2412.10047" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
-                      <a href="https://github.com/microsoft/UFO/tree/main/dataflow" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Code]</a>
-                      <a href="https://microsoft.github.io/UFO/dataflow/overview/" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Documentation]</a>
-                    </span>
-                  </h4>
-                  <p className="text-gray-600 mt-2 leading-relaxed">
-                    Lu Wang, Fangkai Yang, <b><u>Chaoyun Zhang</u></b>, Junting Lu, Jiaxu Qian, Shilin He, Pu Zhao, Bo Qiao, Ray Huang, Si Qin, and others
-                  </p>
-                  <p className="text-[#81D8D0] font-medium mt-2">arXiv preprint (2024)</p>
-                </div>
-
-                {/* 18. Zhang et al., arXiv 2024 */}
-                <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                  <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                    API Agents vs. GUI Agents: Divergence and Convergence
-                    <span className="ml-4 space-x-2">
-                      <a href="https://arxiv.org/pdf/2503.11069?" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
-                    </span>
-                  </h4>
-                  <p className="text-gray-600 mt-2 leading-relaxed">
-                    <b><u>Chaoyun Zhang</u></b>, Shilin He, Liqun Li, Si Qin, Yu Kang, Qingwei Lin, Dongmei Zhang
+                    Linghao Zhang, Shilin He, <b><u>Chaoyun Zhang</u></b>, Yu Kang, Bowen Li, Chengxing Xie, Junhao Wang, Mao-quan Wang, Yufan Huang, Shengyu Fu, Elsie Nallipogu, Qingwei Lin, Yingnong Dang, Saravan Rajmohan, Dongmei Zhang
                   </p>
                   <p className="text-[#81D8D0] font-medium mt-2">arXiv preprint (2025)</p>
                 </div>
@@ -628,9 +633,167 @@ function App() {
                     Jiani Zheng, Lu Wang, Fangkai Yang, <b><u>Chaoyun Zhang</u></b>, Lingrui Mei, Wenjie Yin, Qingwei Lin, Dongmei Zhang, Saravan Rajmohan, Qi Zhang
                   </p>
                   <p className="text-[#81D8D0] font-medium mt-2">arXiv preprint (2025)</p>
+                </div>                  
+
+
+                <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
+                  <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                    Text2Grad: Reinforcement Learning from Natural Language Feedback
+                    <span className="ml-4 space-x-2">
+                      <a href="https://arxiv.org/pdf/2505.22338" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
+                      <a href="https://github.com/microsoft/Text2Grad" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Code]</a>
+                    </span>
+                  </h4>
+                  <p className="text-gray-600 mt-2 leading-relaxed">
+                    Hanyang Wang, Lu Wang, <b><u>Chaoyun Zhang</u></b>, Tianjun Mao, Si Qin, Qingwei Lin, Saravan Rajmohan, Dongmei Zhang
+                  </p>
+                  <p className="text-[#81D8D0] font-medium mt-2">arXiv preprint (2025)</p>
                 </div>
 
-                {/* 19. Zhang et al., arXiv 2025 */}
+                <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
+                  <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                    GUI-Actor: Coordinate-Free Visual Grounding for GUI Agents
+                    <span className="ml-4 space-x-2">
+                      <a href="https://arxiv.org/pdf/2506.03143" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
+                      <a href="https://microsoft.github.io/GUI-Actor/" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Code]</a>
+                    </span>
+                  </h4>
+                  <p className="text-gray-600 mt-2 leading-relaxed">
+                    Qianhui Wu, Kanzhi Cheng, Rui Yang, <b><u>Chaoyun Zhang</u></b>, Jianwei Yang, Huiqiang Jiang, Jian Mu, et al.
+                  </p>
+                  <p className="text-[#81D8D0] font-medium mt-2">arXiv preprint (2025)</p>
+                </div>
+
+                <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
+                  <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                    Zoomer: Adaptive Image Focus Optimization for Black-box MLLM
+                    <span className="ml-4 space-x-2">
+                      <a href="https://arxiv.org/pdf/2505.00742" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
+                    </span>
+                  </h4>
+                  <p className="text-gray-600 mt-2 leading-relaxed">
+                    Jiaxu Qian, Chendong Wang, Yifan Yang, <b><u>Chaoyun Zhang</u></b>, Huiqiang Jiang, Xufang Luo, et al.
+                  </p>
+                  <p className="text-[#81D8D0] font-medium mt-2">arXiv preprint (2025)</p>
+                </div>
+
+                <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
+                  <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                    TaskWeaver: A Code-First Agent Framework
+                    <span className="ml-4 space-x-2">
+                      <a href="https://arxiv.org/pdf/2311.17541" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
+                      <a href="https://github.com/microsoft/TaskWeaver/" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Code]</a>
+                    </span>
+                  </h4>
+                  <p className="text-gray-600 mt-2 leading-relaxed">
+                    Bo Qiao, Liqun Li, Xu Zhang, Shilin He, Yu Kang, <b><u>Chaoyun Zhang</u></b>, Fangkai Yang, Hang Dong, Jue Zhang, Lu Wang, and others
+                  </p>
+                  <p className="text-[#81D8D0] font-medium mt-2">arXiv preprint (2023)</p>
+                </div>
+
+                
+
+                </div>
+              )}
+            </div>
+
+            {/* 2025 Publications */}
+            <div>
+              <button
+                onClick={() => toggleSection('2025')}
+                className="flex items-center gap-2 w-full text-left mb-6 hover:text-[#81D8D0] transition-colors"
+              >
+                <h3 className="text-2xl font-bold text-gray-800">2025 </h3>
+                <ChevronDown 
+                  className={`transition-transform duration-200 ${
+                    collapsedSections['2025'] ? 'rotate-180' : ''
+                  }`} 
+                  size={24} 
+                />
+              </button>
+              {!collapsedSections['2025'] && (
+                <div className="space-y-6">
+
+
+              {/* 18. Zhang et al., arXiv 2024 */}
+                <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
+                  <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                    Large Language Model-Brained GUI Agents: A Survey
+                    <span className="ml-4 space-x-2">
+                      <a href="https://arxiv.org/pdf/2411.18279" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
+                      <a href="https://github.com/vyokky/LLM-Brained-GUI-Agents-Survey" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Code]</a>
+                      <a href="https://vyokky.github.io/LLM-Brained-GUI-Agents-Survey/" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Website]</a>
+                    </span>
+                  </h4>
+                  <p className="text-gray-600 mt-2 leading-relaxed">
+                    <b><u>Chaoyun Zhang</u></b>, Shilin He, Jiaxu Qian, Bowen Li, Liqun Li, Si Qin, Yu Kang, Minghua Ma, Qingwei Lin, Saravan Rajmohan, and others
+                  </p>
+                  <p className="text-[#81D8D0] font-medium mt-2">Transactions on Machine Learning Research (2025)</p>
+                </div>
+
+                {/* 19. Wang et al., arXiv 2024 */}
+                <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
+                  <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                    Large Action Models: From Inception to Implementation
+                    <span className="ml-4 space-x-2">
+                      <a href="https://arxiv.org/pdf/2412.10047" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
+                      <a href="https://github.com/microsoft/UFO/tree/main/dataflow" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Code]</a>
+                      <a href="https://microsoft.github.io/UFO/dataflow/overview/" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Documentation]</a>
+                    </span>
+                  </h4>
+                  <p className="text-gray-600 mt-2 leading-relaxed">
+                    Lu Wang, Fangkai Yang, <b><u>Chaoyun Zhang</u></b>, Junting Lu, Jiaxu Qian, Shilin He, Pu Zhao, Bo Qiao, Ray Huang, Si Qin, and others
+                  </p>
+                  <p className="text-[#81D8D0] font-medium mt-2">Transactions on Machine Learning Research (2025)</p>
+                </div>
+
+                {/* 18. Zhang et al., arXiv 2024 */}
+                <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
+                  <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                    API Agents vs. GUI Agents: Divergence and Convergence
+                    <span className="ml-4 space-x-2">
+                      <a href="https://arxiv.org/pdf/2503.11069?" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
+                    </span>
+                  </h4>
+                  <p className="text-gray-600 mt-2 leading-relaxed">
+                    <b><u>Chaoyun Zhang</u></b>, Shilin He, Liqun Li, Si Qin, Yu Kang, Qingwei Lin, Dongmei Zhang
+                  </p>
+                  <p className="text-[#81D8D0] font-medium mt-2">1st Workshop on Computer Use Agents @ICML 2025.</p>
+                </div>
+
+                {/* 14. Liu et al., arXiv 2024 */}
+                <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
+                  <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                    Large Language Models Can Deliver Accurate and Interpretable Time Series Anomaly Detection
+                    <span className="ml-4 space-x-2">
+                      <a href="https://arxiv.org/pdf/2405.15370" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
+                      <a href="https://github.com/LJunius/LLMAD" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Code]</a>
+                    </span>
+                  </h4>
+                  <p className="text-gray-600 mt-2 leading-relaxed">
+                    Jun Liu, <b><u>Chaoyun Zhang</u></b>, Jiaxu Qian, Minghua Ma, Si Qin, Chetan Bansal, Qingwei Lin, Saravan Rajmohan, Dongmei Zhang
+                  </p>
+                  <p className="text-[#81D8D0] font-medium mt-2">Proceeding of the  ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD) 2025, Applied Data Science Track</p>
+                </div>
+
+
+              {/** 18. Zhang et al., arXiv 2024 */}
+                <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
+                  <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                    Triangle: Empowering Incident Triage with Multi-Agent
+                    <span className="ml-4 space-x-2">
+                      <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2025/02/TRIANGLE_FSE25.pdf" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
+                    </span>
+                  </h4>
+                  <p className="text-gray-600 mt-2 leading-relaxed">
+                    Zhaoyang Yu, Aoyang Fang, Minghua Ma, Jaskaran Singh Walia, <b><u>Chaoyun Zhang</u></b>, Shu Chi, Ze Li,
+                    Murali Chintalapati, Xuchao Zhang, Rujia Wang, Chetan Bansal, Saravan Rajmohan, Qingwei Lin,
+                    Shenglin Zhang, Dan Pei, Pinjia He.
+                  </p>
+                  <p className="text-[#81D8D0] font-medium mt-2">ACM/IEEE International Conference on Automated Software Engineering (ASE) (2025)</p>
+                </div>
+
+                {/* 14. Liu et al., arXiv 2024 */}
                 <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
                   <h4 className="text-lg font-semibold text-gray-800 mb-2">
                     An Empirical Study of Production Incidents in Generative AI Cloud Services
@@ -641,10 +804,11 @@ function App() {
                   <p className="text-gray-600 mt-2 leading-relaxed">
                   Haoran Yan, Yinfang Chen, Minghua Ma, Ming Wen, Shan Lu, Shenglin Zhang, Tianyin Xu, Rujia Wang, Chetan Bansal, Saravan Rajmohan, <b><u>Chaoyun Zhang</u></b>, Dongmei Zhang
                   </p>
-                  <p className="text-[#81D8D0] font-medium mt-2">arXiv preprint (2025)</p>
+                  <p className="text-[#81D8D0] font-medium mt-2">IEEE International Symposium on Software Reliability Engineering (ISSRE) (2025)</p>
                 </div>
 
-                {/* Zhang et al., arXiv 2025 */}
+
+              {/* Zhang et al., arXiv 2025 */}
                 <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
                   <h4 className="text-lg font-semibold text-gray-800 mb-2">
                     DI-BENCH: Benchmarking Large Language Models on Dependency Inference With Testable Repositories at Scale
@@ -663,47 +827,8 @@ function App() {
                   <p className="text-gray-600 mt-2 leading-relaxed">
                     Linghao Zhang, Junhao Wang, Shilin He, <b><u>Chaoyun Zhang</u></b>, Yu Kang, Bowen Li and others
                   </p>
-                  <p className="text-[#81D8D0] font-medium mt-2">arXiv preprint (2025)</p>
+                  <p className="text-[#81D8D0] font-medium mt-2">Proceedings of the Association for Computational Linguistics (ACL 2025)</p>
                 </div>
-
-
-                <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                  <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                    TaskWeaver: A Code-First Agent Framework
-                    <span className="ml-4 space-x-2">
-                      <a href="https://arxiv.org/pdf/2311.17541" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
-                      <a href="https://github.com/microsoft/TaskWeaver/" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Code]</a>
-                    </span>
-                  </h4>
-                  <p className="text-gray-600 mt-2 leading-relaxed">
-                    Bo Qiao, Liqun Li, Xu Zhang, Shilin He, Yu Kang, <b><u>Chaoyun Zhang</u></b>, Fangkai Yang, Hang Dong, Jue Zhang, Lu Wang, and others
-                  </p>
-                  <p className="text-[#81D8D0] font-medium mt-2">arXiv preprint (2023)</p>
-                </div>
-
-                {/* 14. Liu et al., arXiv 2024 */}
-                <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                  <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                    Large Language Models Can Deliver Accurate and Interpretable Time Series Anomaly Detection
-                    <span className="ml-4 space-x-2">
-                      <a href="https://arxiv.org/pdf/2405.15370" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[PDF]</a>
-                      <a href="https://github.com/LJunius/LLMAD" className="text-[#81D8D0] hover:text-[#5fb5ae] text-sm font-medium">[Code]</a>
-                    </span>
-                  </h4>
-                  <p className="text-gray-600 mt-2 leading-relaxed">
-                    Jun Liu, <b><u>Chaoyun Zhang</u></b>, Jiaxu Qian, Minghua Ma, Si Qin, Chetan Bansal, Qingwei Lin, Saravan Rajmohan, Dongmei Zhang
-                  </p>
-                  <p className="text-[#81D8D0] font-medium mt-2">arXiv preprint (2024)</p>
-                </div>
-
-              </div>
-
-            </div>
-
-            {/* 2025 Publications */}
-            <div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-6">2025 </h3>
-              <div className="space-y-6">
 
                 {/* 18. Xu et al., ICLR 2025 */}
               <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
@@ -747,7 +872,7 @@ function App() {
                   <p className="text-gray-600 mt-2 leading-relaxed">
                     <b><u>Chaoyun Zhang</u></b>, Liqun Li, Shilin He, Xu Zhang, Bo Qiao, Si Qin, Minghua Ma, Yu Kang, Qingwei Lin, Saravan Rajmohan, and others
                   </p>
-                  <p className="text-[#81D8D0] font-medium mt-2">To appear in NAACL 2025</p>
+                  <p className="text-[#81D8D0] font-medium mt-2">Proceedings of the North American Chapter of the Association for Computational Linguistics (NAACL) 2025</p>
                 </div>
 
                 {/* 11. Zhang et al., arXiv 2024 */}
@@ -762,22 +887,31 @@ function App() {
                   <p className="text-gray-600 mt-2 leading-relaxed">
                     <b><u>Chaoyun Zhang</u></b>, Zicheng Ma, Yuhao Wu, Shilin He, Si Qin, Minghua Ma, Xiaoting Qin, Yu Kang, Yuyi Liang, Xiaoyu Gou, and others
                   </p>
-                  <p className="text-[#81D8D0] font-medium mt-2"> To appear in ICDE 2025</p>
+                  <p className="text-[#81D8D0] font-medium mt-2"> Proceedings of the International Conference on Data Engineering (ICDE) 2025</p>
                 </div>
 
 
-              </div>
-
+                </div>
+              )}
             </div>
 
 
             {/* 2024 Publications */}
-
             <div>
-
-              <h3 className="text-2xl font-bold text-gray-800 mb-6">2024</h3>
-
-              <div className="space-y-6">
+              <button
+                onClick={() => toggleSection('2024')}
+                className="flex items-center gap-2 w-full text-left mb-6 hover:text-[#81D8D0] transition-colors"
+              >
+                <h3 className="text-2xl font-bold text-gray-800">2024</h3>
+                <ChevronDown 
+                  className={`transition-transform duration-200 ${
+                    collapsedSections['2024'] ? 'rotate-180' : ''
+                  }`} 
+                  size={24} 
+                />
+              </button>
+              {!collapsedSections['2024'] && (
+                <div className="space-y-6">
 
                 {/* 16. Zhang et al., SoCC 2024 */}
                 <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
@@ -945,13 +1079,26 @@ function App() {
               </div>
 
 
-    
-              </div>
+                </div>
+              )}
             </div>
 
             {/* 2023 Publications */}
             <div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-6">2023</h3>
+              <button
+                onClick={() => toggleSection('2023')}
+                className="flex items-center gap-2 w-full text-left mb-6 hover:text-[#81D8D0] transition-colors"
+              >
+                <h3 className="text-2xl font-bold text-gray-800">2023</h3>
+                <ChevronDown 
+                  className={`transition-transform duration-200 ${
+                    collapsedSections['2023'] ? 'rotate-180' : ''
+                  }`} 
+                  size={24} 
+                />
+              </button>
+              {!collapsedSections['2023'] && (
+                <div className="space-y-6">
 
               {/* 1. Jin et al., ESEC/FSE 2023 */}
               <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
@@ -1020,12 +1167,26 @@ function App() {
                   IEEE Transactions on Network Science and Engineering (IEEE TNS&E), 2023
                 </p>
               </div>
+                </div>
+              )}
             </div>
 
             {/* 2022 Publications */}
             <div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-6">2022</h3>
-              <div className="space-y-6">
+              <button
+                onClick={() => toggleSection('2022')}
+                className="flex items-center gap-2 w-full text-left mb-6 hover:text-[#81D8D0] transition-colors"
+              >
+                <h3 className="text-2xl font-bold text-gray-800">2022</h3>
+                <ChevronDown 
+                  className={`transition-transform duration-200 ${
+                    collapsedSections['2022'] ? 'rotate-180' : ''
+                  }`} 
+                  size={24} 
+                />
+              </button>
+              {!collapsedSections['2022'] && (
+                <div className="space-y-6">
                 {/* 20. Zhang et al., IEEE/ACM ToN 2022 */}
                 <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
                   <h4 className="text-lg font-semibold text-gray-800 mb-2">
@@ -1111,14 +1272,27 @@ function App() {
                   </p>
                 </div>
 
-              </div>
+                </div>
+              )}
             </div>
 
 
             {/* 2021 Publications */}
             <div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-6">2021</h3>
-              <div className="space-y-6">
+              <button
+                onClick={() => toggleSection('2021')}
+                className="flex items-center gap-2 w-full text-left mb-6 hover:text-[#81D8D0] transition-colors"
+              >
+                <h3 className="text-2xl font-bold text-gray-800">2021</h3>
+                <ChevronDown 
+                  className={`transition-transform duration-200 ${
+                    collapsedSections['2021'] ? 'rotate-180' : ''
+                  }`} 
+                  size={24} 
+                />
+              </button>
+              {!collapsedSections['2021'] && (
+                <div className="space-y-6">
 
               <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
                 <h4 className="text-lg font-semibold text-gray-800 mb-2">
@@ -1171,15 +1345,26 @@ function App() {
                 </p>
               </div>
 
-                
-
-              </div>
+                </div>
+              )}
             </div>
 
             {/* 2020 Publications */}
             <div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-6">2020</h3>
-              <div className="space-y-6">
+              <button
+                onClick={() => toggleSection('2020')}
+                className="flex items-center gap-2 w-full text-left mb-6 hover:text-[#81D8D0] transition-colors"
+              >
+                <h3 className="text-2xl font-bold text-gray-800">2020</h3>
+                <ChevronDown 
+                  className={`transition-transform duration-200 ${
+                    collapsedSections['2020'] ? 'rotate-180' : ''
+                  }`} 
+                  size={24} 
+                />
+              </button>
+              {!collapsedSections['2020'] && (
+                <div className="space-y-6">
 
               <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
               <h4 className="text-lg font-semibold text-gray-800 mb-2">
@@ -1247,13 +1432,26 @@ function App() {
                 </p>
               </div>
 
-              </div>
+                </div>
+              )}
             </div>
 
             {/* 2019 Publications */}
             <div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-6">2019</h3>
-              <div className="space-y-6">
+              <button
+                onClick={() => toggleSection('2019')}
+                className="flex items-center gap-2 w-full text-left mb-6 hover:text-[#81D8D0] transition-colors"
+              >
+                <h3 className="text-2xl font-bold text-gray-800">2019</h3>
+                <ChevronDown 
+                  className={`transition-transform duration-200 ${
+                    collapsedSections['2019'] ? 'rotate-180' : ''
+                  }`} 
+                  size={24} 
+                />
+              </button>
+              {!collapsedSections['2019'] && (
+                <div className="space-y-6">
                 {/* 6. Zhang et al., IEEE Communications Surveys & Tutorials 2019 */}
                 <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
                   <h4 className="text-lg font-semibold text-gray-800 mb-2">
@@ -1338,13 +1536,26 @@ function App() {
                 </p>
               </div>
 
-              </div>
+                </div>
+              )}
             </div>
 
             {/* 2018 Publications */}
             <div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-6">2018</h3>
-              <div className="space-y-6">
+              <button
+                onClick={() => toggleSection('2018')}
+                className="flex items-center gap-2 w-full text-left mb-6 hover:text-[#81D8D0] transition-colors"
+              >
+                <h3 className="text-2xl font-bold text-gray-800">2018</h3>
+                <ChevronDown 
+                  className={`transition-transform duration-200 ${
+                    collapsedSections['2018'] ? 'rotate-180' : ''
+                  }`} 
+                  size={24} 
+                />
+              </button>
+              {!collapsedSections['2018'] && (
+                <div className="space-y-6">
                 {/* 2. Zhang et al., AAAI 2018 */}
                 <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
                   <h4 className="text-lg font-semibold text-gray-800 mb-2">
@@ -1379,13 +1590,26 @@ function App() {
                   </p>
                 </div>
 
-              </div>
+                </div>
+              )}
             </div>
 
             {/* 2017 Publications */}
             <div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-6">2017</h3>
-              <div className="space-y-6">
+              <button
+                onClick={() => toggleSection('2017')}
+                className="flex items-center gap-2 w-full text-left mb-6 hover:text-[#81D8D0] transition-colors"
+              >
+                <h3 className="text-2xl font-bold text-gray-800">2017</h3>
+                <ChevronDown 
+                  className={`transition-transform duration-200 ${
+                    collapsedSections['2017'] ? 'rotate-180' : ''
+                  }`} 
+                  size={24} 
+                />
+              </button>
+              {!collapsedSections['2017'] && (
+                <div className="space-y-6">
                 {/* 4. Zhang et al., CoNEXT 2017 */}
                 <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
                   <h4 className="text-lg font-semibold text-gray-800 mb-2">
@@ -1403,13 +1627,26 @@ function App() {
                   </p>
                 </div>
 
-              </div>
+                </div>
+              )}
             </div>
 
             {/* 2015 Publications */}
             <div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-6">2015</h3>
-              <div className="space-y-6">
+              <button
+                onClick={() => toggleSection('2015')}
+                className="flex items-center gap-2 w-full text-left mb-6 hover:text-[#81D8D0] transition-colors"
+              >
+                <h3 className="text-2xl font-bold text-gray-800">2015</h3>
+                <ChevronDown 
+                  className={`transition-transform duration-200 ${
+                    collapsedSections['2015'] ? 'rotate-180' : ''
+                  }`} 
+                  size={24} 
+                />
+              </button>
+              {!collapsedSections['2015'] && (
+                <div className="space-y-6">
                 <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
                 <h4 className="text-lg font-semibold text-gray-800 mb-2">
                   A Convolutional Neural Network for Leaves Recognition Using Data Augmentation
@@ -1425,7 +1662,8 @@ function App() {
                   Proceedings of the 2015 IEEE PICOM.
                 </p>
               </div>
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </section>
@@ -1433,31 +1671,193 @@ function App() {
         {/* Service */}
         <section id="service" className="mb-16 scroll-mt-16">
           <h2 className="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b-2 border-[#81D8D0]">Academic Service</h2>
-          <div className="space-y-6">
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">Conference Program Committee and Reviewing</h3>
-              <ul className="space-y-2 text-gray-600">
-                <li>• FSE 2025 Industry Track - Program Committee</li>
-                <li>• KDD ASD Track 2025 - Reviewer</li>
-                <li>• ICLR 2025 - Reviewer</li>
-                <li>• ACL ARR - Reviewer</li>
-              </ul>
+          <div className="grid md:grid-cols-2 gap-8">
+            
+            {/* Program Committee Service */}
+            <div className="bg-white border border-gray-200 rounded-xl p-8 hover:shadow-lg transition-all duration-300 hover:border-[#81D8D0]/30">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 bg-[#81D8D0]/10 rounded-lg">
+                  <Users className="text-[#81D8D0]" size={24} />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-800">Program Committee</h3>
+              </div>
+              <div className="space-y-3">
+                <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#81D8D0]/5 transition-colors">
+                  <Award className="text-[#81D8D0] mt-1 flex-shrink-0" size={16} />
+                  <div>
+                    <p className="font-medium text-gray-800">ICSE 2027</p>
+                    <p className="text-sm text-gray-600">International Conference on Software Engineering</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#81D8D0]/5 transition-colors">
+                  <Award className="text-[#81D8D0] mt-1 flex-shrink-0" size={16} />
+                  <div>
+                    <p className="font-medium text-gray-800">FSE 2025 Industry Track</p>
+                    <p className="text-sm text-gray-600">Foundations of Software Engineering</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#81D8D0]/5 transition-colors">
+                  <Award className="text-[#81D8D0] mt-1 flex-shrink-0" size={16} />
+                  <div>
+                    <p className="font-medium text-gray-800">ACM DistributedML Workshop 2020</p>
+                    <p className="text-sm text-gray-600">Distributed Machine Learning</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#81D8D0]/5 transition-colors">
+                  <Award className="text-[#81D8D0] mt-1 flex-shrink-0" size={16} />
+                  <div>
+                    <p className="font-medium text-gray-800">IEEE CCNC 2020</p>
+                    <p className="text-sm text-gray-600">Consumer Communications & Networking</p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">Journal Reviewing</h3>
-              <ul className="space-y-2 text-gray-600">
-                <li>• ACM Computing Surveys (CSUR)</li>
-                {/* <li>• IEEE Transactions on Pattern Analysis and Machine Intelligence (TPAMI)</li>
-                <li>• Artificial Intelligence Journal (AIJ)</li> */}
-              </ul>
+
+            {/* Reviewing Service */}
+            <div className="bg-white border border-gray-200 rounded-xl p-8 hover:shadow-lg transition-all duration-300 hover:border-[#81D8D0]/30">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 bg-[#81D8D0]/10 rounded-lg">
+                  <BookOpenCheck className="text-[#81D8D0]" size={24} />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-800">Reviewing Service</h3>
+              </div>
+              <div className="space-y-4">
+                <div className="mb-4">
+                  <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Premier Conferences</h4>
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#81D8D0]/5 transition-colors">
+                      <FileText className="text-[#81D8D0] mt-1 flex-shrink-0" size={16} />
+                      <div>
+                        <p className="font-medium text-gray-800">NeurIPS 2025</p>
+                        <p className="text-sm text-gray-600">Neural Information Processing Systems</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#81D8D0]/5 transition-colors">
+                      <FileText className="text-[#81D8D0] mt-1 flex-shrink-0" size={16} />
+                      <div>
+                        <p className="font-medium text-gray-800">ICLR 2025</p>
+                        <p className="text-sm text-gray-600">International Conference on Learning Representations</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#81D8D0]/5 transition-colors">
+                      <FileText className="text-[#81D8D0] mt-1 flex-shrink-0" size={16} />
+                      <div>
+                        <p className="font-medium text-gray-800">KDD ADS Track 2025</p>
+                        <p className="text-sm text-gray-600">Applied Data Science Track</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#81D8D0]/5 transition-colors">
+                      <FileText className="text-[#81D8D0] mt-1 flex-shrink-0" size={16} />
+                      <div>
+                        <p className="font-medium text-gray-800">ACL ARR</p>
+                        <p className="text-sm text-gray-600">Association for Computational Linguistics</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Specialized Conferences</h4>
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#81D8D0]/5 transition-colors">
+                      <FileText className="text-[#81D8D0] mt-1 flex-shrink-0" size={16} />
+                      <div>
+                        <p className="font-medium text-gray-800">IEEE TMA</p>
+                        <p className="text-sm text-gray-600">Traffic Measurement and Analysis</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#81D8D0]/5 transition-colors">
+                      <FileText className="text-[#81D8D0] mt-1 flex-shrink-0" size={16} />
+                      <div>
+                        <p className="font-medium text-gray-800">IEEE WCNC</p>
+                        <p className="text-sm text-gray-600">Wireless Communications and Networking</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#81D8D0]/5 transition-colors">
+                      <FileText className="text-[#81D8D0] mt-1 flex-shrink-0" size={16} />
+                      <div>
+                        <p className="font-medium text-gray-800">IEEE WoWMoM</p>
+                        <p className="text-sm text-gray-600">World of Wireless, Mobile and Multimedia Networks</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            {/* <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">Workshop Organization</h3>
-              <ul className="space-y-2 text-gray-600">
-                <li>• NeurIPS 2023 Workshop on AI Safety - Co-organizer</li>
-                <li>• ICML 2023 Workshop on Large Language Models - Program Chair</li>
-              </ul>
-            </div> */}
+
+            {/* Journal Editorial Service - Full Width */}
+            <div className="md:col-span-2 bg-white border border-gray-200 rounded-xl p-8 hover:shadow-lg transition-all duration-300 hover:border-[#81D8D0]/30">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 bg-[#81D8D0]/10 rounded-lg">
+                  <FileText className="text-[#81D8D0]" size={24} />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-800">Journal Editorial Service</h3>
+              </div>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#81D8D0]/5 transition-colors">
+                  <FileText className="text-[#81D8D0] mt-1 flex-shrink-0" size={16} />
+                  <div>
+                    <p className="font-medium text-gray-800">ACM Computing Surveys</p>
+                    <p className="text-sm text-gray-600">CSUR</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#81D8D0]/5 transition-colors">
+                  <FileText className="text-[#81D8D0] mt-1 flex-shrink-0" size={16} />
+                  <div>
+                    <p className="font-medium text-gray-800">IEEE Communications Letters</p>
+                    <p className="text-sm text-gray-600">ComLet</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#81D8D0]/5 transition-colors">
+                  <FileText className="text-[#81D8D0] mt-1 flex-shrink-0" size={16} />
+                  <div>
+                    <p className="font-medium text-gray-800">IEEE Trans. Mobile Computing</p>
+                    <p className="text-sm text-gray-600">TMC</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#81D8D0]/5 transition-colors">
+                  <FileText className="text-[#81D8D0] mt-1 flex-shrink-0" size={16} />
+                  <div>
+                    <p className="font-medium text-gray-800">IEEE Trans. Smart Grid</p>
+                    <p className="text-sm text-gray-600">TSG</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#81D8D0]/5 transition-colors">
+                  <FileText className="text-[#81D8D0] mt-1 flex-shrink-0" size={16} />
+                  <div>
+                    <p className="font-medium text-gray-800">IEEE SECOM</p>
+                    <p className="text-sm text-gray-600">Systems Engineering</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Professional Activities - Full Width */}
+            <div className="md:col-span-2 bg-gradient-to-br from-[#81D8D0]/5 to-blue-50 border border-[#81D8D0]/20 rounded-xl p-8">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 bg-[#81D8D0]/20 rounded-lg">
+                  <Award className="text-[#81D8D0]" size={24} />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-800">Professional Recognition</h3>
+              </div>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-white/80 p-4 rounded-lg border border-[#81D8D0]/10">
+                  <h4 className="font-semibold text-gray-800 mb-2">Research Impact</h4>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    Active contributor to top-tier conferences and journals in AI, Software Engineering, and Systems research.
+                    Recognized expertise in GUI agents, large language models, and AIOps.
+                  </p>
+                </div>
+                <div className="bg-white/80 p-4 rounded-lg border border-[#81D8D0]/10">
+                  <h4 className="font-semibold text-gray-800 mb-2">Community Engagement</h4>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    Committed to advancing research through peer review, program committee service, and mentoring 
+                    the next generation of researchers in AI and software systems.
+                  </p>
+                </div>
+              </div>
+            </div>
+
           </div>
         </section>
       </div>
