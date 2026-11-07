@@ -1,0 +1,180 @@
+---
+import { Picture } from "astro:assets";
+import Section from "../components/Section.astro";
+import poster from "../assets/poster.webp";
+import agentos from "../assets/agentos.webp";
+import survey from "../assets/survey.webp";
+import lam from "../assets/lam.webp";
+
+type Link = { label: string; href: string };
+
+const UFO3_PRINCIPLES = [
+  ["🌟", "Declarative Decomposition into Dynamic DAG", "Requests decomposed into structured DAG with TaskStars and dependencies for automated scheduling and runtime rewriting."],
+  ["🔄", "Continuous Result-Driven Graph Evolution", "Living constellation that adapts to execution feedback through controlled rewrites and dynamic adjustments."],
+  ["⚡", "Heterogeneous, Asynchronous & Safe Orchestration", "Capability-based device matching with async execution, safe locking, and formally verified correctness."],
+  ["🔌", "Unified Agent Interaction Protocol (AIP)", "WebSocket-based secure coordination layer with fault tolerance and automatic reconnection."],
+  ["🛠️", "Template-Driven MCP-Empowered Device Agents", "Lightweight toolkit for rapid agent development with MCP integration for tool augmentation."],
+];
+const UFO3_LINKS: Link[] = [
+  { label: "GitHub Code", href: "https://github.com/microsoft/UFO/" },
+  { label: "Documentation", href: "https://microsoft.github.io/UFO/" },
+  { label: "Paper", href: "https://arxiv.org/abs/2511.11332" },
+  { label: "YouTube", href: "https://www.youtube.com/watch?v=NGrVWGcJL8o" },
+];
+
+const CARDS = [
+  {
+    title: "UFO²: The Desktop AgentOS",
+    image: agentos,
+    alt: "UFO² Desktop AgentOS architecture",
+    desc: "UFO² is a next-generation AgentOS that brings deeply integrated, system-level intelligence to Windows desktop automation: a centralized <b>HostAgent</b> for natural language task orchestration, application-specialized <b>AppAgents</b> that combine GUI actions with native APIs, hybrid control detection (vision + UI Automation), speculative multi-action planning and a non-disruptive Picture-in-Picture interface.",
+    media: [
+      { label: "微软正式开源UFO²，Windows桌面迈入「AgentOS 时代」", href: "https://www.jiqizhixin.com/articles/2025-05-06-13" },
+      { label: "下一代Windows系统曝光：基于GPT-4V，Agent跨应用调度，代号UFO", href: "https://baijiahao.baidu.com/s?id=1790938358152188625&wfr=spider&for=pc" },
+      { label: "下一代智能版 Windows 要来了？微软推出首个 Windows Agent，命名为 UFO！", href: "https://blog.csdn.net/csdnnews/article/details/136161570" },
+      { label: "Microsoft's UFO abducts traditional user interfaces for a smarter Windows experience", href: "https://the-decoder.com/microsofts-ufo-abducts-traditional-user-interfaces-for-a-smarter-windows-experience/" },
+    ],
+    links: [
+      { label: "GitHub Code", href: "https://github.com/microsoft/UFO/" },
+      { label: "Docs", href: "https://microsoft.github.io/UFO/" },
+      { label: "UFO² Paper", href: "https://arxiv.org/pdf/2504.14603" },
+      { label: "UFO Paper", href: "https://arxiv.org/pdf/2402.07939" },
+    ],
+  },
+  {
+    title: "LLM-Brained GUI Agent Survey",
+    image: survey,
+    alt: "Overview figure of the LLM-brained GUI agent survey",
+    desc: "A comprehensive (90+ pages) survey on <b>large language model-powered GUI agents</b>, AI agents that operate graphical user interfaces from natural language instructions. It covers over 500 research papers, and both the paper and its website are updated as the field moves.",
+    media: [
+      { label: "引领人机交互革命？微软研究团队发布80页的大模型GUI智能体综述", href: "https://baijiahao.baidu.com/s?id=1820751448950288867&wfr=spider&for=pc" },
+      { label: "Agent操纵手机/电脑屏幕的全面综述", href: "https://news.qq.com/rain/a/20241224A07J3R00" },
+      { label: "[LLM-Brained GUI Agents] A Survey: Revolutionizing Human-Computer Interaction", href: "https://medium.com/advancedai/survey-gui-agents-revolutionizing-human-computer-interaction-a-comprehensive-survey-on-27ae2b4a8965" },
+    ],
+    links: [
+      { label: "Paper", href: "https://arxiv.org/pdf/2411.18279" },
+      { label: "GitHub Code", href: "https://github.com/vyokky/LLM-Brained-GUI-Agents-Survey" },
+      { label: "Website", href: "https://vyokky.github.io/LLM-Brained-GUI-Agents-Survey/" },
+    ],
+  },
+  {
+    title: "Large Action Models for GUI Agents",
+    image: lam,
+    alt: "Large Action Model training pipeline",
+    desc: "LLMs are good at generating text, but not at executing actions? Not anymore. A detailed pipeline for training <b>Large Action Models</b> (LAMs) from inception to implementation: data collection and preprocessing, model training and evaluation, and tools for deploying LAMs in real applications, as part of the <b>UFO</b> initiative.",
+    media: [
+      { label: "微软华人团队最新研究：从LLM到LAM，让大模型真正具有「行动力」！", href: "https://mp.weixin.qq.com/s/BVFV8v6KGcpKoz_TYdBdAA" },
+      { label: "无直接数据可用，AI怎么学会「干活」？微软团队揭秘AI从语言到行动的进化之路", href: "https://mp.weixin.qq.com/s/6FHrOMXTCUmKS2GrWrzzrA" },
+      { label: "Microsoft's new Large Action Model can perform some tasks in Word", href: "https://the-decoder.com/microsofts-new-large-action-model-can-perform-some-tasks-in-word/" },
+    ],
+    links: [
+      { label: "GitHub Code", href: "https://github.com/microsoft/UFO/tree/main/dataflow" },
+      { label: "Docs", href: "https://microsoft.github.io/UFO/dataflow/overview/" },
+      { label: "Paper", href: "https://arxiv.org/pdf/2412.10047" },
+    ],
+  },
+];
+
+const btn =
+  "rounded-lg bg-accent-soft/60 px-4 py-2 text-sm font-medium whitespace-nowrap text-accent-deep shadow-xs transition hover:bg-accent hover:text-white";
+const mediaLink = "text-accent-ink hover:text-accent-deep hover:underline";
+---
+
+<Section id="projects" title="Featured Projects">
+  <p class="-mt-1 mb-6 text-gray-600">
+    The UFO family (UFO, UFO², UFO³) has <strong class="text-gray-800">10K+ GitHub stars</strong> and <strong class="text-gray-800">1K+ forks</strong>;
+    the survey and Large Action Models grew around it.
+  </p>
+
+  <div class="space-y-6">
+    <!-- UFO³: the feature, full width -->
+    <article
+      data-reveal
+      class="glow-card grid gap-8 rounded-xl border border-hairline bg-gray-50/80 p-6 shadow-card transition duration-500 hover:-translate-y-1 hover:shadow-lift md:p-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]"
+    >
+      <div class="self-center lg:order-2">
+        <Picture
+          src={poster}
+          formats={["avif", "webp"]}
+          fallbackFormat="webp"
+          widths={[480, 800, 1200, 1600]}
+          sizes="(min-width: 1024px) 540px, 92vw"
+          alt="UFO³ Galaxy: one agent orchestrating Windows, Linux, phones, tablets and cloud devices"
+          class="h-auto w-full rounded-lg shadow-card"
+        />
+      </div>
+      <div class="min-w-0 lg:order-1">
+        <h3 class="mb-3 text-2xl font-semibold tracking-tight text-gray-800">UFO³: Galaxy, Multi-Device Orchestration Framework</h3>
+        <p class="mb-4 text-gray-600">
+          UFO³ introduces Galaxy, a multi-device orchestration framework that coordinates intelligent agents across heterogeneous platforms. It
+          is built on five tightly integrated design principles:
+        </p>
+        <div class="mb-5 space-y-2 text-sm text-gray-600">
+          {
+            UFO3_PRINCIPLES.map(([e, k, d]) => (
+              <div class="flex items-start gap-2">
+                <span class="text-lg leading-6">{e}</span>
+                <div>
+                  <strong class="text-gray-700">{k}.</strong> {d}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+        <div class="mb-5">
+          <h4 class="mb-2 text-sm font-semibold text-gray-800">Media coverage</h4>
+          <ul class="ml-4 list-outside list-disc space-y-1 text-sm text-gray-600">
+            <li><a class={mediaLink} href="https://www.jiqizhixin.com/articles/2025-12-03-7" target="_blank" rel="noopener noreferrer">机器之心: UFO³, Weaving the Digital Agent Galaxy</a></li>
+          </ul>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          {UFO3_LINKS.map((l) => <a class={btn} href={l.href} target="_blank" rel="noopener noreferrer">{l.label}</a>)}
+        </div>
+      </div>
+    </article>
+
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {
+        CARDS.map((p) => (
+          <article
+            data-reveal
+            class="glow-card flex flex-col rounded-xl border border-hairline bg-gray-50/80 p-6 shadow-card transition duration-500 hover:-translate-y-1 hover:shadow-lift"
+          >
+            <h3 class="mb-3 text-xl font-semibold tracking-tight text-gray-800">{p.title}</h3>
+            <div class="mb-4">
+              <Picture
+                src={p.image}
+                formats={["avif", "webp"]}
+                fallbackFormat="webp"
+                widths={[400, 700, 1000]}
+                sizes="(min-width: 1024px) 340px, (min-width: 768px) 45vw, 92vw"
+                alt={p.alt}
+                class="h-auto w-full rounded-lg shadow-card"
+              />
+            </div>
+            <p class="mb-4 text-[15px] leading-relaxed text-gray-600" set:html={p.desc} />
+            <div class="mb-5">
+              <h4 class="mb-2 text-sm font-semibold text-gray-800">Media coverage</h4>
+              <ul class="ml-4 list-outside list-disc space-y-1 text-sm text-gray-600">
+                {p.media.map((m) => (
+                  <li>
+                    <a class={mediaLink} href={m.href} target="_blank" rel="noopener noreferrer">
+                      {m.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div class="mt-auto flex flex-wrap gap-3 pt-1">
+              {p.links.map((l) => (
+                <a class={btn} href={l.href} target="_blank" rel="noopener noreferrer">
+                  {l.label}
+                </a>
+              ))}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</Section>

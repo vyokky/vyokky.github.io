@@ -1,0 +1,99 @@
+---
+import A from "../components/A.astro";
+import Section from "../components/Section.astro";
+---
+
+<Section id="experience" title="Experience">
+  <div class="timeline relative pl-9 md:pl-11">
+    <div aria-hidden="true" class="absolute top-3 bottom-3 left-[11px] w-px bg-hairline md:left-[15px]"></div>
+    <div aria-hidden="true" class="timeline-fill absolute top-3 bottom-3 left-[11px] w-px bg-linear-to-b from-accent to-accent-soft md:left-[15px]"></div>
+    <ol class="space-y-6">
+      <li class="relative" data-reveal>
+        <span aria-hidden="true" class="absolute top-6 -left-9 flex h-[23px] w-[23px] items-center justify-center rounded-full border border-accent/60 bg-white md:-left-11 md:h-[31px] md:w-[31px]">
+          <span class="pulse-dot h-2 w-2 rounded-full bg-accent"></span>
+        </span>
+        <div class="glow-card rounded-xl border border-hairline bg-gray-50/80 p-6 transition-shadow duration-300 hover:shadow-card">
+          <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+            <h3 class="text-xl font-semibold tracking-tight text-gray-800">Head of Computer-Using Agents (CUA)</h3>
+            <span class="text-sm text-gray-500 tabular-nums">Feb 2026 – Present <span class="ml-2 rounded-full bg-accent/15 px-2 py-0.5 text-[11px] font-medium text-accent-ink">Now</span></span>
+          </div>
+          <p class="font-medium text-accent-ink">Beipo (北坡) · Shanghai Qiji Zhifeng Intelligent Technology</p>
+          <ul class="mt-2 ml-5 list-outside list-disc space-y-1 text-gray-600">
+            <li>
+              Lead <strong>NorthCUA</strong> from zero to one: the CUA post-training and model roadmap, combining GUI mid-training, long-horizon SFT
+              and joint desktop and web reinforcement learning.
+            </li>
+            <li>
+              Built the unified harness and experience-data flywheel that connect desktop and web execution, trajectory collection, outcome
+              verification and training-data curation.
+            </li>
+            <li>Released the open NorthCUA Nano, Mini and Pro models, and NorthCUA-Ultrafast for low-latency execution.</li>
+          </ul>
+        </div>
+      </li>
+      <li class="relative" data-reveal>
+        <span aria-hidden="true" class="absolute top-6 -left-9 flex h-[23px] w-[23px] items-center justify-center rounded-full border border-accent/60 bg-white md:-left-11 md:h-[31px] md:w-[31px]">
+          <span class="h-2 w-2 rounded-full bg-accent"></span>
+        </span>
+        <div class="glow-card rounded-xl border border-hairline bg-gray-50/80 p-6 transition-shadow duration-300 hover:shadow-card">
+          <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+            <h3 class="text-xl font-semibold tracking-tight text-gray-800">Principal Researcher</h3>
+            <span class="text-sm text-gray-500 tabular-nums">Jul 2022 – Feb 2026</span>
+          </div>
+          <p class="font-medium text-accent-ink">Microsoft AI / Microsoft Research Asia · DKI · Shanghai</p>
+          <ul class="mt-2 ml-5 list-outside list-disc space-y-1 text-gray-600">
+            <li>
+              Lead developer and algorithm researcher of <strong>UFO, UFO² and UFO³</strong>, the first open-source Windows GUI agent / CUA framework,
+              which grew into a cross-platform, cross-device Desktop AgentOS (10K+ GitHub stars).
+            </li>
+            <li>Trained and evaluated desktop GUI agents and action models; led the LLM-brained GUI agent survey.</li>
+            <li>AIOps: anomaly detection, failure diagnosis and root cause analysis deployed in cloud operations.</li>
+          </ul>
+        </div>
+      </li>
+      {
+        [
+          {
+            t: "Applied Research Scientist",
+            org: "Lightspeed and Quantum Studio (光子工作室群), Tencent · Shenzhen",
+            p: "Dec 2020 – Jul 2022",
+            d: "Matchmaking for League of Legends: Wild Rift: novice skill estimation and multi-objective re-matchmaking, both deployed at million-DAU scale (QuickSkill, CIKM 2022; CUPID, CSCW 2024; two patents).",
+          },
+          { t: "Ph.D. in Informatics", org: "School of Informatics, University of Edinburgh", p: "Sep 2016 – May 2020", d: "" },
+          {
+            t: "MSc in Artificial Intelligence",
+            org: "School of Informatics, University of Edinburgh",
+            p: "Sep 2015 – Nov 2016",
+            d: "Distinction (79/100). Non-intrusive load monitoring for appliance power consumption.",
+          },
+          {
+            t: "Bachelor in Telecommunication Engineering",
+            org: "Huazhong University of Science and Technology",
+            p: "Sep 2011 – Jun 2015",
+            d: "Thesis on plant leaf recognition with convolutional neural networks and data augmentation.",
+          },
+        ].map((it) => (
+          <li class="relative" data-reveal>
+            <span aria-hidden="true" class="absolute top-6 -left-9 flex h-[23px] w-[23px] items-center justify-center rounded-full border border-accent/60 bg-white md:-left-11 md:h-[31px] md:w-[31px]">
+              <span class="h-2 w-2 rounded-full bg-accent" />
+            </span>
+            <div class="glow-card rounded-xl border border-hairline bg-gray-50/80 p-6 transition-shadow duration-300 hover:shadow-card">
+              <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                <h3 class="text-xl font-semibold tracking-tight text-gray-800">{it.t}</h3>
+                <span class="text-sm text-gray-500 tabular-nums">{it.p}</span>
+              </div>
+              <p class="font-medium text-accent-ink">{it.org}</p>
+              {it.d && <p class="mt-2 text-gray-600">{it.d}</p>}
+              {it.t.startsWith("Ph.D.") && (
+                <p class="mt-2 text-gray-600">
+                  Deep neural mobile networking. Supervised by <A href="https://homepages.inf.ed.ac.uk/ppatras/" bold={false}>Paul Patras</A> and{" "}
+                  <A href="https://homepages.inf.ed.ac.uk/rsarkar/" bold={false}>Rik Sarkar</A>.
+                </p>
+              )}
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</Section>

@@ -92,14 +92,14 @@ export default function Publications() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Filter by title, author, venue or year"
-            className="w-full rounded-lg border border-hairline bg-white py-2.5 pl-9 pr-9 text-sm text-gray-700 placeholder:text-gray-500 outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20"
+            className="w-full rounded-lg border border-hairline bg-white py-2.5 pl-9 pr-9 text-sm text-gray-700 placeholder:text-gray-500 outline-hidden transition focus:border-accent focus:ring-2 focus:ring-accent/20"
           />
           {query && (
             <button
               type="button"
               onClick={() => setQuery("")}
               aria-label="Clear filter"
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1 text-gray-500 hover:text-gray-700"
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-sm p-1 text-gray-500 hover:text-gray-700"
             >
               <X size={14} />
             </button>
@@ -130,7 +130,7 @@ export default function Publications() {
           return (
             <section key={g} className="border-t border-hairline md:grid md:grid-cols-[150px_minmax(0,1fr)] md:gap-8">
               {/* Year rail: sticks under the nav while its papers scroll by */}
-              <div className="sticky top-[var(--nav-h)] z-10 -mx-4 bg-paper/90 px-4 backdrop-blur md:static md:mx-0 md:bg-transparent md:px-0 md:backdrop-blur-none">
+              <div className="sticky top-[var(--nav-h)] z-10 -mx-4 bg-paper/90 px-4 backdrop-blur-sm md:static md:mx-0 md:bg-transparent md:px-0 md:backdrop-blur-none">
                 <button
                   type="button"
                   onClick={() => toggle(g)}

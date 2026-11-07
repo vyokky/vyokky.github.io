@@ -1,0 +1,86 @@
+---
+import { ChevronDown } from "lucide-react";
+import A from "../components/A.astro";
+import Section from "../components/Section.astro";
+---
+
+<Section id="news" title="Latest News">
+  <ol class="divide-y divide-hairline border-y border-hairline">
+    <li class="grid gap-1 py-4 sm:grid-cols-[150px_minmax(0,1fr)] sm:gap-6">
+      <p class="flex items-center gap-2 text-sm text-gray-500 tabular-nums sm:pt-0.5">
+        November 2026
+        <span class="inline-flex items-center gap-1.5 rounded-full bg-accent/15 px-2 py-0.5 text-[11px] font-medium text-accent-ink">
+          <span class="pulse-dot inline-block h-1 w-1 rounded-full bg-accent"></span>New
+        </span>
+      </p>
+      <p class="text-gray-700">
+        The <A href="https://arxiv.org/abs/2611.02102">NorthCUA</A> technical report is out, and the NorthCUA <strong>Nano / Mini / Pro</strong>
+        models are open on <A href="https://huggingface.co/beipo-ai">Hugging Face</A> 🚀
+      </p>
+    </li>
+    <li class="grid gap-1 py-4 sm:grid-cols-[150px_minmax(0,1fr)] sm:gap-6">
+      <p class="text-sm text-gray-500 tabular-nums sm:pt-0.5">2026</p>
+      <p class="text-gray-700">
+        Papers accepted at <strong>NeurIPS 2026</strong>, <strong>EMNLP 2026</strong> (main and Findings), <strong>CIKM 2026</strong>,
+        <strong>ICLR 2026</strong> (×2), <strong>Findings of ACL 2026</strong>, <strong>FSE 2026</strong> and <strong>TOSEM</strong>, and
+        <strong>UFO²</strong> in <strong>TMLR</strong>! 🎉
+      </p>
+    </li>
+    <li class="grid gap-1 py-4 sm:grid-cols-[150px_minmax(0,1fr)] sm:gap-6">
+      <p class="text-sm text-gray-500 tabular-nums sm:pt-0.5">February 2026</p>
+      <p class="text-gray-700">Joined <strong>Beipo</strong> as Head of Computer-Using Agents to build NorthCUA.</p>
+    </li>
+    <li class="grid gap-1 py-4 sm:grid-cols-[150px_minmax(0,1fr)] sm:gap-6">
+      <p class="text-sm text-gray-500 tabular-nums sm:pt-0.5">December 2025</p>
+      <p class="text-gray-700">
+        <A href="https://arxiv.org/abs/2511.11332">UFO³: Weaving the Digital Agent Galaxy</A> is reported by
+        <A href="https://www.jiqizhixin.com/articles/2025-12-03-7">机器之心</A> 📰
+      </p>
+    </li>
+    <li class="grid gap-1 py-4 sm:grid-cols-[150px_minmax(0,1fr)] sm:gap-6">
+      <p class="text-sm text-gray-500 tabular-nums sm:pt-0.5">2025</p>
+      <p class="text-gray-700">
+        Our book <strong>大语言模型 GUI 智能体：人机交互新时代</strong>, the first book that systematically introduces GUI agents, is published by
+        Publishing House of Electronics Industry 📖
+      </p>
+    </li>
+  </ol>
+
+  <details class="group mt-0">
+    <summary
+      class="mt-5 inline-flex min-h-[44px] items-center gap-1.5 rounded-lg border border-hairline bg-white px-4 text-sm font-medium whitespace-nowrap text-gray-600 transition hover:border-accent hover:text-accent-ink"
+    >
+      <span class="group-open:hidden">Show 5 earlier updates</span>
+      <span class="hidden group-open:inline">Show less</span>
+      <ChevronDown size={16} className="transition-transform duration-300 group-open:rotate-180" />
+    </summary>
+    <ol class="mt-5 divide-y divide-hairline border-y border-hairline">
+      <li class="grid gap-1 py-4 sm:grid-cols-[150px_minmax(0,1fr)] sm:gap-6">
+        <p class="text-sm text-gray-500 tabular-nums sm:pt-0.5">September 2025</p>
+        <p class="text-gray-700">Two papers accepted at <strong>NeurIPS 2025</strong> and one paper accepted at <strong>ASE 2025</strong>! 🎉</p>
+      </li>
+      <li class="grid gap-1 py-4 sm:grid-cols-[150px_minmax(0,1fr)] sm:gap-6">
+        <p class="text-sm text-gray-500 tabular-nums sm:pt-0.5">May 2025</p>
+        <p class="text-gray-700">One paper accepted at <strong>ACL 2025</strong>, and one paper accepted at <strong>KDD ADS 2025</strong>! 🎉</p>
+      </li>
+      <li class="grid gap-1 py-4 sm:grid-cols-[150px_minmax(0,1fr)] sm:gap-6">
+        <p class="text-sm text-gray-500 tabular-nums sm:pt-0.5">January 2025</p>
+        <p class="text-gray-700">Two papers accepted at <strong>ICLR 2025</strong> and one paper accepted at <strong>NAACL 2025</strong>! 🎉</p>
+      </li>
+      <li class="grid gap-1 py-4 sm:grid-cols-[150px_minmax(0,1fr)] sm:gap-6">
+        <p class="text-sm text-gray-500 tabular-nums sm:pt-0.5">January 2025</p>
+        <p class="text-gray-700">
+          Our work on <A href="https://arxiv.org/pdf/2412.10047">Large Action Models</A> is released and has been reported by
+          <A href="https://mp.weixin.qq.com/s/6FHrOMXTCUmKS2GrWrzzrA">机器之心</A> and <A href="https://mp.weixin.qq.com/s/BVFV8v6KGcpKoz_TYdBdAA">新智元</A> 🚀
+        </p>
+      </li>
+      <li class="grid gap-1 py-4 sm:grid-cols-[150px_minmax(0,1fr)] sm:gap-6">
+        <p class="text-sm text-gray-500 tabular-nums sm:pt-0.5">November 2024</p>
+        <p class="text-gray-700">
+          Our <A href="https://arxiv.org/pdf/2411.18279">survey</A> on Large Language Model-Brained <strong>GUI Agents</strong> is released, and it
+          is reported by <A href="https://baijiahao.baidu.com/s?id=1820751448950288867&wfr=spider&for=pc">机器之心</A> 📰
+        </p>
+      </li>
+    </ol>
+  </details>
+</Section>

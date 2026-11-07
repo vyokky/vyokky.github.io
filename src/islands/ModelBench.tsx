@@ -50,7 +50,7 @@ export default function ModelBench() {
                 aria-selected={i === sel}
                 onClick={() => setSel(i)}
                 className={`min-w-[64px] px-3.5 py-1.5 text-sm font-medium rounded-md transition-colors ${
-                  i === sel ? "bg-accent-ink text-white shadow-sm" : "text-gray-600 hover:text-accent-deep"
+                  i === sel ? "bg-accent-ink text-white shadow-xs" : "text-gray-600 hover:text-accent-deep"
                 }`}
               >
                 {x.id}
@@ -73,7 +73,7 @@ export default function ModelBench() {
               </div>
               <div className="h-1.5 rounded-full bg-accent/10 overflow-hidden">
                 <div
-                  className="bar-fill h-full rounded-full bg-gradient-to-r from-accent-soft to-accent-ink"
+                  className="bar-fill h-full rounded-full bg-linear-to-r from-accent-soft to-accent-ink"
                   style={{ transform: `scaleX(${inView ? v / 100 : 0})` }}
                 />
               </div>

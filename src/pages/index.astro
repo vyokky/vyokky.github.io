@@ -1,0 +1,37 @@
+---
+import Base from "../layouts/Base.astro";
+import Nav from "../sections/Nav.astro";
+import Hero from "../sections/Hero.astro";
+import Spotlight from "../sections/Spotlight.astro";
+import About from "../sections/About.astro";
+import Experience from "../sections/Experience.astro";
+import News from "../sections/News.astro";
+import Projects from "../sections/Projects.astro";
+import Books from "../sections/Books.astro";
+import Service from "../sections/Service.astro";
+import Footer from "../sections/Footer.astro";
+import Section from "../components/Section.astro";
+import Publications from "../islands/Publications";
+---
+
+<Base
+  title="Chaoyun Zhang | Computer-Using Agents | NorthCUA · UFO"
+  description="Chaoyun Zhang (张朝运) - Head of Computer-Using Agents at Beipo, leading NorthCUA; previously Principal Researcher at Microsoft and lead developer of UFO. Research on computer-using agents, GUI agents and AgentOS."
+>
+  <a href="#content" class="skip-link">Skip to content</a>
+  <Nav />
+  <Hero />
+  <main id="content" class="container mx-auto max-w-6xl px-4 py-16">
+    <Spotlight />
+    <About />
+    <Experience />
+    <News />
+    <Projects />
+    <Section id="publications" title="Publications">
+      <Publications client:visible />
+    </Section>
+    <Books />
+    <Service />
+  </main>
+  <Footer />
+</Base>

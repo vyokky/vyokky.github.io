@@ -1,0 +1,111 @@
+---
+import { Image } from "astro:assets";
+import { ArrowRight, ArrowUpRight, Mail } from "lucide-react";
+import NetworkField from "../islands/NetworkField";
+import BrandIcon from "../components/BrandIcon.astro";
+import profile from "../assets/profile.jpg";
+import { publications } from "../data/publications";
+import { EMAIL, GITHUB, LINKEDIN, SCHOLAR } from "../data/links";
+
+// Proof band: every number links to where it comes from.
+const STATS = [
+  { value: "8,100+", label: "Citations", href: SCHOLAR },
+  { value: "10K+", label: "UFO GitHub stars", href: "https://github.com/microsoft/UFO" },
+  { value: String(publications.length), label: "Publications", href: "#publications" },
+  { value: "3", label: "Open NorthCUA models", href: "https://huggingface.co/beipo-ai" },
+];
+---
+
+<header id="top" class="relative overflow-hidden bg-accent-soft/10">
+  <NetworkField client:idle className="absolute inset-0 h-full w-full" />
+  <!-- veil: keeps the lines faint behind the text, livelier toward the edges -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0"
+    style="background: radial-gradient(ellipse 60% 70% at 35% 45%, rgb(251 253 252 / 0.82), rgb(251 253 252 / 0) 72%)"
+  >
+  </div>
+
+  <div class="relative container mx-auto flex max-w-6xl flex-col px-4 md:min-h-[calc(100dvh-var(--nav-h))]">
+    <div class="flex flex-1 flex-col-reverse items-center gap-12 pt-14 md:flex-row md:gap-16 md:pt-10">
+      <div class="w-full min-w-0 flex-1">
+        <h1 class="intro text-[clamp(2.6rem,6.2vw,5rem)] leading-[0.98] font-bold tracking-[-0.035em] text-gray-800" style="--d: 80ms">
+          Chaoyun Zhang
+          <span class="mt-2 block text-[0.42em] leading-tight font-medium tracking-normal text-gray-500 md:mt-0 md:ml-3 md:inline">张朝运</span>
+        </h1>
+        <p class="intro mt-5 text-xl tracking-tight text-gray-600" style="--d: 180ms">
+          Head of Computer-Using Agents at <strong class="font-semibold text-gray-800">Beipo</strong>
+          <span class="text-gray-500"> · previously Principal Researcher at Microsoft</span>
+        </p>
+        <p class="intro mt-4 max-w-xl text-lg leading-relaxed text-gray-600" style="--d: 260ms">
+          I build agents that operate real desktop software and the web, and the experience loops that make them better
+          with practice.
+        </p>
+        <div class="intro mt-7 flex flex-wrap items-center gap-x-6 gap-y-3" style="--d: 360ms">
+          <a
+            href="#northcua"
+            class="group inline-flex min-h-[44px] items-center gap-2 rounded-full bg-accent-ink py-2 pr-3.5 pl-4 text-sm font-medium whitespace-nowrap text-white shadow-card transition hover:bg-accent-deep"
+          >
+            <span class="pulse-dot inline-block h-1.5 w-1.5 rounded-full bg-accent-soft"></span>
+            Now leading NorthCUA
+            <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+          </a>
+          <a href={GITHUB} target="_blank" rel="noopener noreferrer" class="group flex min-h-[44px] items-center gap-2 whitespace-nowrap text-gray-600 transition-colors hover:text-accent-ink">
+            <BrandIcon name="github" class="transition-transform duration-300 group-hover:scale-110" />
+            <span class="text-sm font-medium">GitHub</span>
+          </a>
+          <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" class="group flex min-h-[44px] items-center gap-2 whitespace-nowrap text-gray-600 transition-colors hover:text-accent-ink">
+            <BrandIcon name="linkedin" size={18} class="transition-transform duration-300 group-hover:scale-110" />
+            <span class="text-sm font-medium">LinkedIn</span>
+          </a>
+          <a href={SCHOLAR} target="_blank" rel="noopener noreferrer" class="group flex min-h-[44px] items-center gap-2 whitespace-nowrap text-gray-600 transition-colors hover:text-accent-ink">
+            <BrandIcon name="scholar" class="transition-transform duration-300 group-hover:scale-110" />
+            <span class="text-sm font-medium">Scholar</span>
+          </a>
+          <a href={`mailto:${EMAIL}`} class="group flex min-h-[44px] items-center gap-2 whitespace-nowrap text-gray-600 transition-colors hover:text-accent-ink">
+            <Mail size={20} className="transition-transform duration-300 group-hover:scale-110" />
+            <span class="text-sm font-medium">Email</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="intro relative h-44 w-44 shrink-0 md:h-60 md:w-60" style="--d: 0ms">
+        <svg aria-hidden="true" viewBox="0 0 240 240" class="absolute -inset-6 h-[calc(100%+3rem)] w-[calc(100%+3rem)]">
+          <circle cx="120" cy="120" r="104" fill="none" stroke="#70c1b3" stroke-opacity="0.22" stroke-width="1"></circle>
+          <g class="orbit">
+            <circle cx="120" cy="120" r="114" fill="none" stroke="#70c1b3" stroke-opacity="0.5" stroke-width="1" stroke-dasharray="2 6"></circle>
+            <circle cx="120" cy="6" r="3.5" fill="#2a7a6e"></circle>
+          </g>
+        </svg>
+        <div class="relative h-full w-full overflow-hidden rounded-full shadow-lift ring-4 ring-white">
+          <Image src={profile} alt="Chaoyun Zhang" width={240} height={240} loading="eager" fetchpriority="high" class="h-full w-full object-cover" />
+        </div>
+      </div>
+    </div>
+
+    <dl class="intro mt-14 grid grid-cols-2 border-t border-hairline md:grid-cols-4" style="--d: 480ms">
+      {
+        STATS.map((s, i) => (
+          <a
+            href={s.href}
+            target={s.href.startsWith("#") ? undefined : "_blank"}
+            rel="noopener noreferrer"
+            class:list={[
+              "group flex flex-col-reverse gap-1 py-6 pr-4 md:px-6",
+              i === 0 && "md:pl-0",
+              i % 2 === 1 && "border-l border-hairline pl-4 md:pl-6",
+              i === 2 && "md:border-l md:border-hairline",
+              i > 1 && "border-t border-hairline md:border-t-0",
+            ]}
+          >
+            <dt class="flex items-center gap-1 text-xs text-gray-500 transition-colors group-hover:text-accent-ink">
+              {s.label}
+              <ArrowUpRight size={12} className="opacity-0 transition-opacity group-hover:opacity-100" />
+            </dt>
+            <dd class="text-3xl font-semibold tracking-tight text-gray-800 tabular-nums md:text-4xl">{s.value}</dd>
+          </a>
+        ))
+      }
+    </dl>
+  </div>
+</header>

@@ -1,0 +1,18 @@
+---
+// Inline text link. External links open in a new tab.
+interface Props {
+  href: string;
+  bold?: boolean;
+}
+const { href, bold = true } = Astro.props;
+const external = /^https?:/.test(href);
+---
+
+<a
+  href={href}
+  target={external ? "_blank" : undefined}
+  rel={external ? "noopener noreferrer" : undefined}
+  class:list={[
+    "text-accent-ink underline decoration-accent/50 underline-offset-2 transition-colors hover:text-accent-deep hover:decoration-accent-deep",
+    bold && "font-semibold",
+  ]}><slot /></a>

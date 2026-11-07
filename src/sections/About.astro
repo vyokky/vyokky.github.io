@@ -1,0 +1,51 @@
+---
+import A from "../components/A.astro";
+import Section from "../components/Section.astro";
+import { SCHOLAR } from "../data/links";
+
+const FOCUS = [
+  "Computer-using agents for desktop and web",
+  "GUI agents and the Desktop AgentOS",
+  "Agent post-training: SFT, RL and experience data",
+  "AIOps for large-scale cloud systems",
+];
+---
+
+<Section id="about" title="About Me">
+  <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_260px]">
+    <div class="max-w-[72ch] space-y-4 leading-relaxed text-gray-600">
+      <p>
+        I am the <strong class="text-gray-800">Head of Computer-Using Agents (CUA)</strong> at <strong class="text-gray-800">Beipo (北坡)</strong>,
+        where I lead <A href="#northcua">NorthCUA</A> from zero to one: an experience-driven loop that connects a unified agent harness,
+        experience data, model training and continual learning for agents that operate real desktop software and the web. Its open Nano,
+        Mini and Pro models are state-of-the-art among open-source models (under the reported settings) in GUI grounding, desktop execution
+        and web interaction.
+      </p>
+      <p>
+        Before that, I was a <strong class="text-gray-800">Principal Researcher</strong> in the Data, Knowledge and Intelligence
+        <strong class="text-gray-800">(DKI)</strong> group at <strong class="text-gray-800">Microsoft</strong>, where I was the lead developer and
+        algorithm researcher of <A href="https://github.com/microsoft/UFO/">UFO</A>, the first open-source Windows GUI agent / CUA framework, and
+        drove its evolution through UFO² and UFO³ into a cross-platform, cross-device Desktop AgentOS with
+        <strong class="text-gray-800">10K+ GitHub stars</strong>. I also worked on AIOps: anomaly detection, failure diagnosis and root cause
+        analysis for cloud services. I maintain a public <A href="https://arxiv.org/pdf/2411.18279">survey</A> on LLM-brained GUI agents
+        (<A href="https://vyokky.github.io/LLM-Brained-GUI-Agents-Survey/">Website</A>) and wrote the first book that systematically
+        introduces GUI agents. My work has been cited over <strong class="text-gray-800">8,100</strong> times on
+        <A href={SCHOLAR}>Google Scholar</A>.
+      </p>
+      <p>
+        Earlier, I was a research scientist at Lightspeed and Quantum Studio <strong class="text-gray-800">(光子工作室)</strong>, Tencent, where I
+        developed matchmaking systems for the game <i>League of Legends: Wild Rift</i>. I hold a PhD from the School of Informatics at the
+        University of Edinburgh, supervised by <A href="https://homepages.inf.ed.ac.uk/ppatras/">Prof. Paul Patras</A> and
+        <A href="https://homepages.inf.ed.ac.uk/rsarkar/">Rik Sarkar</A>, an MSc in Artificial Intelligence from the same institution, and a
+        BEng in Telecommunication Engineering from Huazhong University of Science and Technology.
+      </p>
+      <p>For any inquiries, please feel free to reach me at <strong class="text-gray-800">vyokky at 163 dot com</strong>.</p>
+    </div>
+    <aside class="lg:pt-1">
+      <h3 class="text-sm font-semibold text-gray-800">Research focus</h3>
+      <ul class="mt-3 divide-y divide-hairline border-y border-hairline">
+        {FOCUS.map((f) => <li class="py-3 text-sm text-gray-600">{f}</li>)}
+      </ul>
+    </aside>
+  </div>
+</Section>

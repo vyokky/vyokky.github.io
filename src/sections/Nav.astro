@@ -1,0 +1,36 @@
+---
+import { SECTIONS } from "../data/links";
+---
+
+<nav aria-label="Sections" class="sticky top-0 z-50 border-b border-hairline bg-paper/85 backdrop-blur-md">
+  <div class="container mx-auto max-w-6xl px-4">
+    <div class="flex h-14 items-center justify-between gap-6">
+      <a href="#top" class="hidden shrink-0 items-center gap-2 text-sm font-semibold tracking-tight text-gray-800 transition-colors hover:text-accent-ink lg:inline-flex">
+        <span class="pulse-dot inline-block h-1.5 w-1.5 rounded-full bg-accent"></span>
+        Chaoyun Zhang
+      </a>
+      <div
+        class="no-scrollbar -mx-4 flex h-full flex-1 items-center gap-5 overflow-x-auto px-4 [mask-image:linear-gradient(to_right,#000_82%,transparent)] md:justify-end md:gap-6 md:[mask-image:none] lg:mx-0 lg:px-0"
+      >
+        {
+          SECTIONS.map((s) => (
+            <a
+              href={`#${s.id}`}
+              data-spy
+              class="group relative flex h-full shrink-0 items-center whitespace-nowrap text-sm font-medium text-gray-600 transition-colors hover:text-accent-ink data-[active=true]:text-accent-ink"
+            >
+              {s.title}
+              <span
+                aria-hidden="true"
+                class="absolute right-0 bottom-2.5 left-0 h-0.5 origin-left scale-x-0 rounded-full bg-accent transition-transform duration-500 group-data-[active=true]:scale-x-100"
+              />
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+  <div aria-hidden="true" class="absolute right-0 -bottom-px left-0 h-[2px] overflow-hidden">
+    <div class="progress-bar h-full bg-linear-to-r from-accent-soft via-accent to-accent-ink"></div>
+  </div>
+</nav>

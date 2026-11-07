@@ -146,7 +146,9 @@ export default function ExperienceLoop() {
           return (
             <li
               key={s.k}
-              ref={(el) => (refs.current[i] = el)}
+              ref={(el) => {
+                refs.current[i] = el;
+              }}
               data-step={i}
               className={`rounded-xl border p-5 md:p-6 transition-all duration-500 lg:min-h-[34vh] ${
                 on ? "border-accent/50 bg-white shadow-card" : "border-hairline bg-white/50"
