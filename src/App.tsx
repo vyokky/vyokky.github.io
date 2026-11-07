@@ -1,2502 +1,928 @@
-import { useState } from "react";
-import { Github, LinkedinIcon, BookOpenCheck, Newspaper, Mail, ChevronDown, Users, FileText, Award } from "lucide-react";
+import { useState, type ReactNode } from "react";
+import {
+  Github,
+  LinkedinIcon,
+  BookOpenCheck,
+  Mail,
+  Users,
+  FileText,
+  Award,
+  ArrowRight,
+  ArrowUpRight,
+  ScrollText,
+  BookOpen,
+  ChevronDown,
+} from "lucide-react";
 import profileImage from "./image/Image.jpg";
-import agentosImage from "./image/agentos.png";
-import surveyImage from "./image/survey.png";
-import lamImage from "./image/lam.png";
-import posterImage from "./image/poster.png";
+import agentosImage from "./image/agentos.webp";
+import surveyImage from "./image/survey.webp";
+import lamImage from "./image/lam.webp";
+import posterImage from "./image/poster.webp";
+import NetworkField from "./components/NetworkField";
+import NorthCUASpotlight from "./components/NorthCUASpotlight";
+import Publications from "./components/Publications";
+import Timeline, { type TimelineItem } from "./components/Timeline";
+import Reveal from "./components/Reveal";
+import CountUp from "./components/CountUp";
+import { publications } from "./data/publications";
+import { trackPointer, useScrollProgressVar, useScrollSpy } from "./lib/hooks";
 
-// Restored from the deployed gh-pages bundle (2025-11-21), which was newer than master.
-function App() {
-  const sections = [
-      {
-        id: "about",
-        title: "About",
-      },
-      {
-        id: "experience",
-        title: "Experience",
-      },
-      {
-        id: "news",
-        title: "News",
-      },
-      {
-        id: "projects",
-        title: "Projects",
-      },
-      {
-        id: "publications",
-        title: "Publications",
-      },
-      {
-        id: "books",
-        title: "Books",
-      },
-      {
-        id: "service",
-        title: "Service",
-      },
-    ],
-    [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({
-      preprints: false,
-      2025: false,
-      2024: true,
-      2023: true,
-      2022: true,
-      2021: true,
-      2020: true,
-      2019: true,
-      2018: true,
-      2017: true,
-      2015: true,
-    }),
-    toggleSection = (section: string) => {
-      setCollapsedSections((prev) => ({
-        ...prev,
-        [section]: !prev[section],
-      }));
-    };
+const ICON = "text-accent";
+const SCHOLAR = "https://scholar.google.com/citations?hl=en&user=5h9KUFIAAAAJ&view_op=list_works";
+const EMAIL = "vyokky@163.com";
+
+const SECTIONS = [
+  { id: "northcua", title: "NorthCUA" },
+  { id: "about", title: "About" },
+  { id: "experience", title: "Experience" },
+  { id: "news", title: "News" },
+  { id: "projects", title: "Projects" },
+  { id: "publications", title: "Publications" },
+  { id: "books", title: "Books" },
+  { id: "service", title: "Service" },
+];
+const SECTION_IDS = SECTIONS.map((s) => s.id);
+
+function A({ href, children, bold = true }: { href: string; children: ReactNode; bold?: boolean }) {
   return (
-    <div className="min-h-screen bg-white">
-      <nav className="sticky top-0 bg-white shadow-sm z-50">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="flex items-center justify-end space-x-6 py-4">
-            {sections.map((i) => (
-              <a
-                href={`#${i.id}`}
-                className="text-gray-600 hover:text-[#70c1b3] transition-colors text-sm font-medium"
-                key={i.id}
-              >
-                {i.title}
-              </a>
-            ))}
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`text-accent-ink underline decoration-accent/50 underline-offset-2 hover:text-accent-deep hover:decoration-accent-deep ${bold ? "font-semibold" : ""}`}
+    >
+      {children}
+    </a>
+  );
+}
+
+function Section({ id, title, children }: { id: string; title: ReactNode; children: ReactNode }) {
+  return (
+    <Reveal as="section" id={id} className="mb-20">
+      <h2 className="text-2xl font-bold tracking-tight text-gray-800 mb-6 pb-2 border-b-2 border-accent">{title}</h2>
+      {children}
+    </Reveal>
+  );
+}
+
+/* ----------------------------------------------------------------------------- */
+
+const EXPERIENCE: TimelineItem[] = [
+  {
+    title: "Head of Computer-Using Agents (CUA)",
+    org: "Beipo (北坡) · Shanghai Qiji Zhifeng Intelligent Technology",
+    period: "Feb 2026 – Present",
+    current: true,
+    body: (
+      <ul className="list-disc list-outside ml-5 space-y-1">
+        <li>
+          Lead <strong>NorthCUA</strong> from zero to one: the CUA post-training and model roadmap, combining GUI
+          mid-training, long-horizon SFT and joint desktop and web reinforcement learning.
+        </li>
+        <li>
+          Built the unified harness and experience-data flywheel that connect desktop and web execution, trajectory
+          collection, outcome verification and training-data curation.
+        </li>
+        <li>Released the open NorthCUA Nano, Mini and Pro models, and NorthCUA-Ultrafast for low-latency execution.</li>
+      </ul>
+    ),
+  },
+  {
+    title: "Principal Researcher",
+    org: "Microsoft AI / Microsoft Research Asia · DKI · Shanghai",
+    period: "Jul 2022 – Feb 2026",
+    body: (
+      <ul className="list-disc list-outside ml-5 space-y-1">
+        <li>
+          Lead developer and algorithm researcher of <strong>UFO, UFO² and UFO³</strong>, the first open-source Windows
+          GUI agent / CUA framework, which grew into a cross-platform, cross-device Desktop AgentOS (10K+ GitHub stars).
+        </li>
+        <li>Trained and evaluated desktop GUI agents and action models; led the LLM-brained GUI agent survey.</li>
+        <li>AIOps: anomaly detection, failure diagnosis and root cause analysis deployed in cloud operations.</li>
+      </ul>
+    ),
+  },
+  {
+    title: "Applied Research Scientist",
+    org: "Lightspeed and Quantum Studio (光子工作室群), Tencent · Shenzhen",
+    period: "Dec 2020 – Jul 2022",
+    body: (
+      <p>
+        Matchmaking for <strong>League of Legends: Wild Rift</strong>: novice skill estimation and multi-objective
+        re-matchmaking, both deployed at million-DAU scale (QuickSkill, CIKM 2022; CUPID, CSCW 2024; two patents).
+      </p>
+    ),
+  },
+  {
+    title: "Ph.D. in Informatics",
+    org: "School of Informatics, University of Edinburgh",
+    period: "Sep 2016 – May 2020",
+    body: (
+      <p>
+        Deep neural mobile networking. Supervised by{" "}
+        <A href="https://homepages.inf.ed.ac.uk/ppatras/" bold={false}>
+          Paul Patras
+        </A>{" "}
+        and{" "}
+        <A href="https://homepages.inf.ed.ac.uk/rsarkar/" bold={false}>
+          Rik Sarkar
+        </A>
+        .
+      </p>
+    ),
+  },
+  {
+    title: "MSc in Artificial Intelligence",
+    org: "School of Informatics, University of Edinburgh",
+    period: "Sep 2015 – Nov 2016",
+    body: <p>Distinction (79/100). Non-intrusive load monitoring for appliance power consumption.</p>,
+  },
+  {
+    title: "Bachelor in Telecommunication Engineering",
+    org: "Huazhong University of Science and Technology",
+    period: "Sep 2011 – Jun 2015",
+    body: <p>Thesis on plant leaf recognition with convolutional neural networks and data augmentation.</p>,
+  },
+];
+
+type NewsItem = { date: string; isNew?: boolean; body: ReactNode };
+const NEWS: NewsItem[] = [
+  {
+    date: "November 2026",
+    isNew: true,
+    body: (
+      <>
+        The <A href="https://arxiv.org/abs/2611.02102">NorthCUA</A> technical report is out, and the NorthCUA{" "}
+        <strong>Nano / Mini / Pro</strong> models are open on <A href="https://huggingface.co/beipo-ai">Hugging Face</A>{" "}
+        🚀
+      </>
+    ),
+  },
+  {
+    date: "2026",
+    body: (
+      <>
+        Papers accepted at <strong>NeurIPS 2026</strong>, <strong>EMNLP 2026</strong> (main and Findings),{" "}
+        <strong>CIKM 2026</strong>, <strong>ICLR 2026</strong> (×2), <strong>Findings of ACL 2026</strong>,{" "}
+        <strong>FSE 2026</strong> and <strong>TOSEM</strong>, and <strong>UFO²</strong> in <strong>TMLR</strong>! 🎉
+      </>
+    ),
+  },
+  {
+    date: "February 2026",
+    body: (
+      <>
+        Joined <strong>Beipo</strong> as Head of Computer-Using Agents to build NorthCUA.
+      </>
+    ),
+  },
+  {
+    date: "December 2025",
+    body: (
+      <>
+        <A href="https://arxiv.org/abs/2511.11332">UFO³: Weaving the Digital Agent Galaxy</A> is reported by{" "}
+        <A href="https://www.jiqizhixin.com/articles/2025-12-03-7">机器之心</A> 📰
+      </>
+    ),
+  },
+  {
+    date: "2025",
+    body: (
+      <>
+        Our book <strong>大语言模型 GUI 智能体：人机交互新时代</strong>, the first book that systematically introduces GUI
+        agents, is published by Publishing House of Electronics Industry 📖
+      </>
+    ),
+  },
+  {
+    date: "September 2025",
+    body: (
+      <>
+        Two papers accepted at <strong>NeurIPS 2025</strong> and one paper accepted at <strong>ASE 2025</strong>! 🎉
+      </>
+    ),
+  },
+  {
+    date: "May 2025",
+    body: (
+      <>
+        One paper accepted at <strong>ACL 2025</strong>, and one paper accepted at <strong>KDD ADS 2025</strong>! 🎉
+      </>
+    ),
+  },
+  {
+    date: "January 2025",
+    body: (
+      <>
+        Two papers accepted at <strong>ICLR 2025</strong> and one paper accepted at <strong>NAACL 2025</strong>! 🎉
+      </>
+    ),
+  },
+  {
+    date: "January 2025",
+    body: (
+      <>
+        Our work on <A href="https://arxiv.org/pdf/2412.10047">Large Action Models</A> is released and has been reported
+        by <A href="https://mp.weixin.qq.com/s/6FHrOMXTCUmKS2GrWrzzrA">机器之心</A> and{" "}
+        <A href="https://mp.weixin.qq.com/s/BVFV8v6KGcpKoz_TYdBdAA">新智元</A> 🚀
+      </>
+    ),
+  },
+  {
+    date: "November 2024",
+    body: (
+      <>
+        Our <A href="https://arxiv.org/pdf/2411.18279">survey</A> on Large Language Model-Brained <strong>GUI Agents</strong>{" "}
+        is released, and it is reported by{" "}
+        <A href="https://baijiahao.baidu.com/s?id=1820751448950288867&wfr=spider&for=pc">机器之心</A> 📰
+      </>
+    ),
+  },
+];
+const NEWS_VISIBLE = 5;
+
+type Project = {
+  title: string;
+  desc: ReactNode;
+  image: string;
+  size: [number, number];
+  alt: string;
+  extra?: ReactNode;
+  media: { label: string; href: string }[];
+  links: { label: string; href: string }[];
+};
+
+const UFO3: Project = {
+  title: "UFO³: Galaxy, Multi-Device Orchestration Framework",
+  desc: (
+    <>
+      UFO³ introduces Galaxy, a multi-device orchestration framework that coordinates intelligent agents across
+      heterogeneous platforms. It is built on five tightly integrated design principles:
+    </>
+  ),
+  image: posterImage,
+  size: [1600, 946],
+  alt: "UFO³ Galaxy Project",
+  extra: (
+    <div className="text-gray-600 mb-5 space-y-2 text-sm">
+      {[
+        ["🌟", "Declarative Decomposition into Dynamic DAG", "Requests decomposed into structured DAG with TaskStars and dependencies for automated scheduling and runtime rewriting."],
+        ["🔄", "Continuous Result-Driven Graph Evolution", "Living constellation that adapts to execution feedback through controlled rewrites and dynamic adjustments."],
+        ["⚡", "Heterogeneous, Asynchronous & Safe Orchestration", "Capability-based device matching with async execution, safe locking, and formally verified correctness."],
+        ["🔌", "Unified Agent Interaction Protocol (AIP)", "WebSocket-based secure coordination layer with fault tolerance and automatic reconnection."],
+        ["🛠️", "Template-Driven MCP-Empowered Device Agents", "Lightweight toolkit for rapid agent development with MCP integration for tool augmentation."],
+      ].map(([e, k, d]) => (
+        <div key={k} className="flex items-start gap-2">
+          <span className="text-lg leading-6">{e}</span>
+          <div>
+            <strong className="text-gray-700">{k}.</strong> {d}
           </div>
         </div>
-      </nav>
-      <div className="bg-[#81D8D0]/10 py-20">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="flex flex-col md:flex-row items-center gap-12">
-            <div className="w-48 h-48 rounded-full overflow-hidden">
-              <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
-            </div>
-            <div className="flex-1">
-              <h1 className="text-4xl font-bold text-gray-800 mb-4">Chaoyun Zhang (张朝运)</h1>
-              <p className="text-xl text-gray-600 mb-6">Principal Researcher at Microsoft</p>
-              <div className="flex flex-wrap gap-6">
+      ))}
+    </div>
+  ),
+  media: [{ label: "机器之心: UFO³, Weaving the Digital Agent Galaxy", href: "https://www.jiqizhixin.com/articles/2025-12-03-7" }],
+  links: [
+    { label: "GitHub Code", href: "https://github.com/microsoft/UFO/" },
+    { label: "Documentation", href: "https://microsoft.github.io/UFO/" },
+    { label: "Paper", href: "https://arxiv.org/abs/2511.11332" },
+    { label: "YouTube", href: "https://www.youtube.com/watch?v=NGrVWGcJL8o" },
+  ],
+};
+
+const PROJECTS: Project[] = [
+  {
+    title: "UFO²: The Desktop AgentOS",
+    desc: (
+      <>
+        UFO² is a next-generation AgentOS that brings deeply integrated, system-level intelligence to Windows desktop
+        automation: a centralized <b>HostAgent</b> for natural language task orchestration, application-specialized{" "}
+        <b>AppAgents</b> that combine GUI actions with native APIs, hybrid control detection (vision + UI Automation),
+        speculative multi-action planning and a non-disruptive Picture-in-Picture interface.
+      </>
+    ),
+    image: agentosImage,
+    size: [611, 367],
+    alt: "UFO² Desktop AgentOS",
+    media: [
+      { label: "微软正式开源UFO²，Windows桌面迈入「AgentOS 时代」", href: "https://www.jiqizhixin.com/articles/2025-05-06-13" },
+      { label: "下一代Windows系统曝光：基于GPT-4V，Agent跨应用调度，代号UFO", href: "https://baijiahao.baidu.com/s?id=1790938358152188625&wfr=spider&for=pc" },
+      { label: "下一代智能版 Windows 要来了？微软推出首个 Windows Agent，命名为 UFO！", href: "https://blog.csdn.net/csdnnews/article/details/136161570" },
+      { label: "Microsoft's UFO abducts traditional user interfaces for a smarter Windows experience", href: "https://the-decoder.com/microsofts-ufo-abducts-traditional-user-interfaces-for-a-smarter-windows-experience/" },
+    ],
+    links: [
+      { label: "GitHub Code", href: "https://github.com/microsoft/UFO/" },
+      { label: "Docs", href: "https://microsoft.github.io/UFO/" },
+      { label: "UFO² Paper", href: "https://arxiv.org/pdf/2504.14603" },
+      { label: "UFO Paper", href: "https://arxiv.org/pdf/2402.07939" },
+    ],
+  },
+  {
+    title: "LLM-Brained GUI Agent Survey",
+    desc: (
+      <>
+        A comprehensive (90+ pages) survey on <b>large language model-powered GUI agents</b>, AI agents that operate
+        graphical user interfaces from natural language instructions. It covers over 500 research papers, and both the paper
+        and its website are updated as the field moves.
+      </>
+    ),
+    image: surveyImage,
+    size: [1400, 776],
+    alt: "LLM-Brained GUI Agent Survey",
+    media: [
+      { label: "引领人机交互革命？微软研究团队发布80页的大模型GUI智能体综述", href: "https://baijiahao.baidu.com/s?id=1820751448950288867&wfr=spider&for=pc" },
+      { label: "Agent操纵手机/电脑屏幕的全面综述", href: "https://news.qq.com/rain/a/20241224A07J3R00" },
+      { label: "[LLM-Brained GUI Agents] A Survey: Revolutionizing Human-Computer Interaction", href: "https://medium.com/advancedai/survey-gui-agents-revolutionizing-human-computer-interaction-a-comprehensive-survey-on-27ae2b4a8965" },
+    ],
+    links: [
+      { label: "Paper", href: "https://arxiv.org/pdf/2411.18279" },
+      { label: "GitHub Code", href: "https://github.com/vyokky/LLM-Brained-GUI-Agents-Survey" },
+      { label: "Website", href: "https://vyokky.github.io/LLM-Brained-GUI-Agents-Survey/" },
+    ],
+  },
+  {
+    title: "Large Action Models for GUI Agents",
+    desc: (
+      <>
+        LLMs are good at generating text, but not at executing actions? Not anymore. A detailed pipeline for training{" "}
+        <b>Large Action Models</b> (LAMs) from inception to implementation: data collection and preprocessing, model
+        training and evaluation, and tools for deploying LAMs in real applications, as part of the <b>UFO</b> initiative.
+      </>
+    ),
+    image: lamImage,
+    size: [1234, 502],
+    alt: "Large Action Models pipeline",
+    media: [
+      { label: "微软华人团队最新研究：从LLM到LAM，让大模型真正具有「行动力」！", href: "https://mp.weixin.qq.com/s/BVFV8v6KGcpKoz_TYdBdAA" },
+      { label: "无直接数据可用，AI怎么学会「干活」？微软团队揭秘AI从语言到行动的进化之路", href: "https://mp.weixin.qq.com/s/6FHrOMXTCUmKS2GrWrzzrA" },
+      { label: "Microsoft's new Large Action Model can perform some tasks in Word", href: "https://the-decoder.com/microsofts-new-large-action-model-can-perform-some-tasks-in-word/" },
+    ],
+    links: [
+      { label: "GitHub Code", href: "https://github.com/microsoft/UFO/tree/main/dataflow" },
+      { label: "Docs", href: "https://microsoft.github.io/UFO/dataflow/overview/" },
+      { label: "Paper", href: "https://arxiv.org/pdf/2412.10047" },
+    ],
+  },
+];
+
+const STATS = [
+  { to: 8100, suffix: "+", label: "Citations", href: SCHOLAR },
+  { to: 10, suffix: "K+", label: "UFO GitHub stars", href: "https://github.com/microsoft/UFO" },
+  { to: publications.length, suffix: "", label: "Publications", href: "#publications" },
+  { to: 3, suffix: "", label: "Open NorthCUA models", href: "https://huggingface.co/beipo-ai" },
+];
+
+const FOCUS = [
+  "Computer-using agents for desktop and web",
+  "GUI agents and the Desktop AgentOS",
+  "Agent post-training: SFT, RL and experience data",
+  "AIOps for large-scale cloud systems",
+];
+
+/* ----------------------------------------------------------------------------- */
+
+function Avatar() {
+  return (
+    <div className="relative h-44 w-44 shrink-0 md:h-60 md:w-60">
+      <svg aria-hidden="true" viewBox="0 0 240 240" className="absolute -inset-6 w-[calc(100%+3rem)] h-[calc(100%+3rem)]">
+        <circle cx="120" cy="120" r="104" fill="none" stroke="#70c1b3" strokeOpacity="0.22" strokeWidth="1" />
+        <g className="orbit">
+          <circle cx="120" cy="120" r="114" fill="none" stroke="#70c1b3" strokeOpacity="0.5" strokeWidth="1" strokeDasharray="2 6" />
+          <circle cx="120" cy="6" r="3.5" fill="#2a7a6e" />
+        </g>
+      </svg>
+      <div className="relative h-full w-full overflow-hidden rounded-full ring-4 ring-white shadow-lift">
+        <img src={profileImage} alt="Chaoyun Zhang" width={240} height={240} className="h-full w-full object-cover" />
+      </div>
+    </div>
+  );
+}
+
+function Nav() {
+  const active = useScrollSpy(SECTION_IDS);
+  const progressRef = useScrollProgressVar<HTMLDivElement>();
+  return (
+    <nav aria-label="Sections" className="sticky top-0 z-50 border-b border-hairline bg-paper/85 backdrop-blur-md">
+      <div className="container mx-auto px-4 max-w-6xl">
+        <div className="flex h-14 items-center justify-between gap-6">
+          <a href="#top" className="hidden lg:inline-flex shrink-0 items-center gap-2 text-sm font-semibold tracking-tight text-gray-800 hover:text-accent-ink transition-colors">
+            <span className="pulse-dot inline-block h-1.5 w-1.5 rounded-full bg-accent" />
+            Chaoyun Zhang
+          </a>
+          <div className="no-scrollbar -mx-4 lg:mx-0 flex h-full flex-1 items-center md:justify-end gap-5 md:gap-6 overflow-x-auto px-4 lg:px-0 [mask-image:linear-gradient(to_right,#000_82%,transparent)] md:[mask-image:none]">
+            {SECTIONS.map((s) => {
+              const on = s.id === active;
+              return (
                 <a
-                  href="https://github.com/vyokky"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-gray-600 hover:text-[#70c1b3] transition-colors group"
+                  key={s.id}
+                  href={`#${s.id}`}
+                  aria-current={on ? "true" : undefined}
+                  className={`relative flex h-full shrink-0 items-center whitespace-nowrap text-sm font-medium transition-colors ${
+                    on ? "text-accent-ink" : "text-gray-600 hover:text-accent-ink"
+                  }`}
                 >
-                  <Github size={24} className="group-hover:scale-110 transition-transform" />
-                  <span className="text-sm font-medium">GitHub</span>
+                  {s.title}
+                  <span
+                    aria-hidden="true"
+                    className={`absolute left-0 right-0 bottom-2.5 h-0.5 rounded-full bg-accent transition-transform duration-500 origin-left ${
+                      on ? "scale-x-100" : "scale-x-0"
+                    }`}
+                  />
                 </a>
-                <a
-                  href="https://www.linkedin.com/in/chaoyun-zhang-8221b012a/?originalSubdomain=uk"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-gray-600 hover:text-[#70c1b3] transition-colors group"
-                >
-                  <LinkedinIcon size={24} className="group-hover:scale-110 transition-transform" />
-                  <span className="text-sm font-medium">LinkedIn</span>
-                </a>
-                <a
-                  href="https://scholar.google.com/citations?hl=Github-CN&user=5h9KUFIAAAAJ&view_op=list_works"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-gray-600 hover:text-[#70c1b3] transition-colors group"
-                >
-                  <BookOpenCheck size={24} className="group-hover:scale-110 transition-transform" />
-                  <span className="text-sm font-medium">Google Scholar</span>
-                </a>
-                <a
-                  href="mailto:chaoyun.zhang@microsoft.com"
-                  className="flex items-center gap-2 text-gray-600 hover:text-[#70c1b3] transition-colors group"
-                >
-                  <Mail size={24} className="group-hover:scale-110 transition-transform" />
-                  <span className="text-sm font-medium">Email</span>
-                </a>
-              </div>
-            </div>
+              );
+            })}
           </div>
         </div>
       </div>
-      <div className="container mx-auto px-4 max-w-6xl py-12">
-        <section id="about" className="mb-16 scroll-mt-16">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b-2 border-[#70c1b3]">About Me</h2>
-          <div className="text-gray-600 leading-relaxed space-y-4">
-            <p>
-              I am a <strong>Principal Researcher</strong> in the Data, Knowledge and Intelligence{" "}
-              <strong>(DKI)</strong> group at <strong>Microsoft</strong>. My current research focuses on{" "}
-              <strong>GUI Agents</strong> and <strong>Computer-Using Agents (CUAs)</strong> powered by large language
-              models to enhance user experiences on computer systems. Before this, I worked on various AIOps projects,
-              leveraging both traditional and large language model-based approaches, to drive innovation and technology
-              transfer at Microsoft. You can explore my
-              <a
-                href="https://scholar.google.com/citations?hl=Github-CN&user=5h9KUFIAAAAJ&view_op=list_works"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#70c1b3] underline ml-1 mr-1 hover:text-[#5fb5ae] font-bold"
-              >
-                Google Scholar
-              </a>
-              to stay updated on my latest research.
-            </p>
-            <p>
-              Previously, I served as a research scientist at Lightspeed and Quantum Studio{" "}
-              <strong>(光子工作室)</strong>, Tencent, where I developed matchmaking systems for the game{" "}
-              <i>League of Legends: Wild Rift</i>. I hold a PhD from the School of Informatics at the University of
-              Edinburgh, where I was supervised by
-              <a
-                href="https://homepages.inf.ed.ac.uk/ppatras/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#70c1b3] underline ml-1 mr-1 hover:text-[#5fb5ae] font-bold"
-              >
-                Prof. Paul Patras.
-              </a>
-              I also earned an MSc in Artificial Intelligence from the same institution and a BEng in Telecommunication
-              Engineering from Huazhong University of Science and Technology.
-            </p>
-            <p>
-              I am the core developer and maintainer of
-              <a
-                href="https://github.com/microsoft/UFO/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#70c1b3] underline ml-1 mr-1 hover:text-[#5fb5ae] font-bold"
-              >
-                UFO
-              </a>
-              , the first GUI agent for Windows OS, which has received widespread recognition. Recently, I led the
-              development of
-              <a
-                href="https://arxiv.org/abs/2511.11332"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#70c1b3] underline ml-1 mr-1 hover:text-[#5fb5ae] font-bold"
-              >
-                UFO³ (Galaxy)
-              </a>
-              , a revolutionary multi-device orchestration framework that coordinates intelligent agents across
-              heterogeneous platforms. I also maintain a public
-              <a
-                href="https://arxiv.org/pdf/2411.18279?"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#70c1b3] underline ml-1 mr-1 hover:text-[#5fb5ae] font-bold"
-              >
-                survey
-              </a>
-              on large language model-driven GUI agents (
-              <a
-                href="https://vyokky.github.io/LLM-Brained-GUI-Agents-Survey/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#70c1b3] underline hover:text-[#5fb5ae] font-bold"
-              >
-                Website
-              </a>
-              ).
-            </p>
-            <p>
-              For any inquiries, please feel free to reach FileText at <strong>chaoyun.zhang at microsoft dot com</strong>.
-            </p>
+      <div ref={progressRef} aria-hidden="true" className="absolute left-0 right-0 -bottom-px h-[2px] overflow-hidden">
+        <div
+          className="h-full origin-left bg-gradient-to-r from-accent-soft via-accent to-accent-ink"
+          style={{ transform: "scaleX(var(--progress, 0))" }}
+        />
+      </div>
+    </nav>
+  );
+}
+
+function Hero() {
+  return (
+    <header id="top" className="relative overflow-hidden bg-accent-soft/10">
+      <NetworkField className="absolute inset-0 h-full w-full" />
+      {/* veil: keeps the lines faint behind the text, livelier toward the edges */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={{ background: "radial-gradient(ellipse 60% 70% at 35% 45%, rgb(251 253 252 / 0.82), rgb(251 253 252 / 0) 72%)" }}
+      />
+      <div className="container relative mx-auto flex max-w-6xl flex-col px-4 md:min-h-[calc(100dvh-var(--nav-h))]">
+        <div className="flex flex-1 flex-col-reverse items-center gap-12 pt-14 md:flex-row md:items-center md:gap-16 md:pt-10">
+          <div className="w-full min-w-0 flex-1">
+            <Reveal delay={60}>
+              <h1 className="text-[clamp(2.6rem,6.2vw,5rem)] font-bold leading-[0.98] tracking-[-0.035em] text-gray-800">
+                Chaoyun Zhang
+                <span className="mt-2 block text-[0.42em] font-medium leading-tight tracking-normal text-gray-500 md:ml-3 md:mt-0 md:inline">张朝运</span>
+              </h1>
+              <p className="mt-5 text-xl tracking-tight text-gray-600">
+                Head of Computer-Using Agents at <strong className="font-semibold text-gray-800">Beipo</strong>
+                <span className="text-gray-500"> · previously Principal Researcher at Microsoft</span>
+              </p>
+              <p className="mt-4 max-w-xl text-lg leading-relaxed text-gray-600">
+                I build agents that operate real desktop software and the web, and the experience loops that make them
+                better with practice.
+              </p>
+            </Reveal>
+            <Reveal delay={160}>
+              <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
+                <a
+                  href="#northcua"
+                  className="group inline-flex min-h-[44px] items-center gap-2 whitespace-nowrap rounded-full bg-accent-ink py-2 pl-4 pr-3.5 text-sm font-medium text-white shadow-card transition hover:bg-accent-deep"
+                >
+                  <span className="pulse-dot inline-block h-1.5 w-1.5 rounded-full bg-accent-soft" />
+                  Now leading NorthCUA
+                  <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+                </a>
+                {[
+                  { href: "https://github.com/vyokky", label: "GitHub", Icon: Github },
+                  { href: "https://www.linkedin.com/in/chaoyun-zhang-8221b012a/?originalSubdomain=uk", label: "LinkedIn", Icon: LinkedinIcon },
+                  { href: SCHOLAR, label: "Scholar", Icon: BookOpenCheck },
+                  { href: `mailto:${EMAIL}`, label: "Email", Icon: Mail },
+                ].map(({ href, label, Icon }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    target={href.startsWith("mailto:") ? undefined : "_blank"}
+                    rel="noopener noreferrer"
+                    className="group flex min-h-[44px] items-center gap-2 whitespace-nowrap text-gray-600 transition-colors hover:text-accent-ink"
+                  >
+                    <Icon size={20} className="transition-transform duration-300 group-hover:scale-110" />
+                    <span className="text-sm font-medium">{label}</span>
+                  </a>
+                ))}
+              </div>
+            </Reveal>
           </div>
-        </section>
-        <section id="experience" className="mb-16 scroll-mt-16">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b-2 border-[#70c1b3]">Experience</h2>
+          <Reveal className="shrink-0">
+            <Avatar />
+          </Reveal>
+        </div>
+
+        {/* Proof band: every number links to its source */}
+        <Reveal delay={240}>
+          <dl className="mt-14 grid grid-cols-2 border-t border-hairline md:grid-cols-4">
+            {STATS.map((s, i) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target={s.href.startsWith("#") ? undefined : "_blank"}
+                rel="noopener noreferrer"
+                className={`group flex flex-col-reverse gap-1 py-6 pr-4 transition-colors md:px-6 ${i % 2 === 1 ? "border-l border-hairline pl-4 md:pl-6" : ""} ${
+                  i === 0 ? "md:pl-0" : ""
+                } ${i === 2 ? "md:border-l md:border-hairline" : ""} ${i > 1 ? "border-t border-hairline md:border-t-0" : ""}`}
+              >
+                <dt className="flex items-center gap-1 text-xs text-gray-500 transition-colors group-hover:text-accent-ink">
+                  {s.label}
+                  <ArrowUpRight size={12} className="opacity-0 transition-opacity group-hover:opacity-100" />
+                </dt>
+                <dd className="text-3xl font-semibold tracking-tight text-gray-800 md:text-4xl">
+                  <CountUp to={s.to} suffix={s.suffix} />
+                </dd>
+              </a>
+            ))}
+          </dl>
+        </Reveal>
+      </div>
+    </header>
+  );
+}
+
+function ProjectLinks({ links }: { links: Project["links"] }) {
+  return (
+    <div className="flex flex-wrap gap-3">
+      {links.map((l) => (
+        <a
+          key={l.href}
+          href={l.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="whitespace-nowrap rounded-lg bg-accent-soft/60 px-4 py-2 text-sm font-medium text-accent-deep shadow-sm transition hover:bg-accent hover:text-white"
+        >
+          {l.label}
+        </a>
+      ))}
+    </div>
+  );
+}
+
+function Media({ items }: { items: Project["media"] }) {
+  if (!items.length) return null;
+  return (
+    <div className="mb-5">
+      <h4 className="text-sm font-semibold text-gray-800 mb-2">Media coverage</h4>
+      <ul className="list-disc list-outside ml-4 space-y-1 text-sm text-gray-600">
+        {items.map((m) => (
+          <li key={m.href + m.label}>
+            <a href={m.href} target="_blank" rel="noopener noreferrer" className="text-accent-ink hover:text-accent-deep hover:underline">
+              {m.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function FeatureProject({ p }: { p: Project }) {
+  return (
+    <div
+      className="glow-card grid gap-8 rounded-xl border border-hairline bg-gray-50/80 p-6 shadow-card transition duration-500 hover:-translate-y-1 hover:shadow-lift md:p-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]"
+      onPointerMove={trackPointer}
+    >
+      <div className="lg:order-2 self-center">
+        <img src={p.image} alt={p.alt} width={p.size[0]} height={p.size[1]} loading="lazy" decoding="async" className="h-auto w-full rounded-lg shadow-card" />
+      </div>
+      <div className="lg:order-1 min-w-0">
+        <h3 className="text-2xl font-semibold tracking-tight text-gray-800 mb-3">{p.title}</h3>
+        <p className="text-gray-600 mb-4">{p.desc}</p>
+        {p.extra}
+        <Media items={p.media} />
+        <ProjectLinks links={p.links} />
+      </div>
+    </div>
+  );
+}
+
+function ProjectCard({ p }: { p: Project }) {
+  return (
+    <div
+      className="glow-card flex flex-col rounded-xl border border-hairline bg-gray-50/80 p-6 shadow-card transition duration-500 hover:-translate-y-1 hover:shadow-lift"
+      onPointerMove={trackPointer}
+    >
+      <h3 className="text-xl font-semibold tracking-tight text-gray-800 mb-3">{p.title}</h3>
+      <div className="mb-4">
+        <img src={p.image} alt={p.alt} width={p.size[0]} height={p.size[1]} loading="lazy" decoding="async" className="h-auto w-full rounded-lg shadow-card" />
+      </div>
+      <p className="text-gray-600 mb-4 text-[15px] leading-relaxed">{p.desc}</p>
+      <Media items={p.media} />
+      <div className="mt-auto pt-1">
+        <ProjectLinks links={p.links} />
+      </div>
+    </div>
+  );
+}
+
+function ServiceRow({ icon: Icon, title, sub }: { icon: typeof FileText; title: string; sub: string }) {
+  return (
+    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-accent/5 transition-colors">
+      <Icon className={`${ICON} mt-1 flex-shrink-0`} size={16} />
+      <div>
+        <p className="font-medium text-gray-800">{title}</p>
+        <p className="text-sm text-gray-600">{sub}</p>
+      </div>
+    </div>
+  );
+}
+
+function ServiceCard({
+  icon: Icon,
+  title,
+  children,
+  className = "",
+}: {
+  icon: typeof FileText;
+  title: string;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={`glow-card bg-white border border-hairline rounded-xl p-6 md:p-8 transition-all duration-300 hover:shadow-card hover:border-accent/30 ${className}`}
+      onPointerMove={trackPointer}
+    >
+      <div className="flex items-center gap-3 mb-6">
+        <div className="p-2 bg-accent/10 rounded-lg">
+          <Icon className={ICON} size={24} />
+        </div>
+        <h3 className="text-xl font-semibold tracking-tight text-gray-800">{title}</h3>
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function News() {
+  const [all, setAll] = useState(false);
+  const items = all ? NEWS : NEWS.slice(0, NEWS_VISIBLE);
+  return (
+    <div>
+      <ol className="divide-y divide-hairline border-y border-hairline">
+        {items.map((n, i) => (
+          <li key={i} className="grid gap-1 py-4 sm:grid-cols-[150px_minmax(0,1fr)] sm:gap-6">
+            <p className="flex items-center gap-2 text-sm text-gray-500 tabular-nums sm:pt-0.5">
+              {n.date}
+              {n.isNew && (
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/15 px-2 py-0.5 text-[11px] font-medium text-accent-ink">
+                  <span className="pulse-dot inline-block h-1 w-1 rounded-full bg-accent" />
+                  New
+                </span>
+              )}
+            </p>
+            <p className="text-gray-700">{n.body}</p>
+          </li>
+        ))}
+      </ol>
+      {NEWS.length > NEWS_VISIBLE && (
+        <button
+          type="button"
+          onClick={() => setAll((v) => !v)}
+          aria-expanded={all}
+          className="mt-5 inline-flex min-h-[44px] items-center gap-1.5 whitespace-nowrap rounded-lg border border-hairline bg-white px-4 text-sm font-medium text-gray-600 transition hover:border-accent hover:text-accent-ink"
+        >
+          {all ? "Show less" : `Show ${NEWS.length - NEWS_VISIBLE} earlier updates`}
+          <ChevronDown size={16} className={`transition-transform duration-300 ${all ? "rotate-180" : ""}`} />
+        </button>
+      )}
+    </div>
+  );
+}
+
+/* ----------------------------------------------------------------------------- */
+
+function App() {
+  return (
+    <div className="min-h-screen bg-paper">
+      <a href="#content" className="skip-link">
+        Skip to content
+      </a>
+      <Nav />
+      <Hero />
+
+      <main id="content" className="container mx-auto px-4 max-w-6xl py-14">
+        <NorthCUASpotlight />
+
+        <Section id="about" title="About Me">
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_260px]">
+            <div className="text-gray-600 leading-relaxed space-y-4 max-w-[72ch]">
+              <p>
+                I am the <strong className="text-gray-800">Head of Computer-Using Agents (CUA)</strong> at{" "}
+                <strong className="text-gray-800">Beipo (北坡)</strong>, where I lead{" "}
+                <a href="#northcua" className="font-semibold text-accent-ink underline decoration-accent/50 underline-offset-2 hover:text-accent-deep">
+                  NorthCUA
+                </a>{" "}
+                from zero to one: an experience-driven loop that connects a unified agent harness, experience data, model
+                training and continual learning for agents that operate real desktop software and the web. Its open Nano,
+                Mini and Pro models are state-of-the-art among open-source models (under the reported settings) in GUI
+                grounding, desktop execution and web interaction.
+              </p>
+              <p>
+                Before that, I was a <strong className="text-gray-800">Principal Researcher</strong> in the Data, Knowledge
+                and Intelligence <strong className="text-gray-800">(DKI)</strong> group at{" "}
+                <strong className="text-gray-800">Microsoft</strong>, where I was the lead developer and algorithm
+                researcher of <A href="https://github.com/microsoft/UFO/">UFO</A>, the first open-source Windows GUI agent /
+                CUA framework, and drove its evolution through UFO² and UFO³ into a cross-platform, cross-device Desktop
+                AgentOS with <strong className="text-gray-800">10K+ GitHub stars</strong>. I also worked on AIOps: anomaly
+                detection, failure diagnosis and root cause analysis for cloud services. I maintain a public{" "}
+                <A href="https://arxiv.org/pdf/2411.18279">survey</A> on LLM-brained GUI agents (
+                <A href="https://vyokky.github.io/LLM-Brained-GUI-Agents-Survey/">Website</A>) and wrote the first book
+                that systematically introduces GUI agents. My work has been cited over{" "}
+                <strong className="text-gray-800">8,100</strong> times on <A href={SCHOLAR}>Google Scholar</A>.
+              </p>
+              <p>
+                Earlier, I was a research scientist at Lightspeed and Quantum Studio{" "}
+                <strong className="text-gray-800">(光子工作室)</strong>, Tencent, where I developed matchmaking systems for
+                the game <i>League of Legends: Wild Rift</i>. I hold a PhD from the School of Informatics at the University
+                of Edinburgh, supervised by <A href="https://homepages.inf.ed.ac.uk/ppatras/">Prof. Paul Patras</A> and{" "}
+                <A href="https://homepages.inf.ed.ac.uk/rsarkar/">Rik Sarkar</A>, an MSc in Artificial Intelligence from the
+                same institution, and a BEng in Telecommunication Engineering from Huazhong University of Science and
+                Technology.
+              </p>
+              <p>
+                For any inquiries, please feel free to reach me at{" "}
+                <strong className="text-gray-800">vyokky at 163 dot com</strong>.
+              </p>
+            </div>
+            <aside className="lg:pt-1">
+              <h3 className="text-sm font-semibold text-gray-800">Research focus</h3>
+              <ul className="mt-3 divide-y divide-hairline border-y border-hairline">
+                {FOCUS.map((f) => (
+                  <li key={f} className="py-3 text-sm text-gray-600">
+                    {f}
+                  </li>
+                ))}
+              </ul>
+            </aside>
+          </div>
+        </Section>
+
+        <Section id="experience" title="Experience">
+          <Timeline items={EXPERIENCE} />
+        </Section>
+
+        <Section id="news" title="Latest News">
+          <News />
+        </Section>
+
+        <Section id="projects" title="Featured Projects">
+          <p className="mb-6 -mt-1 text-gray-600">
+            The UFO family (UFO, UFO², UFO³) has <strong className="text-gray-800">10K+ GitHub stars</strong> and{" "}
+            <strong className="text-gray-800">1K+ forks</strong>; the survey and Large Action Models grew around it.
+          </p>
           <div className="space-y-6">
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold text-gray-800">Principal Researcher</h3>
-              <p className="text-[#70c1b3] font-medium">
-                Microsoft Research Asia / Microsoft AI / STCA | 2022 - Present
-              </p>
-              <p className="text-gray-600 mt-2"> GUI agents, large language models, and AIOps.</p>
-            </div>
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold text-gray-800">Applied Research Scientist</h3>
-              <p className="text-[#70c1b3] font-medium">
-                Lightspeed and Quantum Studio (光子工作室), Tencent | 2020 - 2022
-              </p>
-              <p className="text-gray-600 mt-2">
-                Worked on matchmaking systems for <strong>League of Legends: Wild Rift</strong>, a popular mobile MOBA
-                game.
-              </p>
-            </div>
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold text-gray-800">Ph.D. in Informatics</h3>
-              <p className="text-[#70c1b3] font-medium">School of Informatics, University of Edinburgh | 2016 - 2020</p>
-              <p className="text-gray-600 mt-2">Focused on deep learning for mobile networking.</p>
-            </div>
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold text-gray-800">MSc in Artificial Intelligence</h3>
-              <p className="text-[#70c1b3] font-medium">School of Informatics, University of Edinburgh | 2015 - 2016</p>
-              <p className="text-gray-600 mt-2">
-                Worked on non-intrusive load monitoring for appliance power consumption.
-              </p>
-            </div>
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold text-gray-800">Bechelor in Telecommunication Engineering</h3>
-              <p className="text-[#70c1b3] font-medium">Huazhong University of Science and Technology | 2011 - 2015</p>
+            <FeatureProject p={UFO3} />
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {PROJECTS.map((p) => (
+                <ProjectCard key={p.title} p={p} />
+              ))}
             </div>
           </div>
-        </section>
-        <section id="news" className="mb-16 scroll-mt-16">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b-2 border-[#70c1b3]">Latest News</h2>
-          <div className="space-y-4">
-            <div className="flex gap-4 items-start">
-              <Newspaper className="text-[#70c1b3] flex-shrink-0" />
-              <div>
-                <p className="text-gray-400 text-sm">September 2025</p>
-                <p className="text-gray-700">
-                  Exciting news! Two papers accepted at <strong>NeurIPS 2025</strong> and one paper accepted at{" "}
-                  <strong>ASE 2025</strong>! 🎉
-                </p>
+        </Section>
+
+        <Section id="publications" title="Publications">
+          <Publications />
+        </Section>
+
+        <Section id="books" title="Books">
+          <div
+            className="glow-card p-6 md:p-8 border border-hairline rounded-xl transition-shadow duration-300 hover:shadow-card bg-white"
+            onPointerMove={trackPointer}
+          >
+            <div className="flex items-start gap-4">
+              <div className="hidden sm:block p-2.5 bg-accent/10 rounded-lg">
+                <BookOpen className={ICON} size={24} />
               </div>
-            </div>
-            <div className="flex gap-4 items-start">
-              <Newspaper className="text-[#70c1b3] flex-shrink-0" />
               <div>
-                <p className="text-gray-400 text-sm">May 2025</p>
-                <p className="text-gray-700">
-                  {" "}
-                  One paper accepted at <strong>ACL 2025</strong>, and one paper accepted at{" "}
-                  <strong>KDD ADS 2025</strong>! 🎉
+                <h4 className="text-lg font-semibold text-gray-800 mb-2">大语言模型 GUI 智能体：人机交互新时代</h4>
+                <p className="text-gray-600 mt-2 leading-relaxed">
+                  <b>
+                    <u>张朝运</u>
+                  </b>
+                  , 秦思, 李立群, 何世林
                 </p>
-              </div>
-            </div>
-            <div className="flex gap-4 items-start">
-              <Newspaper className="text-[#70c1b3] flex-shrink-0" />
-              <div>
-                <p className="text-gray-400 text-sm">January 2025</p>
-                <p className="text-gray-700">
-                  Two papers accepted at <strong>ICLR 2025</strong> and one paper accepted at{" "}
-                  <strong>NAACL 2025</strong>! 🎉
+                <p className="text-gray-600 mt-2 leading-relaxed">
+                  The first book that systematically introduces GUI agents, covering perception, decision-making, action,
+                  data and applications. Funded by the MIIT Academic Publishing Fund (工信学术出版基金).
                 </p>
-              </div>
-            </div>
-            <div className="flex gap-4 items-start">
-              <Newspaper className="text-[#70c1b3] flex-shrink-0" />
-              <div>
-                <p className="text-gray-400 text-sm">January 2025</p>
-                <p className="text-gray-700">
-                  Our work on
-                  <a
-                    href="https://arxiv.org/pdf/2412.10047"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#70c1b3] underline font-bold ml-1 mr-1 hover:text-[#5fb5ae]"
-                  >
-                    Large Action Models
-                  </a>{" "}
-                  is released and has been been reported by
-                  <a
-                    href="https://mp.weixin.qq.com/s/6FHrOMXTCUmKS2GrWrzzrA"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#70c1b3] underline font-bold ml-1 mr-1 hover:text-[#5fb5ae]"
-                  >
-                    机器之心
-                  </a>
-                  and
-                  <a
-                    href="https://mp.weixin.qq.com/s/BVFV8v6KGcpKoz_TYdBdAA"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#70c1b3] underline font-bold ml-1 mr-1 hover:text-[#5fb5ae]"
-                  >
-                    新智元
-                  </a>
-                  🚀！
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-4 items-start">
-              <Newspaper className="text-[#70c1b3] flex-shrink-0" />
-              <div>
-                <p className="text-gray-400 text-sm">November 2024</p>
-                <p className="text-gray-700">
-                  Our
-                  <a
-                    href="https://arxiv.org/pdf/2411.18279?"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#70c1b3] underline font-bold ml-1 mr-1 hover:text-[#5fb5ae]"
-                  >
-                    survey
-                  </a>
-                  on Large Language Model-Brained <strong>GUI Agents</strong> is released, and it is reported by
-                  <a
-                    href="https://baijiahao.baidu.com/s?id=1820751448950288867&wfr=spider&for=pc"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#70c1b3] underline font-bold ml-1 mr-1 hover:text-[#5fb5ae]"
-                  >
-                    机器之心
-                  </a>
-                  📰！
+                <p className="text-accent-ink font-medium mt-2">
+                  电子工业出版社 (Publishing House of Electronics Industry), 2025
                 </p>
               </div>
             </div>
           </div>
-        </section>
-        <section id="projects" className="mb-16 scroll-mt-16">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b-2 border-[#70c1b3]">Featured Projects</h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-gray-50 shadow-md p-6 rounded-lg transition-transform transform hover:scale-105">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">
-                UFO³: Galaxy - Multi-Device Orchestration Framework
-              </h3>
-              <p className="text-gray-600 mb-4">
-                UFO³ introduces Galaxy, a revolutionary multi-device orchestration framework that coordinates
-                intelligent agents across heterogeneous platforms. Built on five tightly integrated design principles:
-              </p>
-              <div className="mb-4">
-                <img src={posterImage} alt="UFO³ Galaxy Project" className="w-full rounded-lg shadow-md" />
-              </div>
-              <div className="text-gray-600 mb-4 space-y-2 text-sm">
-                <div className="flex items-start gap-2">
-                  <span className="text-lg">🌟</span>
-                  <div>
-                    <strong>Declarative Decomposition into Dynamic DAG</strong> - Requests decomposed into structured
-                    DAG with TaskStars and dependencies for automated scheduling and runtime rewriting
-                  </div>
-                </div>
-                <div className="flex items-start gap-2">
-                  <span className="text-lg">🔄</span>
-                  <div>
-                    <strong>Continuous Result-Driven Graph Evolution</strong> - Living constellation that adapts to
-                    execution feedback through controlled rewrites and dynamic adjustments
-                  </div>
-                </div>
-                <div className="flex items-start gap-2">
-                  <span className="text-lg">⚡</span>
-                  <div>
-                    <strong>Heterogeneous, Asynchronous & Safe Orchestration</strong> - Capability-based device matching
-                    with async execution, safe locking, and formally verified correctness
-                  </div>
-                </div>
-                <div className="flex items-start gap-2">
-                  <span className="text-lg">🔌</span>
-                  <div>
-                    <strong>Unified Agent Interaction Protocol (AIP)</strong> - WebSocket-based secure coordination
-                    layer with fault tolerance and automatic reconnection
-                  </div>
-                </div>
-                <div className="flex items-start gap-2">
-                  <span className="text-lg">🛠️</span>
-                  <div>
-                    <strong>Template-Driven MCP-Empowered Device Agents</strong> - Lightweight toolkit for rapid agent
-                    development with MCP integration for tool augmentation
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-wrap gap-4">
-                <a
-                  href="https://github.com/microsoft/UFO/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-[#81D8D0] text-white px-4 py-2 rounded-lg shadow-md hover:bg-[#70c1b3] transition"
-                >
-                  GitHub Code
-                </a>
-                <a
-                  href="https://microsoft.github.io/UFO/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-[#81D8D0] text-white px-4 py-2 rounded-lg shadow-md hover:bg-[#70c1b3] transition"
-                >
-                  Documentation
-                </a>
-                <a
-                  href="https://arxiv.org/abs/2511.11332"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-[#81D8D0] text-white px-4 py-2 rounded-lg shadow-md hover:bg-[#70c1b3] transition"
-                >
-                  Paper
-                </a>
-                <a
-                  href="https://www.youtube.com/watch?v=NGrVWGcJL8o"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-[#81D8D0] text-white px-4 py-2 rounded-lg shadow-md hover:bg-[#70c1b3] transition"
-                >
-                  YouTube
-                </a>
-              </div>
-            </div>
-            <div className="bg-gray-50 shadow-md p-6 rounded-lg transition-transform transform hover:scale-105">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">UFO²: The Desktop AgentOS</h3>
-              <p className="text-gray-600 mb-4">
-                UFO² a next-generation AgentOS designed to bring deeply integrated, system-level intelligence to Windows
-                desktop automation. It features a centralized <b>HostAgent</b> for natural language task orchestration
-                and application-specialized <b>AppAgents</b> that combine GUI actions with native APIs. It leverages a
-                hybrid control detection pipeline (vision + UI Automation), speculative multi-action planning, and a
-                non-disruptive Picture-in-Picture interface to deliver robust, efficient, and user-aligned automation.
-              </p>
-              <div className="mb-4">
-                <img src={agentosImage} alt="UFO Project Screenshot" className="w-full rounded-lg shadow-md" />
-              </div>
-              <div className="mb-4">
-                <h4 className="text-lg font-semibold text-gray-800 mb-2">Media Coverage</h4>
-                <ul className="list-disc list-inside text-gray-600">
-                  <li>
-                    <a
-                      href="https://www.jiqizhixin.com/articles/2025-05-06-13"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[#70c1b3] hover:underline"
-                    >
-                      微软正式开源UFO²，Windows桌面迈入「AgentOS 时代」
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="https://baijiahao.baidu.com/s?id=1790938358152188625&wfr=spider&for=pc"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[#70c1b3] hover:underline"
-                    >
-                      下一代Windows系统曝光：基于GPT-4V，Agent跨应用调度，代号UFO
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="https://blog.csdn.net/csdnnews/article/details/136161570"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[#70c1b3] hover:underline"
-                    >
-                      下一代智能版 Windows 要来了？微软推出首个 Windows Agent，命名为 UFO！
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="https://the-decoder.com/microsofts-ufo-abducts-traditional-user-interfaces-for-a-smarter-windows-experience/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[#70c1b3] hover:underline"
-                    >
-                      Microsoft's UFO abducts traditional user interfaces for a smarter Windows experience
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div className="flex flex-wrap gap-4">
-                <a
-                  href="https://github.com/microsoft/UFO/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-[#81D8D0] text-white px-4 py-2 rounded-lg shadow-md hover:bg-[#70c1b3] transition"
-                >
-                  GitHub Code
-                </a>
-                <a
-                  href="https://microsoft.github.io/UFO/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-[#81D8D0] text-white px-4 py-2 rounded-lg shadow-md hover:bg-[#70c1b3] transition"
-                >
-                  Documentation
-                </a>
-                <a
-                  href="https://arxiv.org/pdf/2504.14603"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-[#81D8D0] text-white px-4 py-2 rounded-lg shadow-md hover:bg-[#70c1b3] transition"
-                >
-                  UFO² Paper
-                </a>
-                <a
-                  href="https://arxiv.org/pdf/2402.07939"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-[#81D8D0] text-white px-4 py-2 rounded-lg shadow-md hover:bg-[#70c1b3] transition"
-                >
-                  UFO Paper (NAACL 2025)
-                </a>
-              </div>
-            </div>
-            <div className="bg-gray-50 shadow-md p-6 rounded-lg transition-transform transform hover:scale-105">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">LLM-Brained GUI Agent Survey</h3>
-              <p className="text-gray-600 mb-4">
-                We present a comprehensive (90+ pages) survey on <b>large language model-powered GUI agents</b>—AI
-                agents that interact with graphical user interfaces (GUIs) on digital devices using natural language
-                instructions via LLMs. This survey is the most extensive to date, encompassing over 500 research papers.
-                Both the paper and its accompanying website are periodically updated to reflect the latest advancements
-                in this rapidly evolving field.
-              </p>
-              <div className="mb-4">
-                <img src={surveyImage} alt="SurveyImage Project Screenshot" className="w-full rounded-lg shadow-md" />
-              </div>
-              <div className="mb-4">
-                <h4 className="text-lg font-semibold text-gray-800 mb-2">Media Coverage</h4>
-                <ul className="list-disc list-inside text-gray-600">
-                  <li>
-                    <a
-                      href="https://baijiahao.baidu.com/s?id=1820751448950288867&wfr=spider&for=pc"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[#70c1b3] hover:underline"
-                    >
-                      引领人机交互革命？微软研究团队发布80页的大模型GUI智能体综述
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="https://news.qq.com/rain/a/20241224A07J3R00"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[#70c1b3] hover:underline"
-                    >
-                      Agent操纵手机/电脑屏幕的全面综述
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="https://medium.com/advancedai/survey-gui-agents-revolutionizing-human-computer-interaction-a-comprehensive-survey-on-27ae2b4a8965"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[#70c1b3] hover:underline"
-                    >
-                      [LLM-Brained GUI Agents] A Survey: Revolutionizing Human-Computer Interaction
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div className="flex flex-wrap gap-4">
-                <a
-                  href="https://arxiv.org/pdf/2411.18279"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-[#81D8D0] text-white px-4 py-2 rounded-lg shadow-md hover:bg-[#70c1b3] transition"
-                >
-                  Paper
-                </a>
-                <a
-                  href="https://github.com/vyokky/LLM-Brained-GUI-Agents-Survey"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-[#81D8D0] text-white px-4 py-2 rounded-lg shadow-md hover:bg-[#70c1b3] transition"
-                >
-                  GitHub Code
-                </a>
-                <a
-                  href="https://vyokky.github.io/LLM-Brained-GUI-Agents-Survey/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-[#81D8D0] text-white px-4 py-2 rounded-lg shadow-md hover:bg-[#70c1b3] transition"
-                >
-                  Website
-                </a>
-              </div>
-            </div>
-            <div className="bg-gray-50 shadow-md p-6 rounded-lg transition-transform transform hover:scale-105">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">Large Action Models for GUI Agents</h3>
-              <p className="text-gray-600 mb-4">
-                LLMs are good at generating text, but not at executing actions? Not anymore! We present a detail
-                pipeline for training <b>Large Action Models</b> (LAMs) from inception to implementation. Starting from
-                data collection and preprocessing, we move on to model training and evaluation. We also provide a set of
-                tools for deploying LAMs in real-world applications. This project is part of the <b>UFO</b> initiative,
-                which aims to build actionable models tailored for GUI agents.
-              </p>
-              <div className="mb-4">
-                <img src={lamImage} alt="LAM Project Screenshot" className="w-full rounded-lg shadow-md" />
-              </div>
-              <div className="mb-4">
-                <h4 className="text-lg font-semibold text-gray-800 mb-2">Media Coverage</h4>
-                <ul className="list-disc list-inside text-gray-600">
-                  <li>
-                    <a
-                      href="https://mp.weixin.qq.com/s/BVFV8v6KGcpKoz_TYdBdAA"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[#70c1b3] hover:underline"
-                    >
-                      微软华人团队最新研究：从LLM到LAM，让大模型真正具有「行动力」！
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="https://mp.weixin.qq.com/s/6FHrOMXTCUmKS2GrWrzzrA"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[#70c1b3] hover:underline"
-                    >
-                      无直接数据可用，AI怎么学会「干活」？微软团队揭秘AI从语言到行动的进化之路
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="https://the-decoder.com/microsofts-new-large-action-model-can-perform-some-tasks-in-word/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[#70c1b3] hover:underline"
-                    >
-                      Microsoft's new Large Action Model can perform some tasks in Word
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div className="flex flex-wrap gap-4">
-                <a
-                  href="https://github.com/microsoft/UFO/tree/main/dataflow"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-[#81D8D0] text-white px-4 py-2 rounded-lg shadow-md hover:bg-[#70c1b3] transition"
-                >
-                  GitHub Code
-                </a>
-                <a
-                  href="https://microsoft.github.io/UFO/dataflow/overview/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-[#81D8D0] text-white px-4 py-2 rounded-lg shadow-md hover:bg-[#70c1b3] transition"
-                >
-                  Documentation
-                </a>
-                <a
-                  href="https://arxiv.org/pdf/2412.10047"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-[#81D8D0] text-white px-4 py-2 rounded-lg shadow-md hover:bg-[#70c1b3] transition"
-                >
-                  Paper
-                </a>
-              </div>
-            </div>
-          </div>
-        </section>
-        <section id="publications" className="mb-16 scroll-mt-16">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b-2 border-[#70c1b3]">Publications</h2>
-          <div className="space-y-12">
-            <div>
-              <button
-                onClick={() => toggleSection("preprints")}
-                className="flex items-center gap-2 w-full text-left mb-6 hover:text-[#70c1b3] transition-colors"
-              >
-                <h3 className="text-2xl font-bold text-gray-800">Preprints</h3>
-                <ChevronDown className={`transition-transform duration-200 ${collapsedSections.preprints ? "rotate-180" : ""}`} size={24} />
-              </button>
-              {!collapsedSections.preprints && (
-                <div className="space-y-6">
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      UFO³: Weaving the Digital Agent Galaxy
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/abs/2511.11332"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                        <a
-                          href="https://github.com/microsoft/UFO/"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [Code]
-                        </a>
-                        <a
-                          href="https://microsoft.github.io/UFO/"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [Documentation]
-                        </a>
-                        <a
-                          href="https://www.youtube.com/watch?v=NGrVWGcJL8o"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [YouTube]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Liqun Li, He Huang, Chiming Ni, Bo Qiao, Si Qin, Yu Kang, Minghua Ma, Qingwei Lin, Saravan
-                      Rajmohan, Dongmei Zhang
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">arXiv preprint (2025)</p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      GUI-360°: A Comprehensive Dataset and Benchmark for Computer-Using Agents
-                      <span className="ml-4 space-x-2">
-                        <a href="#" className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium">
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Jian Mu,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Chiming Ni, Lu Wang, Bo Qiao, Kartik Mathur, Qianhui Wu, Yuhang Xie, Xiaojun Ma, Mengyu Zhou, Si
-                      Qin, Liqun Li, Yu Kang, Minghua Ma, Qingwei Lin, Saravan Rajmohan, Dongmei Zhang
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">arXiv preprint (2025)</p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Can Language Models Go Beyond Coding? Assessing the Capability of Language Models to Build
-                      Real-World Systems
-                      <span className="ml-4 space-x-2">
-                        <a href="#" className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium">
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Chenyu Zhao, Shenglin Zhang, Zeshun Huang, Weilin Jin, Yongqian Sun, Dan Pei,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Qingwei Lin, Chetan Bansal, Saravan Rajmohan, Minghua Ma
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">arXiv preprint (2025)</p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Agentic Troubleshooting Guide Automation for Incident Management
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/2510.10074"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Jiayi Mao, Liqun Li, Yanjie Gao, Zegang Peng, Shilin He,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Si Qin, Samia Khalid, Qingwei Lin, Saravan Rajmohan, Sitaram Lanka, Dongmei Zhang
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">arXiv preprint (2025)</p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      No More Manual Guides: Automatic and Scalable Generation of High-Quality Excel Tutorials
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/2509.21816"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Yuhang Xie, Jian Mu, Xiaojun Ma,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Lu Wang, Mengyu Zhou, Mugeng Liu, Si Qin, Qingwei Lin, Saravan Rajmohan, Shi Han, Dongmei Zhang
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">arXiv preprint (2025)</p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Learning GUI Grounding with Spatial Reasoning from Visual Feedback
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/2509.21552"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Yu Zhao, Wei-Ning Chen, Huseyin Atahan Inan, Samuel Kessler, Lu Wang, Lukas Wutschitz, Fangkai
-                      Yang,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Pasquale Minervini, Saravan Rajmohan, Robert Sim
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">arXiv preprint (2025)</p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      UFO2: The Desktop AgentOS
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/2504.14603"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                        <a
-                          href="https://github.com/microsoft/UFO/"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [Code]
-                        </a>
-                        <a
-                          href="https://microsoft.github.io/UFO/"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [Documentation]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , He Huang, Chiming Ni, Jian Mu, Si Qin, Shilin He, and others
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">arXiv preprint (2025)</p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      VEM: Environment-Free Exploration for Training GUI Agent with Value Environment Model
-                      <span className="ml-4 space-x-2">
-                        <a href="#" className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium">
-                          [PDF]
-                        </a>
-                        <a
-                          href="https://github.com/microsoft/GUI-Agent-RL"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [Code]
-                        </a>
-                        <a
-                          href="https://microsoft.github.io/GUI-Agent-RL/"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [Website]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Jiani Zheng, Lu Wang, Fangkai Yang,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Lingrui Mei, Wenjie Yin, Qingwei Lin, Dongmei Zhang, Saravan Rajmohan, Qi Zhang
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">arXiv preprint (2025)</p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Text2Grad: Reinforcement Learning from Natural Language Feedback
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/2505.22338"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                        <a
-                          href="https://github.com/microsoft/Text2Grad"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [Code]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Hanyang Wang, Lu Wang,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Tianjun Mao, Si Qin, Qingwei Lin, Saravan Rajmohan, Dongmei Zhang
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">arXiv preprint (2025)</p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Zoomer: Adaptive Image Focus Optimization for Black-box MLLM
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/2505.00742"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Jiaxu Qian, Chendong Wang, Yifan Yang,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Huiqiang Jiang, Xufang Luo, et al.
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">arXiv preprint (2025)</p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      TaskWeaver: A Code-First Agent Framework
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/2311.17541"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                        <a
-                          href="https://github.com/microsoft/TaskWeaver/"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [Code]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Bo Qiao, Liqun Li, Xu Zhang, Shilin He, Yu Kang,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Fangkai Yang, Hang Dong, Jue Zhang, Lu Wang, and others
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">arXiv preprint (2023)</p>
-                  </div>
-                </div>
-              )}
-            </div>
-            <div>
-              <button
-                onClick={() => toggleSection("2025")}
-                className="flex items-center gap-2 w-full text-left mb-6 hover:text-[#70c1b3] transition-colors"
-              >
-                <h3 className="text-2xl font-bold text-gray-800">2025 </h3>
-                <ChevronDown className={`transition-transform duration-200 ${collapsedSections[2025] ? "rotate-180" : ""}`} size={24} />
-              </button>
-              {!collapsedSections[2025] && (
-                <div className="space-y-6">
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      SWE-bench Goes Live!
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/2505.23419"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                        <a
-                          href="https://github.com/microsoft/SWE-bench-Live"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [Code]
-                        </a>
-                        <a
-                          href="https://swe-bench-live.github.io/"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [Leaderboard]
-                        </a>
-                        <a
-                          href="https://huggingface.co/SWE-bench-Live"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [HuggingFace]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Linghao Zhang, Shilin He,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Yu Kang, Bowen Li, Chengxing Xie, Junhao Wang, Maoquan Wang, Yufan Huang, Shengyu Fu, Elsie
-                      Nallipogu, Qingwei Lin, Yingnong Dang, Saravan Rajmohan, Dongmei Zhang
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      {" "}
-                      Neural Information Processing Systems (NeurIPS), Data and Benchmark Track, 2025
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      GUI-Actor: Coordinate-Free Visual Grounding for GUI Agents
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/2506.03143"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                        <a
-                          href="https://microsoft.github.io/GUI-Actor/"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [Code]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Qianhui Wu, Kanzhi Cheng, Rui Yang,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Jianwei Yang, Huiqiang Jiang, Jian Mu, <i>et al.</i>
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Neural Information Processing Systems (NeurIPS) 2025
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Large Language Model-Brained GUI Agents: A Survey
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/2411.18279"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                        <a
-                          href="https://github.com/vyokky/LLM-Brained-GUI-Agents-Survey"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [Code]
-                        </a>
-                        <a
-                          href="https://vyokky.github.io/LLM-Brained-GUI-Agents-Survey/"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [Website]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Shilin He, Jiaxu Qian, Bowen Li, Liqun Li, Si Qin, Yu Kang, Minghua Ma, Qingwei Lin, Saravan
-                      Rajmohan, and others
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Transactions on Machine Learning Research (TMLR) 2025
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Large Action Models: From Inception to Implementation
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/2412.10047"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                        <a
-                          href="https://github.com/microsoft/UFO/tree/main/dataflow"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [Code]
-                        </a>
-                        <a
-                          href="https://microsoft.github.io/UFO/dataflow/overview/"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [Documentation]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Lu Wang, Fangkai Yang,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Junting Lu, Jiaxu Qian, Shilin He, Pu Zhao, Bo Qiao, Ray Huang, Si Qin, and others
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Transactions on Machine Learning Research (TMLR) 2025
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      API Agents vs. GUI Agents: Divergence and Convergence
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/2503.11069?"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Shilin He, Liqun Li, Si Qin, Yu Kang, Qingwei Lin, Dongmei Zhang
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">1st Workshop on Computer Use Agents @ICML 2025.</p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Large Language Models Can Deliver Accurate and Interpretable Time Series Anomaly Detection
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/2405.15370"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                        <a
-                          href="https://github.com/LJunius/LLMAD"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [Code]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Jun Liu,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Jiaxu Qian, Minghua Ma, Si Qin, Chetan Bansal, Qingwei Lin, Saravan Rajmohan, Dongmei Zhang
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Proceeding of the ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD) 2025, Applied
-                      Data Science Track
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Triangle: Empowering Incident Triage with Multi-Agent
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://www.microsoft.com/en-us/research/wp-content/uploads/2025/02/TRIANGLE_FSE25.pdf"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Zhaoyang Yu, Aoyang Fang, Minghua Ma, Jaskaran Singh Walia,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Shu Chi, Ze Li, Murali Chintalapati, Xuchao Zhang, Rujia Wang, Chetan Bansal, Saravan Rajmohan,
-                      Qingwei Lin, Shenglin Zhang, Dan Pei, Pinjia He.
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      ACM/IEEE International Conference on Automated Software Engineering (ASE) (2025)
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      An Empirical Study of Production Incidents in Generative AI Cloud Services
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/2504.08865"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Haoran Yan, Yinfang Chen, Minghua Ma, Ming Wen, Shan Lu, Shenglin Zhang, Tianyin Xu, Rujia Wang,
-                      Chetan Bansal, Saravan Rajmohan,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Dongmei Zhang
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      IEEE International Symposium on Software Reliability Engineering (ISSRE) (2025)
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      DI-BENCH: Benchmarking Large Language Models on Dependency Inference With Testable Repositories at
-                      Scale
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/2501.13699"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                        <a
-                          href="https://github.com/Microsoft/DI-Bench"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [Code]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Linghao Zhang, Junhao Wang, Shilin He,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Yu Kang, Bowen Li and others
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Proceedings of the Association for Computational Linguistics (ACL 2025)
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      OpenRCA: Can Large Language Models Locate the Root Cause of Software Failures?
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://openreview.net/pdf?id=M4qNIzQYpd"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                        <a
-                          href="https://github.com/microsoft/OpenRCA"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [Code]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Junjielong Xu, Qinan Zhang, Zhiqing Zhong, Shilin He,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Qingwei Lin, Dan Pei, Pinjia He, Dongmei Zhang, Qi Zhang
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      {" "}
-                      International Conference on Learning Representations (ICLR) 2025
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      RuAG: Learned-Rule-Augmented Generation for Large Language Models
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/2411.03349"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Yudi Zhang, Pei Xiao, Lu Wang,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Meng Fang, Yali Du, Yevgeniy Puzyrev, Randolph Yao, Si Qin, Qingwei Lin, and others
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      International Conference on Learning Representations (ICLR) 2025
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      UFO: A UI-Focused Agent for Windows OS Interaction
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/2402.07939"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                        <a
-                          href="https://github.com/microsoft/UFO/"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [Code]
-                        </a>
-                        <a
-                          href="https://microsoft.github.io/UFO/"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [Documentation]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Liqun Li, Shilin He, Xu Zhang, Bo Qiao, Si Qin, Minghua Ma, Yu Kang, Qingwei Lin, Saravan
-                      Rajmohan, and others
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Proceedings of the North American Chapter of the Association for Computational Linguistics (NAACL)
-                      2025
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      AllHands: Ask Me Anything on Large-Scale Verbatim Feedback via Large Language Models
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/2403.15157"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Zicheng Ma, Yuhao Wu, Shilin He, Si Qin, Minghua Ma, Xiaoting Qin, Yu Kang, Yuyi Liang, Xiaoyu
-                      Gou, and others
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      {" "}
-                      Proceedings of the International Conference on Data Engineering (ICDE) 2025
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-            <div>
-              <button
-                onClick={() => toggleSection("2024")}
-                className="flex items-center gap-2 w-full text-left mb-6 hover:text-[#70c1b3] transition-colors"
-              >
-                <h3 className="text-2xl font-bold text-gray-800">2024</h3>
-                <ChevronDown className={`transition-transform duration-200 ${collapsedSections[2024] ? "rotate-180" : ""}`} size={24} />
-              </button>
-              {!collapsedSections[2024] && (
-                <div className="space-y-6">
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Deoxys: A Causal Inference Engine for Unhealthy Node Mitigation in Large-Scale Cloud
-                      Infrastructure
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://dl.acm.org/doi/pdf/10.1145/3698038.3698534"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Randolph Yao, Si Qin, Ze Li, Shekhar Agrawal, Binit R Mishra, Tri Tran, Minghua Ma, Qingwei Lin,
-                      Murali Chintalapati, and others
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Proceedings of the 2024 ACM Symposium on Cloud Computing (SoCC 2024)
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Everything of Thoughts: Defying the Law of Penrose Triangle for Thought Generation
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/2311.04254"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                        <a
-                          href="https://github.com/microsoft/Everything-of-Thoughts-XoT"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [Code]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Ruomeng Ding,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Lu Wang, Yong Xu, Minghua Ma, Wei Zhang, Si Qin, Saravan Rajmohan, Qingwei Lin, Dongmei Zhang
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Proceedings of the Association for Computational Linguistics (ACL 2024)
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Call Me When Necessary: LLMs Can Efficiently and Faithfully Reason over Structured Environments
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/2403.08593"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Sitao Cheng, Ziyuan Zhuang, Yong Xu, Fangkai Yang,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Xiaoting Qin, Xiang Huang, Ling Chen, Qingwei Lin, Dongmei Zhang, and others
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Proceedings of the Association for Computational Linguistics (ACL 2024)
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      QueryAgent: A Reliable and Efficient Reasoning Framework With Environmental Feedback-Based
-                      Self-Correction
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/2403.11886"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Xiang Huang, Sitao Cheng, Shanshan Huang, Jiayu Shen, Yong Xu,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Yuzhong Qu
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      {" "}
-                      Proceedings of the Association for Computational Linguistics (ACL 2024)
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      CUPID: Improving Battle Fairness and Position Satisfaction in Online MOBA Games With a
-                      Re-Matchmaking System
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/2406.19720"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Ge Fan,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Kai Wang, Yingjie Li, Junyang Chen, Zenglin Xu
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Proceedings of the ACM on Human-Computer Interaction (CSCW 2024)
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      ImDiffusion: Imputed Diffusion Models for Multivariate Time Series Anomaly Detection
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://www.vldb.org/pvldb/vol17/p359-zhang.pdf"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                        <a
-                          href="https://github.com/17000cyh/IMDiffusion.git"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [Code]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Yuhang Chen,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Minghua Ma, Yudong Liu, Ruomeng Ding, Bowen Li, Shilin He, Saravan Rajmohan, Qingwei Lin,
-                      Dongmei Zhang
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">Proceedings of the VLDB Endowment (VLDB 2024)</p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Xpert: Empowering Incident Management With Query Recommendations via Large Language Models
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://dl.acm.org/doi/pdf/10.1145/3597503.3639081"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Yuxuan Jiang,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Shilin He, Zhihao Yang, Minghua Ma, Si Qin, Yu Kang, Yingnong Dang, Saravan Rajmohan, Qingwei
-                      Lin, and others
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Proceedings of the IEEE/ACM 46th International Conference on Software Engineering (ICSE 2024)
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Automatic Root Cause Analysis via Large Language Models for Cloud Incidents
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://dl.acm.org/doi/pdf/10.1145/3627703.3629553"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Yinfang Chen, Huaibing Xie, Minghua Ma, Yu Kang, Xin Gao, Liu Shi, Yunjie Cao, Xuedong Gao, Hao
-                      Fan, Ming Wen, Jun Zeng, Supriyo Ghosh, Xuchao Zhang,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , and others
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Proceedings of the Nineteenth European Conference on Computer Systems (EuroSys 2024)
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      MonitorAssistant: Simplifying Cloud Service Monitoring via Large Language Models
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://dl.acm.org/doi/pdf/10.1145/3663529.3663826"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Zhaoyang Yu, Minghua Ma,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Si Qin, Yu Kang, Chetan Bansal, Saravan Rajmohan, Yingnong Dang, Changhua Pei, Dan Pei, and
-                      others
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Proceedings of the 32nd ACM International Conference on the Foundations of Software Engineering
-                      (ESEC/FSE 2024)
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Large Language Models Can Provide Accurate and Interpretable Incident Triage
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=10771420"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Zexin Wang, Jianhui Li, Minghua Ma, Ze Li, Yu Kang,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Chetan Bansal, Murali Chintalapati, Saravan Rajmohan, Qingwei Lin, and others
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      2024 IEEE 35th International Symposium on Software Reliability Engineering (ISSRE 2024)
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-            <div>
-              <button
-                onClick={() => toggleSection("2023")}
-                className="flex items-center gap-2 w-full text-left mb-6 hover:text-[#70c1b3] transition-colors"
-              >
-                <h3 className="text-2xl font-bold text-gray-800">2023</h3>
-                <ChevronDown className={`transition-transform duration-200 ${collapsedSections[2023] ? "rotate-180" : ""}`} size={24} />
-              </button>
-              {!collapsedSections[2023] && (
-                <div className="space-y-6">
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Assess and Summarize: Improve Outage Understanding With Large Language Models
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/2305.18084"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Pengxiang Jin, Shenglin Zhang, Minghua Ma, Haozhe Li, Yu Kang, Liqun Li, Yudong Liu, Bo Qiao,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Pu Zhao, and others
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Proceedings of the 32nd ACM International Conference on the Foundations of Software Engineering
-                      (ESEC/FSE 2023)
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      TraceDiag: Adaptive, Interpretable, and Efficient Root Cause Analysis on Large-Scale Microservice
-                      Systems
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/2310.18740"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Ruomeng Ding,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Lu Wang, Yong Xu, Minghua Ma, Xiaomin Wu, Meng Zhang, Qingjun Chen, Xin Gao, Xuedong Gao, and
-                      others
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Proceedings of the 32nd ACM International Conference on the Foundations of Software Engineering
-                      (ESEC/FSE 2023)
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Root Cause Analysis for Microservice Systems via Hierarchical Reinforcement Learning From Human
-                      Feedback
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://dl.acm.org/doi/pdf/10.1145/3580305.3599934"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Lu Wang,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Ruomeng Ding, Yong Xu, Qihang Chen, Wentao Zou, Qingjun Chen, Meng Zhang, Xuedong Gao, Hao Fan,
-                      and others
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Proceedings of the 29th ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD 2023)
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Improving Rating Prediction in Multi-Criteria Recommender Systems via a Collective Factor Model
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://papers.ssrn.com/sol3/Delivery.cfm?abstractid=4618243"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Ge Fan,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Junyang Chen, Paul Li, Yingjie Li, Victor CM Leung
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      IEEE Transactions on Network Science and Engineering (IEEE TNS&E), 2023
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-            <div>
-              <button
-                onClick={() => toggleSection("2022")}
-                className="flex items-center gap-2 w-full text-left mb-6 hover:text-[#70c1b3] transition-colors"
-              >
-                <h3 className="text-2xl font-bold text-gray-800">2022</h3>
-                <ChevronDown className={`transition-transform duration-200 ${collapsedSections[2022] ? "rotate-180" : ""}`} size={24} />
-              </button>
-              {!collapsedSections[2022] && (
-                <div className="space-y-6">
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Adversarial Attacks Against Deep Learning-Based Network Intrusion Detection Systems and Defense
-                      Mechanisms
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://www.research.ed.ac.uk/files/245550295/Adversarial_Attacks_Against_ZHANG_DOA01122021_AFV.pdf"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Xavier Costa-Pérez, Paul Patras
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">IEEE/ACM Transactions on Networking (ToN), 2022</p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Field-Aware Variational Autoencoders for Billion-Scale User Representation Learning
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://www.researchgate.net/profile/Ge-Fan-5/publication/361253019_Field-aware_Variational_Autoencoders_for_Billion-scale_User_Representation_Learning/links/62a69c556886635d5cd4c1ce/Field-aware-Variational-Autoencoders-for-Billion-scale-User-Representation-Learning.pdf"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Ge Fan,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Junyang Chen, Baopu Li, Zenglin Xu, Yingjie Li, Luyu Peng, Zhiguo Gong
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Proceedings of the 2022 IEEE 38th International Conference on Data Engineering (ICDE 2022).
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      AdnFM: An Attentive DenseNet Based Factorization Machine for Click-Through-Rate Prediction
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://dl.acm.org/doi/pdf/10.1145/3512850.3512852"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Kai Wang, Chunxu Shen,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Wenye Ma
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Proceedings of the 2022 8th International Conference on Computing and Data Engineering.
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Quickskill: Novice Skill Estimation in Online Multiplayer Games
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://www.researchgate.net/profile/Ge-Fan-5/publication/362728596_QuickSkill_Novice_Skill_Estimation_in_Online_Multiplayer_Games/links/638026627b0e356feb7f0a28/QuickSkill-Novice-Skill-Estimation-in-Online-Multiplayer-Games.pdf"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Kai Wang, Hao Chen, Ge Fan, Yingjie Li, Lifang Wu, Bingchao Zheng
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Proceedings of the 31st ACM International Conference on Information Knowledge Management (CIKM
-                      2022)
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      MV-HAN: A Hybrid Attentive Networks Based Multi-View Learning Model for Large-Scale Contents
-                      Recommendation
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/2210.07660"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Ge Fan,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Kai Wang, Junyang Chen
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Proceedings of the 37th IEEE/ACM International Conference on Automated Software Engineering (ASE
-                      2022)
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-            <div>
-              <button
-                onClick={() => toggleSection("2021")}
-                className="flex items-center gap-2 w-full text-left mb-6 hover:text-[#70c1b3] transition-colors"
-              >
-                <h3 className="text-2xl font-bold text-gray-800">2021</h3>
-                <ChevronDown className={`transition-transform duration-200 ${collapsedSections[2021] ? "rotate-180" : ""}`} size={24} />
-              </button>
-              {!collapsedSections[2021] && (
-                <div className="space-y-6">
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Spider: Deep Learning-Driven Sparse Mobile Traffic Measurement Collection and Reconstruction
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://www.pure.ed.ac.uk/ws/portalfiles/portal/244096825/Spider_FANG_DOA15082021_AFV.pdf"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Yini Fang, Alec F Diallo,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Paul Patras
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Proceedings of the 2021 IEEE Global Communications Conference (GLOBECOM 2021)
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      CloudLSTM: A Recurrent Neural Model for Spatiotemporal Point-Cloud Stream Forecasting
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://ojs.aaai.org/index.php/AAAI/article/download/17296/17103"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Marco Fiore, Iain Murray, Paul Patras
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Proceedings of the AAAI Conference on Artificial Intelligence (2021)
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Predicting Ratings in Multi-Criteria Recommender Systems via a Collective Factor Model
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://demalworkshop.github.io/www2021/papers/predictingratings.pdf"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Ge Fan,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Junyang Chen, Kaishun Wu
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">Proceedings of DeMal@The Web Conference (2021)</p>
-                  </div>
-                </div>
-              )}
-            </div>
-            <div>
-              <button
-                onClick={() => toggleSection("2020")}
-                className="flex items-center gap-2 w-full text-left mb-6 hover:text-[#70c1b3] transition-colors"
-              >
-                <h3 className="text-2xl font-bold text-gray-800">2020</h3>
-                <ChevronDown className={`transition-transform duration-200 ${collapsedSections[2020] ? "rotate-180" : ""}`} size={24} />
-              </button>
-              {!collapsedSections[2020] && (
-                <div className="space-y-6">
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Microscope: Mobile Service Traffic Decomposition for Network Slicing as a Service
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://www.research.ed.ac.uk/files/162970684/Microscope_Mobicom_2020_revision_pp.pdf"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Marco Fiore, Cezary Ziemlicki, Paul Patras
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Proceedings of the 26th Annual International Conference on Mobile Computing and Networking
-                      (MobiCOM 2020)
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Tiki-Taka: Attacking and Defending Deep Learning-Based Intrusion Detection Systems
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://www.research.ed.ac.uk/files/162970796/TikiTaka_CCSW_copy.pdf"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Xavier Costa-Pérez, Paul Patras
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Proceedings of the 2020 ACM SIGSAC Conference on Cloud Computing Security Workshop (CCSW 2020)
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      A Machine-Learning-Based Framework for Optimizing the Operation of Future Networks
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://dspace.networks.imdea.org/bitstream/handle/20.500.12761/805/A_Machine_Learning-based_Framework.pdf?sequence=1&isAllowed=y"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Claudio Fiandrino,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Paul Patras, Albert Banchs, Joerg Widmer
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">IEEE Communications Magazine</p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Driver Behavior Recognition via Interwoven Deep Convolutional Neural Nets With Multi-Stream Inputs
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=9233399"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Rui Li, Woojin Kim, Daesub Yoon, Paul Patras
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">IEEE Access.</p>
-                  </div>
-                </div>
-              )}
-            </div>
-            <div>
-              <button
-                onClick={() => toggleSection("2019")}
-                className="flex items-center gap-2 w-full text-left mb-6 hover:text-[#70c1b3] transition-colors"
-              >
-                <h3 className="text-2xl font-bold text-gray-800">2019</h3>
-                <ChevronDown className={`transition-transform duration-200 ${collapsedSections[2019] ? "rotate-180" : ""}`} size={24} />
-              </button>
-              {!collapsedSections[2019] && (
-                <div className="space-y-6">
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Deep Learning in Mobile and Wireless Networking: A Survey
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/1803.04311"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Paul Patras, Hamed Haddadi
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">IEEE Communications Surveys & Tutorials (2019)</p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Delmu: A Deep Learning Approach to Maximising the Utility of Virtualised Millimetre-Wave Backhauls
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/1810.00356"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Rui Li,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Pan Cao, Paul Patras, John S Thompson
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">MLM 2019.</p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Learning Driven Mobility Control of Airborne Base Stations in Emergency Networks
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://inria.hal.science/hal-01927252/document"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Rui Li,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Paul Patras, Razvan Stanica, Fabrice Valois
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      ACM SIGMETRICS Performance Evaluation Review 2019.
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Multi-Service Mobile Traffic Forecasting via Convolutional Long Short-Term Memories
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/1905.09771"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Marco Fiore, Paul Patras
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Proceedings of the 2019 IEEE International Symposium on Measurements Networking (M&N 2019)
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      A 3D-CNN and LSTM Based Multi-Task Learning Architecture for Action Recognition
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=8677269"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      Xi Ouyang, Shuangjie Xu,{" "}
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Pan Zhou, Yang Yang, Guanghui Liu, Xuelong Li
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">IEEE Access (2019)</p>
-                  </div>
-                </div>
-              )}
-            </div>
-            <div>
-              <button
-                onClick={() => toggleSection("2018")}
-                className="flex items-center gap-2 w-full text-left mb-6 hover:text-[#70c1b3] transition-colors"
-              >
-                <h3 className="text-2xl font-bold text-gray-800">2018</h3>
-                <ChevronDown className={`transition-transform duration-200 ${collapsedSections[2018] ? "rotate-180" : ""}`} size={24} />
-              </button>
-              {!collapsedSections[2018] && (
-                <div className="space-y-6">
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Sequence-to-Point Learning With Neural Networks for Nonintrusive Load Monitoring
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://ojs.aaai.org/index.php/AAAI/article/download/11873/11732"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                        <a
-                          href="https://github.com/vyokky/seq2point_NILM"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [Code]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Mingjun Zhong, Zongzuo Wang, Nigel Goddard, Charles Sutton
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Proceedings of the Thirty-Second AAAI Conference on Artificial Intelligence (AAAI 2018)
-                    </p>
-                  </div>
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      Long-Term Mobile Traffic Forecasting Using Deep Spatio-Temporal Neural Networks
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/1712.08083"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Paul Patras
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Proceedings of the Eighteenth ACM International Symposium on Mobile Ad Hoc Networking and
-                      Computing (MobiHoc 2018)
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-            <div>
-              <button
-                onClick={() => toggleSection("2017")}
-                className="flex items-center gap-2 w-full text-left mb-6 hover:text-[#70c1b3] transition-colors"
-              >
-                <h3 className="text-2xl font-bold text-gray-800">2017</h3>
-                <ChevronDown className={`transition-transform duration-200 ${collapsedSections[2017] ? "rotate-180" : ""}`} size={24} />
-              </button>
-              {!collapsedSections[2017] && (
-                <div className="space-y-6">
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      ZipNet-GAN: Inferring Fine-Grained Mobile Traffic Patterns via a Generative Adversarial Neural
-                      Network
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://arxiv.org/pdf/1711.02413"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Xi Ouyang, Paul Patras
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">
-                      Proceedings of the 13th International Conference on Emerging Networking EXperiments and
-                      Technologies (CoNEXT 2017)
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-            <div>
-              <button
-                onClick={() => toggleSection("2015")}
-                className="flex items-center gap-2 w-full text-left mb-6 hover:text-[#70c1b3] transition-colors"
-              >
-                <h3 className="text-2xl font-bold text-gray-800">2015</h3>
-                <ChevronDown className={`transition-transform duration-200 ${collapsedSections[2015] ? "rotate-180" : ""}`} size={24} />
-              </button>
-              {!collapsedSections[2015] && (
-                <div className="space-y-6">
-                  <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      A Convolutional Neural Network for Leaves Recognition Using Data Augmentation
-                      <span className="ml-4 space-x-2">
-                        <a
-                          href="https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=7363364"
-                          className="text-[#70c1b3] hover:text-[#5fb5ae] text-sm font-medium"
-                        >
-                          [PDF]
-                        </a>
-                      </span>
-                    </h4>
-                    <p className="text-gray-600 mt-2 leading-relaxed">
-                      <b>
-                        <u>Chaoyun Zhang</u>
-                      </b>
-                      , Pan Zhou, Chenghua Li, Lijun Liu
-                    </p>
-                    <p className="text-[#70c1b3] font-medium mt-2">Proceedings of the 2015 IEEE PICOM.</p>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </section>
-        <section id="books" className="mb-16 scroll-mt-16">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b-2 border-[#70c1b3]">Books</h2>
-          <div className="space-y-6">
-            <div className="p-8 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow bg-white">
-              <h4 className="text-lg font-semibold text-gray-800 mb-2">大语言模型 GUI 智能体：人机交互新时代</h4>
-              <p className="text-gray-600 mt-2 leading-relaxed">
-                <b>
-                  <u>张朝运</u>
-                </b>
-                , 秦思, 李立群, 何世林
-              </p>
-              <p className="text-[#70c1b3] font-medium mt-2">电子工业出版社 (China Machine Press), 2025</p>
-            </div>
-          </div>
-        </section>
-        <section id="service" className="mb-16 scroll-mt-16">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b-2 border-[#70c1b3]">Academic Service</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-white border border-gray-200 rounded-xl p-8 hover:shadow-lg transition-all duration-300 hover:border-[#70c1b3]/30">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-[#70c1b3]/10 rounded-lg">
-                  <Users className="text-[#70c1b3]" size={24} />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-800">Program Committee</h3>
-              </div>
+        </Section>
+
+        <Section id="service" title="Service & Honors">
+          <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+            <ServiceCard icon={Users} title="Program Committee">
               <div className="space-y-3">
-                <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#70c1b3]/5 transition-colors">
-                  <Award className="text-[#70c1b3] mt-1 flex-shrink-0" size={16} />
-                  <div>
-                    <p className="font-medium text-gray-800">ICSE 2027</p>
-                    <p className="text-sm text-gray-600">International Conference on Software Engineering</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#70c1b3]/5 transition-colors">
-                  <Award className="text-[#70c1b3] mt-1 flex-shrink-0" size={16} />
-                  <div>
-                    <p className="font-medium text-gray-800">FSE 2025 Industry Track</p>
-                    <p className="text-sm text-gray-600">Foundations of Software Engineering</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#70c1b3]/5 transition-colors">
-                  <Award className="text-[#70c1b3] mt-1 flex-shrink-0" size={16} />
-                  <div>
-                    <p className="font-medium text-gray-800">ACM DistributedML Workshop 2020</p>
-                    <p className="text-sm text-gray-600">Distributed Machine Learning</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#70c1b3]/5 transition-colors">
-                  <Award className="text-[#70c1b3] mt-1 flex-shrink-0" size={16} />
-                  <div>
-                    <p className="font-medium text-gray-800">IEEE CCNC 2020</p>
-                    <p className="text-sm text-gray-600">Consumer Communications & Networking</p>
-                  </div>
-                </div>
+                <ServiceRow icon={Award} title="ICSE 2027" sub="International Conference on Software Engineering" />
+                <ServiceRow icon={Award} title="FSE 2025 Industry Track" sub="Foundations of Software Engineering" />
+                <ServiceRow icon={Award} title="ACM DistributedML Workshop 2020" sub="Distributed Machine Learning" />
+                <ServiceRow icon={Award} title="IEEE CCNC 2020" sub="Consumer Communications & Networking" />
               </div>
-            </div>
-            <div className="bg-white border border-gray-200 rounded-xl p-8 hover:shadow-lg transition-all duration-300 hover:border-[#70c1b3]/30">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-[#70c1b3]/10 rounded-lg">
-                  <BookOpenCheck className="text-[#70c1b3]" size={24} />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-800">Reviewing Service</h3>
-              </div>
+            </ServiceCard>
+
+            <ServiceCard icon={BookOpenCheck} title="Reviewing Service">
               <div className="space-y-4">
                 <div className="mb-4">
-                  <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-                    Premier Conferences
-                  </h4>
+                  <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Premier Conferences</h4>
                   <div className="space-y-3">
-                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#70c1b3]/5 transition-colors">
-                      <FileText className="text-[#70c1b3] mt-1 flex-shrink-0" size={16} />
-                      <div>
-                        <p className="font-medium text-gray-800">NeurIPS 2025</p>
-                        <p className="text-sm text-gray-600">Neural Information Processing Systems</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#70c1b3]/5 transition-colors">
-                      <FileText className="text-[#70c1b3] mt-1 flex-shrink-0" size={16} />
-                      <div>
-                        <p className="font-medium text-gray-800">ICLR 2025</p>
-                        <p className="text-sm text-gray-600">International Conference on Learning Representations</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#70c1b3]/5 transition-colors">
-                      <FileText className="text-[#70c1b3] mt-1 flex-shrink-0" size={16} />
-                      <div>
-                        <p className="font-medium text-gray-800">KDD ADS Track 2025</p>
-                        <p className="text-sm text-gray-600">Applied Data Science Track</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#70c1b3]/5 transition-colors">
-                      <FileText className="text-[#70c1b3] mt-1 flex-shrink-0" size={16} />
-                      <div>
-                        <p className="font-medium text-gray-800">ACL ARR</p>
-                        <p className="text-sm text-gray-600">Association for Computational Linguistics</p>
-                      </div>
-                    </div>
+                    <ServiceRow icon={FileText} title="NeurIPS 2025" sub="Neural Information Processing Systems" />
+                    <ServiceRow icon={FileText} title="ICLR 2025" sub="International Conference on Learning Representations" />
+                    <ServiceRow icon={FileText} title="KDD ADS Track 2025" sub="Applied Data Science Track" />
+                    <ServiceRow icon={FileText} title="ACL ARR" sub="Association for Computational Linguistics" />
                   </div>
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-                    Specialized Conferences
-                  </h4>
+                  <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Specialized Conferences</h4>
                   <div className="space-y-3">
-                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#70c1b3]/5 transition-colors">
-                      <FileText className="text-[#70c1b3] mt-1 flex-shrink-0" size={16} />
-                      <div>
-                        <p className="font-medium text-gray-800">IEEE TMA</p>
-                        <p className="text-sm text-gray-600">Traffic Measurement and Analysis</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#70c1b3]/5 transition-colors">
-                      <FileText className="text-[#70c1b3] mt-1 flex-shrink-0" size={16} />
-                      <div>
-                        <p className="font-medium text-gray-800">IEEE WCNC</p>
-                        <p className="text-sm text-gray-600">Wireless Communications and Networking</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#70c1b3]/5 transition-colors">
-                      <FileText className="text-[#70c1b3] mt-1 flex-shrink-0" size={16} />
-                      <div>
-                        <p className="font-medium text-gray-800">IEEE WoWMoM</p>
-                        <p className="text-sm text-gray-600">World of Wireless, Mobile and Multimedia Networks</p>
-                      </div>
-                    </div>
+                    <ServiceRow icon={FileText} title="IEEE TMA" sub="Traffic Measurement and Analysis" />
+                    <ServiceRow icon={FileText} title="IEEE WCNC" sub="Wireless Communications and Networking" />
+                    <ServiceRow icon={FileText} title="IEEE WoWMoM" sub="World of Wireless, Mobile and Multimedia Networks" />
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="md:col-span-2 bg-white border border-gray-200 rounded-xl p-8 hover:shadow-lg transition-all duration-300 hover:border-[#70c1b3]/30">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-[#70c1b3]/10 rounded-lg">
-                  <FileText className="text-[#70c1b3]" size={24} />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-800">Journal Editorial Service</h3>
-              </div>
+            </ServiceCard>
+
+            <ServiceCard icon={FileText} title="Journal Editorial Service" className="md:col-span-2">
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#70c1b3]/5 transition-colors">
-                  <FileText className="text-[#70c1b3] mt-1 flex-shrink-0" size={16} />
-                  <div>
-                    <p className="font-medium text-gray-800">ACM Computing Surveys</p>
-                    <p className="text-sm text-gray-600">CSUR</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#70c1b3]/5 transition-colors">
-                  <FileText className="text-[#70c1b3] mt-1 flex-shrink-0" size={16} />
-                  <div>
-                    <p className="font-medium text-gray-800">IEEE Communications Letters</p>
-                    <p className="text-sm text-gray-600">ComLet</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#70c1b3]/5 transition-colors">
-                  <FileText className="text-[#70c1b3] mt-1 flex-shrink-0" size={16} />
-                  <div>
-                    <p className="font-medium text-gray-800">IEEE Trans. Mobile Computing</p>
-                    <p className="text-sm text-gray-600">TMC</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#70c1b3]/5 transition-colors">
-                  <FileText className="text-[#70c1b3] mt-1 flex-shrink-0" size={16} />
-                  <div>
-                    <p className="font-medium text-gray-800">IEEE Trans. Smart Grid</p>
-                    <p className="text-sm text-gray-600">TSG</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-[#70c1b3]/5 transition-colors">
-                  <FileText className="text-[#70c1b3] mt-1 flex-shrink-0" size={16} />
-                  <div>
-                    <p className="font-medium text-gray-800">IEEE SECOM</p>
-                    <p className="text-sm text-gray-600">Systems Engineering</p>
-                  </div>
-                </div>
+                <ServiceRow icon={FileText} title="ACM Computing Surveys" sub="CSUR" />
+                <ServiceRow icon={FileText} title="IEEE Communications Letters" sub="ComLet" />
+                <ServiceRow icon={FileText} title="IEEE Trans. Mobile Computing" sub="TMC" />
+                <ServiceRow icon={FileText} title="IEEE Trans. Smart Grid" sub="TSG" />
+                <ServiceRow icon={FileText} title="IEEE SECOM" sub="Systems Engineering" />
               </div>
-            </div>
-            <div className="md:col-span-2 bg-gradient-to-br from-[#70c1b3]/5 to-blue-50 border border-[#70c1b3]/20 rounded-xl p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-[#70c1b3]/20 rounded-lg">
-                  <Award className="text-[#70c1b3]" size={24} />
+            </ServiceCard>
+
+            <div className="md:col-span-2 rounded-xl border border-accent/20 bg-gradient-to-br from-accent/5 to-accent-soft/10 p-6 md:p-8">
+              <div className="grid md:grid-cols-2 gap-8">
+                <div>
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="p-2 bg-accent/20 rounded-lg">
+                      <Award className={ICON} size={24} />
+                    </div>
+                    <h3 className="text-xl font-semibold tracking-tight text-gray-800">Awards</h3>
+                  </div>
+                  <ul className="space-y-3">
+                    {[
+                      ["2018", "Best Student Paper Award, MLN"],
+                      ["2018", "ACM MobiHoc Student Travel Grant"],
+                      ["2017", "Outstanding MSc Dissertation Award, University of Edinburgh"],
+                      ["2016", "Edinburgh Global Research Scholarship"],
+                    ].map(([y, t]) => (
+                      <li key={t} className="flex gap-3 bg-white/80 p-3 rounded-lg border border-hairline">
+                        <span className="text-xs font-medium text-accent-ink pt-0.5 tabular-nums">{y}</span>
+                        <span className="text-sm text-gray-700">{t}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-800">Professional Recognition</h3>
-              </div>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="bg-white/80 p-4 rounded-lg border border-[#70c1b3]/10">
-                  <h4 className="font-semibold text-gray-800 mb-2">Research Impact</h4>
-                  <p className="text-sm text-gray-600 leading-relaxed">
-                    Active contributor to top-tier conferences and journals in AI, Software Engineering, and Systems
-                    research. Recognized expertise in GUI agents, large language models, and AIOps.
-                  </p>
-                </div>
-                <div className="bg-white/80 p-4 rounded-lg border border-[#70c1b3]/10">
-                  <h4 className="font-semibold text-gray-800 mb-2">Community Engagement</h4>
-                  <p className="text-sm text-gray-600 leading-relaxed">
-                    Committed to advancing research through peer review, program committee service, and mentoring the
-                    next generation of researchers in AI and software systems.
-                  </p>
+                <div>
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="p-2 bg-accent/20 rounded-lg">
+                      <ScrollText className={ICON} size={24} />
+                    </div>
+                    <h3 className="text-xl font-semibold tracking-tight text-gray-800">Patents</h3>
+                  </div>
+                  <ul className="space-y-3">
+                    {[
+                      ["US12244467B2", "Distributed Network Traffic Data Decomposition Method (granted)"],
+                      ["US 18/428,627", "Customized anomaly monitor for compute system performance metrics"],
+                      ["CN116785718A", "Novice skill detection for MOBA games (面向 MOBA 游戏的新手能力探测算法)"],
+                      ["CN116850601A", "Multi-objective optimization for MOBA matchmaking and position assignment"],
+                    ].map(([id, t]) => (
+                      <li key={id} className="bg-white/80 p-3 rounded-lg border border-hairline">
+                        <p className="font-mono text-xs text-accent-ink">{id}</p>
+                        <p className="text-sm text-gray-700">{t}</p>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             </div>
           </div>
-        </section>
-      </div>
+        </Section>
+      </main>
+
+      <footer className="border-t border-hairline">
+        <div className="container mx-auto max-w-6xl px-4 py-12">
+          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-sm text-gray-500">Get in touch</p>
+              <a href={`mailto:${EMAIL}`} className="mt-1 inline-block text-2xl md:text-3xl font-semibold tracking-tight text-gray-800 hover:text-accent-ink transition-colors">
+                {EMAIL}
+              </a>
+            </div>
+            <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+              <a href="https://github.com/vyokky" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-accent-ink">GitHub</a>
+              <a href={SCHOLAR} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-accent-ink">Google Scholar</a>
+              <a href="https://www.linkedin.com/in/chaoyun-zhang-8221b012a/?originalSubdomain=uk" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-accent-ink">LinkedIn</a>
+            </div>
+          </div>
+          <div className="mt-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-gray-500">
+            <span>© 2026 Chaoyun Zhang</span>
+            <span>Last updated November 2026</span>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

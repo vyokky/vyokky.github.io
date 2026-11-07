@@ -1,3 +1,228 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*
+ * Design tokens + motion layer.
+ * Motion budget (four beats): the hero network field; the timeline drawing itself on scroll;
+ * the NorthCUA spotlight (experience-loop signal + model switch); cards answering the cursor.
+ * Everything is decorative: the page reads the same without it, and
+ * `prefers-reduced-motion: reduce` freezes all of it (see bottom).
+ */
+
+:root {
+  --accent: #70c1b3;
+  --accent-soft: #81d8d0;
+  --accent-ink: #2a7a6e;
+  --accent-deep: #134e46;
+  --paper: #fbfdfc;
+  --nav-h: 56px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---------- Mobile floor ---------- */
+html,
+body {
+  overflow-x: clip; /* clip, not hidden: hidden would break the sticky nav */
+}
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-h) + 16px);
+}
+body {
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+h1,
+h2,
+h3,
+h4 {
+  overflow-wrap: anywhere;
+  min-width: 0;
+  text-wrap: balance;
+}
+p,
+li {
+  text-wrap: pretty;
+}
+
+/* ---------- Focus & skip link ---------- */
+:focus-visible {
+  outline: 2px solid var(--accent-ink);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -48px;
+  z-index: 100;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: var(--accent-deep);
+  color: #f4fbf9;
+  font-size: 14px;
+  transition: top 0.2s var(--ease-out);
+}
+.skip-link:focus {
+  top: 12px;
+}
+
+/* ---------- Scroll reveal ---------- */
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 12px, 0);
+  transition:
+    opacity 0.8s var(--ease-out),
+    transform 0.8s var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+.no-js .reveal {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- Cards answer the cursor (mouse/trackpad only) ---------- */
+.glow-card {
+  position: relative;
+  isolation: isolate;
+}
+@media (hover: hover) and (pointer: fine) {
+  .glow-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    background: radial-gradient(380px circle at var(--mx, 50%) var(--my, 50%), rgb(112 193 179 / 0.14), transparent 62%);
+  }
+  .glow-card:hover::before {
+    opacity: 1;
+  }
+}
+
+/* ---------- Dot matrix texture, masked to one corner ---------- */
+.dot-grid {
+  background-image: radial-gradient(rgb(112 193 179 / 0.32) 1px, transparent 1.2px);
+  background-size: 18px 18px;
+  -webkit-mask-image: radial-gradient(ellipse at 88% 0%, #000 0%, transparent 60%);
+  mask-image: radial-gradient(ellipse at 88% 0%, #000 0%, transparent 60%);
+}
+
+/* ---------- Spotlight frame: a slow light travelling round the border ---------- */
+@property --beam-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+.beam-border {
+  position: relative;
+  border-radius: 1rem;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--beam-angle),
+    rgb(112 193 179 / 0.28) 0deg,
+    rgb(112 193 179 / 0.28) 260deg,
+    var(--accent) 310deg,
+    #c4efe8 335deg,
+    rgb(112 193 179 / 0.28) 360deg
+  );
+  animation: beam-rotate 12s linear infinite;
+}
+@keyframes beam-rotate {
+  to {
+    --beam-angle: 360deg;
+  }
+}
+
+/* ---------- Avatar orbit ---------- */
+.orbit {
+  animation: orbit-spin 36s linear infinite;
+  transform-origin: 50% 50%;
+}
+@keyframes orbit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Live indicator ---------- */
+.pulse-dot {
+  position: relative;
+}
+.pulse-dot::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 9999px;
+  border: 1px solid var(--accent);
+  animation: pulse-ring 2.6s var(--ease-out) infinite;
+}
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+/* ---------- Experience-loop ring ---------- */
+.loop-path {
+  stroke-dasharray: 3 7;
+  animation: dash-flow 2.6s linear infinite;
+}
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
+
+/* ---------- Benchmark bars (state change, not decoration) ---------- */
+.bar-fill {
+  transform-origin: left center;
+  transition: transform 1s var(--ease-out);
+}
+
+.timeline-progress {
+  transform-origin: top center;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ---------- Reduced motion: every beat has a still form ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .pulse-dot::after {
+    display: none;
+  }
+}
