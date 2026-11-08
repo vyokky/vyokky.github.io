@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import { ArrowRight, ArrowUpRight, Mail } from "lucide-react";
 import NetworkField from "../islands/NetworkField";
 import BrandIcon from "../components/BrandIcon.astro";
+import DotFrame from "../components/DotFrame.astro";
 import profile from "../assets/profile.jpg";
 import { publications } from "../data/publications";
 import { EMAIL, GITHUB, LINKEDIN, SCHOLAR } from "../data/links";
@@ -72,8 +73,9 @@ const STATS = [
         <div class="intro mt-9 flex flex-wrap items-center gap-x-6 gap-y-3" style="--d: 360ms">
           <a
             href="#northcua"
-            class="btn-primary group inline-flex min-h-[44px] items-center gap-2 rounded-full py-2 pr-3.5 pl-4 text-sm font-medium whitespace-nowrap"
+            class="btn-primary btn-dots group inline-flex min-h-[44px] items-center gap-2 rounded-full py-2 pr-3.5 pl-4 text-sm font-medium whitespace-nowrap"
           >
+            <DotFrame />
             <span class="pulse-dot inline-block h-1.5 w-1.5 rounded-full bg-accent-soft"></span>
             {T.cta}
             <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-0.5" />
@@ -138,7 +140,7 @@ const STATS = [
               i > 1 && "border-t border-hairline md:border-t-0",
             ]}
           >
-            <span class="t-meta flex items-center gap-1 transition-colors group-hover:text-accent-ink">
+            <span class="t-caption flex items-center gap-1 transition-colors group-hover:text-accent-ink">
               {s.label}
               <ArrowUpRight size={12} className="opacity-0 transition-opacity group-hover:opacity-100" />
             </span>

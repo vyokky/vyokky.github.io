@@ -110,7 +110,7 @@ export default function ModelBench({ lang = "en" }: { lang?: "en" | "zh" }) {
       </p>
 
       <div className="mt-5 border-t border-hairline pt-4">
-        <p className="t-meta mb-2">{t.pro}</p>
+        <p className="t-caption mb-2">{t.pro}</p>
         <dl className="grid grid-cols-3 gap-3">
           {PRO_EXTRA.map((g) => (
             <div key={g.k} className="flex flex-col-reverse justify-end">

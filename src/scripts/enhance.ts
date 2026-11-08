@@ -139,3 +139,24 @@ if (FINE && !REDUCED) {
     });
   }
 }
+
+/* Section headings: let the characters rise once the heading comes into view. */
+{
+  const heads = document.querySelectorAll<HTMLElement>(".rise");
+  if (REDUCED || !("IntersectionObserver" in window)) {
+    heads.forEach((h) => h.classList.add("risen"));
+  } else {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add("risen");
+            io.unobserve(e.target);
+          }
+        }
+      },
+      { rootMargin: "0px 0px -12% 0px", threshold: 0 },
+    );
+    heads.forEach((h) => io.observe(h));
+  }
+}

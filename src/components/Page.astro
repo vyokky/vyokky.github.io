@@ -11,6 +11,7 @@ import Service from "../sections/Service.astro";
 import Footer from "../sections/Footer.astro";
 import Section from "./Section.astro";
 import Publications from "../islands/Publications";
+import CommandPalette from "../islands/CommandPalette";
 import { UI, type Lang } from "../i18n";
 
 interface Props {
@@ -36,4 +37,5 @@ const ui = UI[lang];
     <Service lang={lang} />
   </main>
   <Footer lang={lang} />
+  <CommandPalette client:idle lang={lang} />
 </Base>

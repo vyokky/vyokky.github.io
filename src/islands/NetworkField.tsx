@@ -186,7 +186,9 @@ export default function NetworkField({ className = "" }: { className?: string })
     io.observe(canvas);
     document.addEventListener("visibilitychange", sync);
 
-    const host = canvas.parentElement;
+    // skip the <astro-island> wrapper: pointer events over the hero content land on its parent
+    let host = canvas.parentElement;
+    while (host && host.tagName === "ASTRO-ISLAND") host = host.parentElement;
     const onMove = (e: PointerEvent) => {
       if (e.pointerType === "touch") return;
       const r = canvas.getBoundingClientRect();

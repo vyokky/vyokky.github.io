@@ -1,5 +1,5 @@
 ---
-import { Languages } from "lucide-react";
+import { Languages, Search } from "lucide-react";
 import { SECTION_IDS, UI, type Lang } from "../i18n";
 
 interface Props {
@@ -36,12 +36,22 @@ const home = lang === "zh" ? "/zh/" : "/";
           ))
         }
       </div>
+      <button
+        type="button"
+        data-palette-open
+        aria-label={lang === "zh" ? "打开搜索（⌘K）" : "Open search (⌘K)"}
+        class="surface surface-hover inline-flex h-8 shrink-0 items-center gap-2 rounded-full px-2.5 text-xs text-gray-500 md:pr-2"
+      >
+        <Search size={14} className="text-accent-ink" />
+        <span class="hidden md:inline">{lang === "zh" ? "搜索" : "Search"}</span>
+        <kbd class="hidden rounded border border-hairline bg-white/70 px-1 text-[10px] text-gray-500 md:inline">⌘K</kbd>
+      </button>
       <a
         href={ui.switchHref}
         hreflang={lang === "zh" ? "en" : "zh-CN"}
         lang={lang === "zh" ? "en" : "zh-CN"}
         aria-label={ui.switchAria}
-        class="surface surface-hover inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium text-accent-ink"
+        class="surface surface-hover -ml-2 inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full px-3 text-xs font-medium text-accent-ink md:-ml-3"
       >
         <Languages size={13} />
         {ui.switchLabel}

@@ -1,12 +1,39 @@
 ---
+// Section with a circuit-trace heading whose characters rise in once (enhance.ts adds .risen).
 interface Props {
   id: string;
   title: string;
 }
 const { id, title } = Astro.props;
+const CJK = /[　-鿿＀-￯]/;
+// words stay unbroken; CJK characters may wrap anywhere, so each is its own unit
+let ci = 0;
+const units = title.split(/(\s+)/).flatMap((tok) => {
+  if (/^\s+$/.test(tok)) return [{ space: true, chars: [] as { c: string; i: number }[] }];
+  if (CJK.test(tok)) return [...tok].map((c) => ({ space: false, chars: [{ c, i: ci++ }] }));
+  return [{ space: false, chars: [...tok].map((c) => ({ c, i: ci++ })) }];
+});
 ---
 
 <section id={id} data-reveal class="relative mb-28 md:mb-36">
-  <h2 class="trace-title t-h2 mb-10">{title}</h2>
+  <h2 class="trace-title rise t-h2 mb-10" aria-label={title}>
+    <span aria-hidden="true">
+      {
+        units.map((u) =>
+          u.space ? (
+            " "
+          ) : (
+            <span class="rise-word">
+              {u.chars.map((ch) => (
+                <span class="rise-char" style={`--ci:${ch.i}`}>
+                  {ch.c}
+                </span>
+              ))}
+            </span>
+          ),
+        )
+      }
+    </span>
+  </h2>
   <slot />
 </section>

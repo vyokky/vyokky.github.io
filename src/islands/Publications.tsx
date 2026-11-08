@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { ChevronDown, Search, Star, X } from "lucide-react";
 import { publications, type Publication } from "../data/publications";
 
@@ -108,6 +108,22 @@ export default function Publications({ lang = "en" }: { lang?: "en" | "zh" }) {
   }, [q, onlySelected]);
   const shown = groups.reduce((n, x) => n + x.items.length, 0);
   const toggle = (g: string) => setCollapsed((c) => ({ ...c, [g]: !c[g] }));
+
+  // the command palette asks us to show one paper
+  useEffect(() => {
+    const w = window as unknown as { __pubFilter?: string };
+    if (w.__pubFilter) {
+      setQuery(w.__pubFilter);
+      w.__pubFilter = undefined;
+    }
+    const onFilter = (e: Event) => {
+      setOnlySelected(false);
+      setQuery((e as CustomEvent<string>).detail ?? "");
+      w.__pubFilter = undefined;
+    };
+    window.addEventListener("pub:filter", onFilter);
+    return () => window.removeEventListener("pub:filter", onFilter);
+  }, []);
 
   return (
     <div>
