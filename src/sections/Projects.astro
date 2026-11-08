@@ -7,23 +7,63 @@ import ModelBench from "../islands/ModelBench";
 import poster from "../assets/poster.webp";
 import agentos from "../assets/agentos.webp";
 import ufo from "../assets/ufo.webp";
+import { UI, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const zh = lang === "zh";
+
+const T = zh
+  ? {
+      intro: "我在北坡负责的 NorthCUA，以及我在微软主导开发的 UFO 系列",
+      introStats: ["10K+ GitHub Stars", "1K+ Forks"],
+      ncChip: "开源 · 2026.11",
+      ncRole: "项目负责人 · 共同第一作者 · 北坡",
+      ncDesc:
+        "经验驱动的计算机使用智能体系统，覆盖桌面应用与网页：统一 Harness 负责长程任务的执行与验证，经验数据飞轮把模型薄弱点持续转化为训练数据，分阶段后训练再把这些经验变成更强的策略。开源模型在 GUI 定位、桌面执行与 Web 交互三个方向达到开源模型 SOTA（按技术报告的评测设置）。",
+      ncLinks: ["技术报告", "项目主页", "模型", "代码"],
+      loopAria: "NorthCUA 经验闭环",
+      ultrafast: "Ultrafast：平均任务提速 2.3 倍（基于 RL 前的 Nano，WebArena-Verified 中固定的 320 个成功任务；成功率 60.6%，对照 64.2%）。",
+      press: "媒体报道",
+    }
+  : {
+      intro: "NorthCUA, which I lead at Beipo, and the UFO family I built at Microsoft, with",
+      introStats: ["10K+ GitHub stars", "1K+ forks"],
+      ncChip: "Open source · Nov 2026",
+      ncRole: "Project lead · co-first author · Beipo",
+      ncDesc:
+        "An experience-driven computer-use agent system for desktop applications and the web: a unified harness that executes and verifies long-horizon tasks, an experience flywheel that turns weak spots into training data, and staged post-training that turns it into stronger policies. Its open models are state-of-the-art among open-source models (reported settings) in GUI grounding, desktop execution and web interaction.",
+      ncLinks: ["Technical report", "Project page", "Models", "Code"],
+      loopAria: "The NorthCUA experience loop",
+      ultrafast: "Ultrafast: 2.3× lower mean task time (pre-RL Nano, 320 fixed successful WebArena-Verified tasks, 60.6% vs 64.2% success).",
+      press: "Press",
+    };
 
 type Link = { label: string; href: string };
 type Press = { outlet: string; title: string; href: string };
 
 /* NorthCUA: public sources only (CV, arXiv 2611.02102, beipo.top/blog/northcua, HF beipo-ai, GitHub beipo-ai/NorthCUA). */
 const NC_LINKS = [
-  { label: "Technical report", href: "https://arxiv.org/abs/2611.02102", icon: "report", primary: true },
-  { label: "Project page", href: "https://beipo.top/blog/northcua/en/", icon: "globe" },
-  { label: "Models", href: "https://huggingface.co/beipo-ai", icon: "layers" },
-  { label: "Code", href: "https://github.com/beipo-ai/NorthCUA", icon: "github" },
+  { label: T.ncLinks[0], href: "https://arxiv.org/abs/2611.02102", icon: "report", primary: true },
+  { label: T.ncLinks[1], href: zh ? "https://beipo.top/blog/northcua/" : "https://beipo.top/blog/northcua/en/", icon: "globe" },
+  { label: T.ncLinks[2], href: "https://huggingface.co/beipo-ai", icon: "layers" },
+  { label: T.ncLinks[3], href: "https://github.com/beipo-ai/NorthCUA", icon: "github" },
 ];
-const NC_LOOP = [
-  { k: "Harness", s: "execute · verify · keep", d: "Prepares the workspace, acts over long horizons on desktop and web, checks the real outcome and keeps the trajectory." },
-  { k: "Experience flywheel", s: "tasks · skills · milestones", d: "Builds executable tasks, curates assessed trajectories and mines hard cases with reusable skills and verified milestones." },
-  { k: "Staged learning", s: "mid-training · SFT · RL", d: "Broad GUI mid-training, verified long-horizon SFT, then joint desktop and web reinforcement learning." },
-  { k: "Stronger policies", s: "Nano · Mini · Pro", d: "Updated policies go back to real software for the next round of practice." },
-];
+const NC_LOOP = zh
+  ? [
+      { k: "统一 Harness", s: "执行 · 验证 · 留存", d: "准备工作区，在桌面与网页上执行长程任务，检查真实结果并留存轨迹。" },
+      { k: "经验数据飞轮", s: "任务 · 技能 · 里程碑", d: "构造可执行任务，筛选经过评估的轨迹，用可复用技能与经验证的里程碑攻克难题。" },
+      { k: "分阶段学习", s: "mid-training · SFT · RL", d: "广泛 GUI 中期训练、经验证的长程 SFT，再到桌面与网页联合强化学习。" },
+      { k: "更强的策略", s: "Nano · Mini · Pro", d: "更新后的策略回到真实软件，开始下一轮实践。" },
+    ]
+  : [
+      { k: "Harness", s: "execute · verify · keep", d: "Prepares the workspace, acts over long horizons on desktop and web, checks the real outcome and keeps the trajectory." },
+      { k: "Experience flywheel", s: "tasks · skills · milestones", d: "Builds executable tasks, curates assessed trajectories and mines hard cases with reusable skills and verified milestones." },
+      { k: "Staged learning", s: "mid-training · SFT · RL", d: "Broad GUI mid-training, verified long-horizon SFT, then joint desktop and web reinforcement learning." },
+      { k: "Stronger policies", s: "Nano · Mini · Pro", d: "Updated policies go back to real software for the next round of practice." },
+    ];
 
 // UFO family, newest first: three equal cards in one row.
 const UFOS = [
@@ -85,13 +125,38 @@ const UFOS = [
   },
 ];
 
+const UFO_ZH = [
+  {
+    desc: "Galaxy 在异构设备与平台之间协调多个智能体，把 Desktop AgentOS 扩展到跨设备协作。",
+    points: ["动态任务 DAG 与运行时重规划", "结果驱动的图演化", "异步、安全的多设备编排", "Agent Interaction Protocol（AIP）", "MCP 赋能的设备智能体"],
+    links: ["代码", "论文", "视频"],
+  },
+  {
+    desc: "面向 Windows 的新一代 AgentOS：中心化的 <b>HostAgent</b> 用自然语言编排任务，面向具体应用的 <b>AppAgents</b> 融合 GUI 操作与原生 API。",
+    points: ["视觉 + UI Automation 混合控件检测", "推测式多步动作规划", "不打扰用户的画中画桌面"],
+    links: ["代码", "文档", "论文"],
+  },
+  {
+    desc: "业界首个开源 Windows GUI Agent / CUA 框架。一句自然语言请求，即可跨 Word、照片、PowerPoint 与 Outlook 完成任务。",
+    points: ["界面感知与控件定位", "任务规划与动作选择", "UFO² 与 UFO³ 的起点"],
+    links: ["代码", "文档", "论文"],
+  },
+];
+const CARDS = zh
+  ? UFOS.map((u, i) => ({
+      ...u,
+      desc: UFO_ZH[i].desc,
+      points: UFO_ZH[i].points,
+      links: u.links.map((l, j) => ({ ...l, label: UFO_ZH[i].links[j] ?? l.label })),
+    }))
+  : UFOS;
+
 const btn = "btn-tonal inline-flex items-center rounded-lg px-3.5 py-1.5 text-sm font-medium whitespace-nowrap";
 ---
 
-<Section id="projects" title="Featured Projects">
+<Section id="projects" title={UI[lang].titles.projects}>
   <p class="-mt-3 mb-10 text-gray-600">
-    NorthCUA, which I lead at Beipo, and the UFO family I built at Microsoft, with
-    <span class="font-semibold text-gray-900">10K+ GitHub stars</span> and <span class="font-semibold text-gray-900">1K+ forks</span>.
+    {T.intro}{zh ? "（" : " "}<span class="font-semibold text-gray-900">{T.introStats[0]}</span>{zh ? "、" : " and "}<span class="font-semibold text-gray-900">{T.introStats[1]}</span>{zh ? "）。" : "."}
   </p>
 
   <div class="space-y-8">
@@ -104,19 +169,14 @@ const btn = "btn-tonal inline-flex items-center rounded-lg px-3.5 py-1.5 text-sm
         <div class="card relative grid gap-8 md:p-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-12">
           <div class="min-w-0">
             <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
-              <span class="chip"><span class="pulse-dot inline-block h-1.5 w-1.5 rounded-full bg-accent"></span>Open source · Nov 2026</span>
-              <span class="t-small text-gray-500">Project lead · co-first author · Beipo</span>
+              <span class="chip"><span class="pulse-dot inline-block h-1.5 w-1.5 rounded-full bg-accent"></span>{T.ncChip}</span>
+              <span class="t-small text-gray-500">{T.ncRole}</span>
             </div>
             <h3 class="mt-5 text-[2.5rem] leading-[0.95] font-semibold tracking-[-0.045em] md:text-[3.25rem]">
               North<span class="text-accent">CUA</span>
             </h3>
             <p class="mt-3 text-[1.0625rem] tracking-[-0.01em] text-gray-700">Turbocharging Computer-Use Agents through Experience at Scale</p>
-            <p class="mt-4 text-[15px] leading-relaxed text-gray-600">
-              An experience-driven computer-use agent system for desktop applications and the web: a unified harness that executes and
-              verifies long-horizon tasks, an experience flywheel that turns weak spots into training data, and staged post-training that
-              turns it into stronger policies. Its open models are state-of-the-art among open-source models (reported settings) in GUI
-              grounding, desktop execution and web interaction.
-            </p>
+            <p class="mt-4 text-[15px] leading-relaxed text-gray-600">{T.ncDesc}</p>
             <div class="mt-6 flex flex-wrap gap-2.5">
               {
                 NC_LINKS.map((l) => (
@@ -142,11 +202,11 @@ const btn = "btn-tonal inline-flex items-center rounded-lg px-3.5 py-1.5 text-sm
           </div>
 
           <div class="glow-card surface self-start rounded-xl p-5 md:p-6">
-            <ModelBench client:visible />
+            <ModelBench client:visible lang={lang} />
           </div>
 
           <div class="lg:col-span-2">
-            <ol class="loop-strip grid grid-cols-2 gap-2 sm:grid-cols-[repeat(4,minmax(0,1fr))_auto] sm:items-center sm:gap-0" aria-label="The NorthCUA experience loop">
+            <ol class="loop-strip grid grid-cols-2 gap-2 sm:grid-cols-[repeat(4,minmax(0,1fr))_auto] sm:items-center sm:gap-0" aria-label={T.loopAria}>
               {
                 NC_LOOP.map((st, i) => (
                   <li class="loop-step surface flex items-center gap-2.5 rounded-lg px-3 py-2.5 sm:mr-5" style={`--i:${i}`} title={st.d}>
@@ -161,7 +221,7 @@ const btn = "btn-tonal inline-flex items-center rounded-lg px-3.5 py-1.5 text-sm
               <li aria-hidden="true" class="hidden text-accent-ink sm:block">↺</li>
             </ol>
             <p class="t-meta mt-3 text-[11px] leading-relaxed">
-              Ultrafast: 2.3× lower mean task time (pre-RL Nano, 320 fixed successful WebArena-Verified tasks, 60.6% vs 64.2% success).
+              {T.ultrafast}
             </p>
           </div>
         </div>
@@ -171,7 +231,7 @@ const btn = "btn-tonal inline-flex items-center rounded-lg px-3.5 py-1.5 text-sm
     <!-- UFO³, UFO², UFO: one row -->
     <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-7">
       {
-        UFOS.map((p) => (
+        CARDS.map((p) => (
           <article data-reveal class="tilt glow-card surface surface-hover card flex flex-col md:p-7">
             <span class="chip self-start">{p.tag}</span>
             <h3 class="t-h3 mt-4 min-h-[3.25rem]">{p.title}</h3>
@@ -186,7 +246,7 @@ const btn = "btn-tonal inline-flex items-center rounded-lg px-3.5 py-1.5 text-sm
                 class="aspect-[16/10] h-auto w-full rounded-xl bg-white object-contain shadow-card ring-1 ring-black/5"
               />
             </div>
-            <p class="mt-5 text-[15px] leading-relaxed text-gray-600" set:html={p.desc} />
+            <p class="rich mt-5 text-[15px] leading-relaxed text-gray-600" set:html={p.desc} />
             <ul class="mt-4 space-y-1.5 text-sm text-gray-600">
               {p.points.map((pt) => (
                 <li class="flex gap-2.5">
@@ -205,7 +265,7 @@ const btn = "btn-tonal inline-flex items-center rounded-lg px-3.5 py-1.5 text-sm
                 ))}
               </div>
               <div class="t-small flex items-center gap-2 text-gray-500">
-                Press
+                {T.press}
                 <ul class="press flex flex-wrap">
                   {p.press.map((m) => (
                     <li>

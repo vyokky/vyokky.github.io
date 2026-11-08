@@ -202,6 +202,34 @@
   }
 }
 
+/* Chinese pages: CJK glyphs need neutral tracking and a little more leading. Unlayered on purpose,
+ * so it wins over tracking utilities. */
+:lang(zh) body {
+  line-height: 1.85;
+}
+:lang(zh) :is(h1, h2, h3, h4, .t-display, .t-h2, .t-h3, .t-lead) {
+  letter-spacing: 0.01em;
+}
+:lang(zh) .t-display {
+  letter-spacing: 0.02em;
+}
+
+/* Rich text injected with set:html: bold and links follow the page style. */
+.rich b,
+.rich strong {
+  font-weight: 600;
+  color: var(--color-gray-900);
+}
+.rich a {
+  color: var(--color-accent-ink);
+  text-decoration: underline;
+  text-decoration-color: rgb(112 193 179 / 0.5);
+  text-underline-offset: 2px;
+}
+.rich a:hover {
+  color: var(--color-accent-deep);
+}
+
 /* ---------- Skip link ---------- */
 .skip-link {
   position: absolute;
@@ -554,46 +582,6 @@ body::after {
   }
   to {
     transform: scaleX(1);
-  }
-}
-
-/* Hero floor: a faint perspective grid drifting toward the viewer. */
-.grid-floor {
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 58%;
-  overflow: hidden;
-  pointer-events: none;
-  perspective: 520px;
-  perspective-origin: var(--po, 50%) 0%;
-  mask-image: linear-gradient(to top, #000 0%, rgb(0 0 0 / 0.55) 45%, transparent 100%);
-}
-.grid-floor__plane {
-  position: absolute;
-  left: -60%;
-  right: -60%;
-  top: 0;
-  height: 220%;
-  transform: rotateX(70deg);
-  transform-origin: 50% 0%;
-  overflow: hidden;
-}
-.grid-floor__lines {
-  position: absolute;
-  inset: -56px 0 0 0;
-  background-image:
-    linear-gradient(rgb(42 122 110 / 0.2) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(42 122 110 / 0.2) 1px, transparent 1px);
-  background-size: 56px 56px;
-}
-@media (prefers-reduced-motion: no-preference) {
-  .grid-floor__lines {
-    animation: floor-drift 5s linear infinite;
-  }
-}
-@keyframes floor-drift {
-  to {
-    transform: translateY(56px);
   }
 }
 

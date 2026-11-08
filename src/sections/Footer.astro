@@ -1,5 +1,12 @@
 ---
 import { GITHUB, LINKEDIN, SCHOLAR } from "../data/links";
+import type { Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const zh = lang === "zh";
 const link = "text-gray-600 transition-colors hover:text-accent-ink";
 ---
 
@@ -8,11 +15,11 @@ const link = "text-gray-600 transition-colors hover:text-accent-ink";
   <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[radial-gradient(ellipse_50%_100%_at_50%_0%,rgb(112_193_179/0.12),transparent)]"></div>
   <div class="relative container mx-auto flex max-w-6xl flex-col gap-4 px-5 py-10 md:px-8 sm:flex-row sm:items-center sm:justify-between">
     <div class="text-sm text-gray-500">
-      <span class="font-medium text-gray-700">Chaoyun Zhang</span> · © 2026 · Last updated November 2026
+      <span class="font-medium text-gray-700">{zh ? "张朝运" : "Chaoyun Zhang"}</span> · © 2026 · {zh ? "更新于 2026 年 11 月" : "Last updated November 2026"}
     </div>
     <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
       <a href={GITHUB} target="_blank" rel="noopener noreferrer" class={link}>GitHub</a>
-      <a href={SCHOLAR} target="_blank" rel="noopener noreferrer" class={link}>Google Scholar</a>
+      <a href={SCHOLAR} target="_blank" rel="noopener noreferrer" class={link}>{zh ? "谷歌学术" : "Google Scholar"}</a>
       <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" class={link}>LinkedIn</a>
     </div>
   </div>

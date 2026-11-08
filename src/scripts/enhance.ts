@@ -113,11 +113,10 @@ if (FINE && !REDUCED) {
   });
 }
 
-/* Hero depth: the avatar rig turns toward the pointer and the floor's vanishing point follows. */
+/* Hero depth: the avatar rig turns toward the pointer. */
 if (FINE && !REDUCED) {
   const hero = document.getElementById("top");
   const rig = document.querySelector<HTMLElement>(".avatar-rig");
-  const floor = document.querySelector<HTMLElement>(".grid-floor");
   if (hero && rig) {
     let tx = 0, ty = 0, cx = 0, cy = 0, raf = 0;
     const step = () => {
@@ -125,7 +124,6 @@ if (FINE && !REDUCED) {
       cy += (ty - cy) * 0.08;
       rig.style.setProperty("--ry", `${(cx * 14).toFixed(2)}deg`);
       rig.style.setProperty("--rx", `${(-cy * 10).toFixed(2)}deg`);
-      floor?.style.setProperty("--po", `${(50 + cx * 18).toFixed(1)}%`);
       raf = Math.abs(tx - cx) + Math.abs(ty - cy) > 0.001 ? requestAnimationFrame(step) : 0;
     };
     hero.addEventListener("pointermove", (e) => {

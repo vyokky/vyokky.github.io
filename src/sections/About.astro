@@ -2,39 +2,68 @@
 import A from "../components/A.astro";
 import Section from "../components/Section.astro";
 import { SCHOLAR } from "../data/links";
+import { UI, type Lang } from "../i18n";
 
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const b = "font-semibold text-gray-900";
 ---
 
-<Section id="about" title="About Me">
-  <div>
-    <div class="space-y-5 text-gray-600">
-      <p class="t-lead">
-        I am the <strong class="text-gray-800">Head of Computer-Using Agents (CUA)</strong> at <strong class="text-gray-800">Beipo (北坡)</strong>,
-        where I lead <A href="#northcua">NorthCUA</A> from zero to one: an experience-driven loop that connects a unified agent harness,
-        experience data, model training and continual learning for agents that operate real desktop software and the web. Its open Nano,
-        Mini and Pro models are state-of-the-art among open-source models (under the reported settings) in GUI grounding, desktop execution
-        and web interaction. I am also responsible for the CUA and Web Agent capabilities of
-        <A href="https://nex-agi.com">Nex-N2.5</A>.
-      </p>
-      <p>
-        Before that, I was a <strong class="text-gray-800">Principal Researcher</strong> in the Data, Knowledge and Intelligence
-        <strong class="text-gray-800">(DKI)</strong> group at <strong class="text-gray-800">Microsoft</strong>, where I was the lead developer and
-        algorithm researcher of <A href="https://github.com/microsoft/UFO/">UFO</A>, the first open-source Windows GUI agent / CUA framework, and
-        drove its evolution through UFO² and UFO³ into a cross-platform, cross-device Desktop AgentOS with
-        <strong class="text-gray-800">10K+ GitHub stars</strong>. I also worked on AIOps: anomaly detection, failure diagnosis and root cause
-        analysis for cloud services. I maintain a public <A href="https://arxiv.org/pdf/2411.18279">survey</A> on LLM-brained GUI agents
-        (<A href="https://vyokky.github.io/LLM-Brained-GUI-Agents-Survey/">Website</A>) and wrote the first book that systematically
-        introduces GUI agents. My work has been cited over <strong class="text-gray-800">8,100</strong> times on
-        <A href={SCHOLAR}>Google Scholar</A>.
-      </p>
-      <p>
-        Earlier, I was a research scientist at Lightspeed and Quantum Studio <strong class="text-gray-800">(光子工作室)</strong>, Tencent, where I
-        developed matchmaking systems for the game <i>League of Legends: Wild Rift</i>. I hold a PhD from the School of Informatics at the
-        University of Edinburgh, supervised by <A href="https://homepages.inf.ed.ac.uk/ppatras/">Prof. Paul Patras</A> and
-        <A href="https://homepages.inf.ed.ac.uk/rsarkar/">Rik Sarkar</A>, an MSc in Artificial Intelligence from the same institution, and a
-        BEng in Telecommunication Engineering from Huazhong University of Science and Technology.
-      </p>
-      <p>For any inquiries, please feel free to reach me at <strong class="text-gray-800">vyokky at 163 dot com</strong>.</p>
-    </div>
-  </div>
+<Section id="about" title={UI[lang].titles.about}>
+  {
+    lang === "zh" ? (
+      <div class="space-y-5 text-gray-600">
+        <p class="t-lead">
+          我现任上海奇绩智峰智能科技有限公司（<strong class={b}>北坡</strong>）<strong class={b}>计算机使用智能体（CUA）负责人</strong>，从 0 到 1 主导
+          <A href="#northcua">NorthCUA</A>，构建覆盖统一 Harness、经验数据、模型训练与持续学习的 CUA 闭环；推出 Nano、Mini、Pro
+          三档开源模型，在 GUI 定位、桌面执行与 Web 交互三个方向达到开源模型 SOTA（按技术报告的评测设置）。同时负责
+          <A href="https://nex-agi.com">Nex-N2.5</A> 的 CUA 与 Web Agent 能力。
+        </p>
+        <p>
+          此前任微软（Microsoft AI / 微软亚洲研究院）<strong class={b}>首席研究员（Principal Researcher）</strong>，是业界首个开源 Windows GUI
+          Agent / CUA 框架 <A href="https://github.com/microsoft/UFO/">UFO</A> 的主要开发者与算法研究者，推动其从 UFO 演进到 UFO² 与 UFO³，成为跨平台、跨设备的
+          Desktop AgentOS，项目累计 <strong class={b}>10K+ GitHub Stars</strong>。我也长期从事 AIOps 研究：云服务时序异常检测、故障诊断与根因分析。我维护着一份公开的
+          LLM 驱动 GUI 智能体<A href="https://arxiv.org/pdf/2411.18279">综述</A>（<A href="https://vyokky.github.io/LLM-Brained-GUI-Agents-Survey/">网站</A>），并出版了市面上首本系统介绍
+          GUI 智能体的著作；<A href={SCHOLAR}>Google Scholar</A> 引用量已超过 <strong class={b}>8,100</strong> 次。
+        </p>
+        <p>
+          更早之前，我在腾讯光子工作室群担任算法研究员，为《英雄联盟手游》研发匹配系统。我在爱丁堡大学信息学院获得博士学位，导师为
+          <A href="https://homepages.inf.ed.ac.uk/ppatras/">Paul Patras</A> 与 <A href="https://homepages.inf.ed.ac.uk/rsarkar/">Rik Sarkar</A>；同校获得人工智能硕士学位；本科毕业于华中科技大学通信工程专业。
+        </p>
+        <p>如有任何问题，欢迎通过 <strong class={b}>vyokky at 163 dot com</strong> 联系我。</p>
+      </div>
+    ) : (
+      <div class="space-y-5 text-gray-600">
+        <p class="t-lead">
+          I am the <strong class={b}>Head of Computer-Using Agents (CUA)</strong> at <strong class={b}>Beipo (北坡)</strong>, where I lead{" "}
+          <A href="#northcua">NorthCUA</A> from zero to one: an experience-driven loop that connects a unified agent harness, experience data,
+          model training and continual learning for agents that operate real desktop software and the web. Its open Nano, Mini and Pro models are
+          state-of-the-art among open-source models (under the reported settings) in GUI grounding, desktop execution and web interaction. I am
+          also responsible for the CUA and Web Agent capabilities of <A href="https://nex-agi.com">Nex-N2.5</A>.
+        </p>
+        <p>
+          Before that, I was a <strong class={b}>Principal Researcher</strong> in the Data, Knowledge and Intelligence <strong class={b}>(DKI)</strong>{" "}
+          group at <strong class={b}>Microsoft</strong>, where I was the lead developer and algorithm researcher of{" "}
+          <A href="https://github.com/microsoft/UFO/">UFO</A>, the first open-source Windows GUI agent / CUA framework, and drove its evolution
+          through UFO² and UFO³ into a cross-platform, cross-device Desktop AgentOS with <strong class={b}>10K+ GitHub stars</strong>. I also
+          worked on AIOps: anomaly detection, failure diagnosis and root cause analysis for cloud services. I maintain a public{" "}
+          <A href="https://arxiv.org/pdf/2411.18279">survey</A> on LLM-brained GUI agents (
+          <A href="https://vyokky.github.io/LLM-Brained-GUI-Agents-Survey/">Website</A>) and wrote the first book that systematically introduces
+          GUI agents. My work has been cited over <strong class={b}>8,100</strong> times on <A href={SCHOLAR}>Google Scholar</A>.
+        </p>
+        <p>
+          Earlier, I was a research scientist at Lightspeed and Quantum Studio <strong class={b}>(光子工作室)</strong>, Tencent, where I developed
+          matchmaking systems for the game <i>League of Legends: Wild Rift</i>. I hold a PhD from the School of Informatics at the University of
+          Edinburgh, supervised by <A href="https://homepages.inf.ed.ac.uk/ppatras/">Prof. Paul Patras</A> and{" "}
+          <A href="https://homepages.inf.ed.ac.uk/rsarkar/">Rik Sarkar</A>, an MSc in Artificial Intelligence from the same institution, and a
+          BEng in Telecommunication Engineering from Huazhong University of Science and Technology.
+        </p>
+        <p>
+          For any inquiries, please feel free to reach me at <strong class={b}>vyokky at 163 dot com</strong>.
+        </p>
+      </div>
+    )
+  }
 </Section>

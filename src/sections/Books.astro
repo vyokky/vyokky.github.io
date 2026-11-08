@@ -1,25 +1,35 @@
 ---
 import { BookOpen } from "lucide-react";
 import Section from "../components/Section.astro";
+import { UI, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const zh = lang === "zh";
 ---
 
-<Section id="books" title="Books">
+<Section id="books" title={UI[lang].titles.books}>
   <article class="glow-card surface surface-hover card">
     <div class="flex items-start gap-4">
       <div class="hidden rounded-lg bg-accent/10 p-2.5 sm:block">
         <BookOpen className="text-accent" size={24} />
       </div>
       <div>
-        <span class="chip">Book · 2025</span>
+        <span class="chip">{zh ? "著作 · 2025" : "Book · 2025"}</span>
         <h3 class="t-h3 mt-4">大语言模型 GUI 智能体：人机交互新时代</h3>
         <p class="mt-2 text-[15px] text-gray-600">
           <b class="font-semibold text-gray-900 underline decoration-accent decoration-2 underline-offset-4">张朝运</b>, 秦思, 李立群, 何世林
         </p>
         <p class="mt-3 max-w-[80ch] text-[15px] leading-relaxed text-gray-600">
-          The first book that systematically introduces GUI agents, covering perception, decision-making, action, data and applications. Funded
-          by the MIIT Academic Publishing Fund (工信学术出版基金).
+          {
+            zh
+              ? "市面上第一本系统介绍 GUI 智能体的著作，系统梳理感知、决策、行动、数据与应用体系。工信学术出版基金资助。"
+              : "The first book that systematically introduces GUI agents, covering perception, decision-making, action, data and applications. Funded by the MIIT Academic Publishing Fund (工信学术出版基金)."
+          }
         </p>
-        <p class="t-small mt-3 font-medium text-accent-ink">电子工业出版社 (Publishing House of Electronics Industry), 2025</p>
+        <p class="t-small mt-3 font-medium text-accent-ink">{zh ? "电子工业出版社，2025" : "电子工业出版社 (Publishing House of Electronics Industry), 2025"}</p>
       </div>
     </div>
   </article>

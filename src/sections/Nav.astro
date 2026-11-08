@@ -1,25 +1,33 @@
 ---
-import { SECTIONS } from "../data/links";
+import { Languages } from "lucide-react";
+import { SECTION_IDS, UI, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const ui = UI[lang];
+const home = lang === "zh" ? "/zh/" : "/";
 ---
 
-<nav aria-label="Sections" class="nav-shell sticky top-0 z-50 border-b border-hairline bg-paper/80 backdrop-blur-xl backdrop-saturate-150">
+<nav aria-label={lang === "zh" ? "页面导航" : "Sections"} class="nav-shell sticky top-0 z-50 border-b border-hairline bg-paper/80 backdrop-blur-xl backdrop-saturate-150">
   <div class="container mx-auto max-w-6xl px-5 md:px-8">
-    <div class="flex h-14 items-center justify-between gap-6">
-      <a href="#top" class="hidden shrink-0 items-center gap-2 text-sm font-semibold tracking-tight text-gray-800 transition-colors hover:text-accent-ink lg:inline-flex">
+    <div class="flex h-14 items-center justify-between gap-4 md:gap-6">
+      <a href={`${home}#top`} class="hidden shrink-0 items-center gap-2 text-sm font-semibold tracking-tight text-gray-800 transition-colors hover:text-accent-ink lg:inline-flex">
         <span class="pulse-dot inline-block h-1.5 w-1.5 rounded-full bg-accent"></span>
-        Chaoyun Zhang
+        {lang === "zh" ? "张朝运" : "Chaoyun Zhang"}
       </a>
       <div
-        class="no-scrollbar -mx-5 flex h-full flex-1 items-center gap-5 overflow-x-auto px-5 [mask-image:linear-gradient(to_right,#000_82%,transparent)] md:justify-end md:gap-6 md:[mask-image:none] lg:mx-0 lg:px-0"
+        class="no-scrollbar -ml-5 flex h-full min-w-0 flex-1 items-center gap-5 overflow-x-auto pl-5 [mask-image:linear-gradient(to_right,#000_80%,transparent)] md:justify-end md:gap-6 md:[mask-image:none] lg:ml-0 lg:pl-0"
       >
         {
-          SECTIONS.map((s) => (
+          SECTION_IDS.map((id) => (
             <a
-              href={`#${s.id}`}
+              href={`#${id}`}
               data-spy
-              class="group relative flex h-full shrink-0 items-center whitespace-nowrap text-sm font-medium text-gray-600 transition-colors hover:text-accent-ink data-[active=true]:text-accent-ink"
+              class="group relative flex h-full shrink-0 items-center text-sm font-medium whitespace-nowrap text-gray-600 transition-colors hover:text-accent-ink data-[active=true]:text-accent-ink"
             >
-              {s.title}
+              {ui.nav[id]}
               <span
                 aria-hidden="true"
                 class="absolute right-0 bottom-2.5 left-0 h-0.5 origin-left scale-x-0 rounded-full bg-accent transition-transform duration-500 group-data-[active=true]:scale-x-100"
@@ -28,6 +36,16 @@ import { SECTIONS } from "../data/links";
           ))
         }
       </div>
+      <a
+        href={ui.switchHref}
+        hreflang={lang === "zh" ? "en" : "zh-CN"}
+        lang={lang === "zh" ? "en" : "zh-CN"}
+        aria-label={ui.switchAria}
+        class="surface surface-hover inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium text-accent-ink"
+      >
+        <Languages size={13} />
+        {ui.switchLabel}
+      </a>
     </div>
   </div>
   <div aria-hidden="true" class="absolute right-0 -bottom-px left-0 h-[2px] overflow-hidden">

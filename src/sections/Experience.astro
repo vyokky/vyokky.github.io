@@ -1,36 +1,104 @@
 ---
 import A from "../components/A.astro";
 import Section from "../components/Section.astro";
+import { UI, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const zh = lang === "zh";
 
 const node =
   "absolute top-7 -left-9 flex h-[23px] w-[23px] items-center justify-center rounded-full border border-accent/50 bg-white shadow-card md:-left-11 md:h-[31px] md:w-[31px]";
 const smallNode =
   "absolute top-1.5 -left-9 flex h-[23px] w-[23px] items-center justify-center rounded-full border border-hairline bg-white md:-left-11 md:h-[31px] md:w-[31px]";
 
-const EDUCATION = [
-  {
-    t: "Ph.D. in Informatics",
-    org: "University of Edinburgh",
-    p: "2016 – 2020",
-    d: "Deep neural mobile networking.",
-    sup: true,
-  },
-  {
-    t: "MSc in Artificial Intelligence",
-    org: "University of Edinburgh",
-    p: "2015 – 2016",
-    d: "Distinction (79/100). Non-intrusive load monitoring.",
-  },
-  {
-    t: "BEng in Telecommunication Engineering",
-    org: "Huazhong University of Science and Technology",
-    p: "2011 – 2015",
-    d: "Leaf recognition with CNNs and data augmentation.",
-  },
-];
+const EDUCATION = zh
+  ? [
+      { t: "信息学博士", org: "爱丁堡大学", p: "2016 – 2020", d: "研究方向：Deep Neural Mobile Networking。", sup: true },
+      { t: "人工智能硕士", org: "爱丁堡大学", p: "2015 – 2016", d: "成绩 79/100（一等）。非侵入式负荷监测。" },
+      { t: "通信工程学士", org: "华中科技大学", p: "2011 – 2015", d: "毕业设计：基于卷积神经网络和数据增广的植物叶子识别。" },
+    ]
+  : [
+      { t: "Ph.D. in Informatics", org: "University of Edinburgh", p: "2016 – 2020", d: "Deep neural mobile networking.", sup: true },
+      { t: "MSc in Artificial Intelligence", org: "University of Edinburgh", p: "2015 – 2016", d: "Distinction (79/100). Non-intrusive load monitoring." },
+      { t: "BEng in Telecommunication Engineering", org: "Huazhong University of Science and Technology", p: "2011 – 2015", d: "Leaf recognition with CNNs and data augmentation." },
+    ];
+
+const JOBS = zh
+  ? {
+      beipo: {
+        t: "计算机使用智能体（CUA）负责人",
+        p: "2026.02 – 至今",
+        now: "在职",
+        org: "北坡 · 上海奇绩智峰智能科技有限公司 · NorthCUA / Nex-N2.5",
+        items: [
+          "从 0 主导 <b>NorthCUA</b> 的 CUA 后训练与模型算法路线，融合 GUI mid-training、长程 SFT 与桌面–Web 联合强化学习。",
+          "构建统一 Harness 与经验数据飞轮，贯通桌面 / Web 任务执行、轨迹采集、结果验证和训练数据筛选。",
+          "推出 NorthCUA Nano、Mini、Pro 三档开源模型，以及低延迟执行的 NorthCUA-Ultrafast。",
+          "负责 <a href=\"https://nex-agi.com\" target=\"_blank\" rel=\"noopener noreferrer\">Nex-N2.5</a> 的 CUA 与 Web Agent 能力。",
+        ],
+      },
+      msft: {
+        t: "首席研究员（Principal Researcher）",
+        p: "2022.07 – 2026.02",
+        org: "微软 · Microsoft AI / 微软亚洲研究院 · DKI · 上海",
+        items: [
+          "业界首个开源 Windows GUI Agent / CUA 框架 <b>UFO</b> 及 UFO–UFO³ 系列的主要开发者与算法研究者，推动其演进为跨平台、跨设备的 Desktop AgentOS（10K+ GitHub Stars）。",
+          "负责桌面 GUI Agent 与行动模型的训练、评测和能力迭代，并主持 GUI Agent 系统化综述。",
+          "研究云服务时序异常检测、故障诊断与根因分析，推动模型在实际运维场景落地。",
+        ],
+      },
+      tencent: {
+        t: "算法研究员",
+        p: "2020.12 – 2022.07",
+        org: "腾讯 · 光子工作室群 · 深圳",
+        d: "围绕《英雄联盟手游》匹配质量建模，研发新手能力估计与多目标二次匹配算法，均在百万级 DAU 场景上线（QuickSkill，CIKM 2022；CUPID，CSCW 2024；两项发明专利）。",
+      },
+      edu: "教育经历",
+      supBy: "导师：",
+      and: "、",
+    }
+  : {
+      beipo: {
+        t: "Head of Computer-Using Agents",
+        p: "Feb 2026 – now",
+        now: "Current",
+        org: "Beipo (北坡) · NorthCUA / Nex-N2.5",
+        items: [
+          "Lead <b>NorthCUA</b> from zero to one: the CUA post-training and model roadmap, combining GUI mid-training, long-horizon SFT and joint desktop and web reinforcement learning.",
+          "Built the unified harness and experience-data flywheel that connect desktop and web execution, trajectory collection, outcome verification and training-data curation.",
+          "Released the open NorthCUA Nano, Mini and Pro models, and NorthCUA-Ultrafast for low-latency execution.",
+          "Responsible for the CUA and Web Agent capabilities of <a href=\"https://nex-agi.com\" target=\"_blank\" rel=\"noopener noreferrer\">Nex-N2.5</a>.",
+        ],
+      },
+      msft: {
+        t: "Principal Researcher",
+        p: "Jul 2022 – Feb 2026",
+        org: "Microsoft AI / Microsoft Research Asia · DKI · Shanghai",
+        items: [
+          "Lead developer and algorithm researcher of <b>UFO, UFO² and UFO³</b>, the first open-source Windows GUI agent / CUA framework, which grew into a cross-platform, cross-device Desktop AgentOS (10K+ GitHub stars).",
+          "Trained and evaluated desktop GUI agents and action models; led the LLM-brained GUI agent survey.",
+          "AIOps: anomaly detection, failure diagnosis and root cause analysis deployed in cloud operations.",
+        ],
+      },
+      tencent: {
+        t: "Applied Research Scientist",
+        p: "Dec 2020 – Jul 2022",
+        org: "Lightspeed and Quantum Studio (光子工作室群), Tencent · Shenzhen",
+        d: "Matchmaking for <i>League of Legends: Wild Rift</i>: novice skill estimation and multi-objective re-matchmaking, both deployed at million-DAU scale (QuickSkill, CIKM 2022; CUPID, CSCW 2024; two patents).",
+      },
+      edu: "Education",
+      supBy: "Supervised by ",
+      and: " and ",
+    };
+const listCls =
+  "rich mt-4 ml-4 list-outside list-disc space-y-1.5 text-[15px] leading-relaxed text-gray-600 marker:text-accent";
+
 ---
 
-<Section id="experience" title="Experience">
+<Section id="experience" title={UI[lang].titles.experience}>
   <div class="timeline relative pl-9 md:pl-11">
     <div aria-hidden="true" class="absolute top-3 bottom-3 left-[11px] w-px bg-hairline md:left-[15px]"></div>
     <div aria-hidden="true" class="timeline-fill absolute top-3 bottom-3 left-[11px] w-px bg-linear-to-b from-accent to-accent-soft md:left-[15px]"></div>
@@ -41,22 +109,11 @@ const EDUCATION = [
         <span aria-hidden="true" class={node}><span class="pulse-dot node-glow h-2 w-2 rounded-full bg-accent-ink"></span></span>
         <article class="glow-card surface surface-hover card">
           <header class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-            <h3 class="t-h3">Head of Computer-Using Agents</h3>
-            <p class="t-meta flex items-center gap-2">Feb 2026 – now <span class="chip">Current</span></p>
+            <h3 class="t-h3">{JOBS.beipo.t}</h3>
+            <p class="t-meta flex items-center gap-2">{JOBS.beipo.p} <span class="chip">{JOBS.beipo.now}</span></p>
           </header>
-          <p class="t-small mt-1 font-medium text-accent-ink">Beipo (北坡) · NorthCUA / Nex-N2.5</p>
-          <ul class="mt-4 ml-4 list-outside list-disc space-y-1.5 text-[15px] leading-relaxed text-gray-600 marker:text-accent">
-            <li>
-              Lead <strong class="font-semibold text-gray-800">NorthCUA</strong> from zero to one: the CUA post-training and model roadmap, combining
-              GUI mid-training, long-horizon SFT and joint desktop and web reinforcement learning.
-            </li>
-            <li>
-              Built the unified harness and experience-data flywheel that connect desktop and web execution, trajectory collection, outcome
-              verification and training-data curation.
-            </li>
-            <li>Released the open NorthCUA Nano, Mini and Pro models, and NorthCUA-Ultrafast for low-latency execution.</li>
-            <li>Responsible for the CUA and Web Agent capabilities of <A href="https://nex-agi.com" bold={false}>Nex-N2.5</A>.</li>
-          </ul>
+          <p class="t-small mt-1 font-medium text-accent-ink">{JOBS.beipo.org}</p>
+          <ul class={listCls}>{JOBS.beipo.items.map((it) => <li set:html={it} />)}</ul>
         </article>
       </li>
 
@@ -65,18 +122,11 @@ const EDUCATION = [
         <span aria-hidden="true" class={node}><span class="node-glow h-2 w-2 rounded-full bg-accent"></span></span>
         <article class="glow-card surface surface-hover card">
           <header class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-            <h3 class="t-h3">Principal Researcher</h3>
-            <p class="t-meta">Jul 2022 – Feb 2026</p>
+            <h3 class="t-h3">{JOBS.msft.t}</h3>
+            <p class="t-meta">{JOBS.msft.p}</p>
           </header>
-          <p class="t-small mt-1 font-medium text-accent-ink">Microsoft AI / Microsoft Research Asia · DKI · Shanghai</p>
-          <ul class="mt-4 ml-4 list-outside list-disc space-y-1.5 text-[15px] leading-relaxed text-gray-600 marker:text-accent">
-            <li>
-              Lead developer and algorithm researcher of <strong class="font-semibold text-gray-800">UFO, UFO² and UFO³</strong>, the first open-source
-              Windows GUI agent / CUA framework, which grew into a cross-platform, cross-device Desktop AgentOS (10K+ GitHub stars).
-            </li>
-            <li>Trained and evaluated desktop GUI agents and action models; led the LLM-brained GUI agent survey.</li>
-            <li>AIOps: anomaly detection, failure diagnosis and root cause analysis deployed in cloud operations.</li>
-          </ul>
+          <p class="t-small mt-1 font-medium text-accent-ink">{JOBS.msft.org}</p>
+          <ul class={listCls}>{JOBS.msft.items.map((it) => <li set:html={it} />)}</ul>
         </article>
       </li>
 
@@ -85,20 +135,17 @@ const EDUCATION = [
         <span aria-hidden="true" class={node}><span class="node-glow h-2 w-2 rounded-full bg-accent"></span></span>
         <article class="glow-card surface surface-hover card">
           <header class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-            <h3 class="t-h3">Applied Research Scientist</h3>
-            <p class="t-meta">Dec 2020 – Jul 2022</p>
+            <h3 class="t-h3">{JOBS.tencent.t}</h3>
+            <p class="t-meta">{JOBS.tencent.p}</p>
           </header>
-          <p class="t-small mt-1 font-medium text-accent-ink">Lightspeed and Quantum Studio (光子工作室群), Tencent · Shenzhen</p>
-          <p class="mt-4 text-[15px] leading-relaxed text-gray-600">
-            Matchmaking for <i>League of Legends: Wild Rift</i>: novice skill estimation and multi-objective re-matchmaking, both deployed at
-            million-DAU scale (QuickSkill, CIKM 2022; CUPID, CSCW 2024; two patents).
-          </p>
+          <p class="t-small mt-1 font-medium text-accent-ink">{JOBS.tencent.org}</p>
+          <p class="rich mt-4 text-[15px] leading-relaxed text-gray-600" set:html={JOBS.tencent.d} />
         </article>
       </li>
 
       <!-- Education: lighter rows on the same line -->
       <li class="relative pt-6" data-reveal>
-        <p class="t-label mb-4 text-gray-500">Education</p>
+        <p class="t-label mb-4 text-gray-500">{JOBS.edu}</p>
         <ol class="divide-y divide-hairline border-y border-hairline">
           {
             EDUCATION.map((e) => (
@@ -114,8 +161,7 @@ const EDUCATION = [
                     {e.d}
                     {e.sup && (
                       <>
-                        {" "}Supervised by <A href="https://homepages.inf.ed.ac.uk/ppatras/" bold={false}>Paul Patras</A> and{" "}
-                        <A href="https://homepages.inf.ed.ac.uk/rsarkar/" bold={false}>Rik Sarkar</A>.
+                        {" "}{JOBS.supBy}<A href="https://homepages.inf.ed.ac.uk/ppatras/" bold={false}>Paul Patras</A>{JOBS.and}<A href="https://homepages.inf.ed.ac.uk/rsarkar/" bold={false}>Rik Sarkar</A>{zh ? "。" : "."}
                       </>
                     )}
                   </p>

@@ -1,10 +1,17 @@
 ---
 import { Award, BookOpenCheck, FileText, ScrollText, Users } from "lucide-react";
 import Section from "../components/Section.astro";
+import { UI, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const zh = lang === "zh";
 
 const GROUPS = [
   {
-    title: "Program committee",
+    title: zh ? "程序委员会" : "Program committee",
     icon: "users",
     items: [
       ["ICSE 2027", "International Conference on Software Engineering"],
@@ -14,18 +21,18 @@ const GROUPS = [
     ],
   },
   {
-    title: "Reviewing",
+    title: zh ? "会议审稿" : "Reviewing",
     icon: "review",
     items: [
       ["NeurIPS 2025", "Neural Information Processing Systems"],
       ["ICLR 2025", "Learning Representations"],
       ["KDD ADS 2025", "Applied Data Science Track"],
       ["ACL ARR", "Association for Computational Linguistics"],
-      ["IEEE TMA · WCNC · WoWMoM", "Networking and measurement venues"],
+      ["IEEE TMA · WCNC · WoWMoM", zh ? "网络与测量方向会议" : "Networking and measurement venues"],
     ],
   },
   {
-    title: "Journals",
+    title: zh ? "期刊审稿" : "Journals",
     icon: "journal",
     items: [
       ["ACM Computing Surveys", "CSUR"],
@@ -36,23 +43,37 @@ const GROUPS = [
     ],
   },
 ];
-const AWARDS = [
-  ["2018", "Best Student Paper Award, MLN"],
-  ["2018", "ACM MobiHoc Student Travel Grant"],
-  ["2017", "Outstanding MSc Dissertation Award, University of Edinburgh"],
-  ["2016", "Edinburgh Global Research Scholarship"],
-];
-const PATENTS = [
-  ["US12244467B2", "Distributed network traffic data decomposition method (granted)"],
-  ["US 18/428,627", "Customized anomaly monitor for compute system performance metrics"],
-  ["CN116785718A", "Novice skill detection for MOBA games"],
-  ["CN116850601A", "Multi-objective optimization for MOBA matchmaking and position assignment"],
-];
+const AWARDS = zh
+  ? [
+      ["2018", "MLN 最佳学生论文奖"],
+      ["2018", "ACM MobiHoc 学生旅行基金"],
+      ["2017", "爱丁堡大学杰出硕士论文奖"],
+      ["2016", "爱丁堡全球研究奖学金"],
+    ]
+  : [
+      ["2018", "Best Student Paper Award, MLN"],
+      ["2018", "ACM MobiHoc Student Travel Grant"],
+      ["2017", "Outstanding MSc Dissertation Award, University of Edinburgh"],
+      ["2016", "Edinburgh Global Research Scholarship"],
+    ];
+const PATENTS = zh
+  ? [
+      ["US12244467B2", "分布式网络流量数据分解方法（美国授权专利）"],
+      ["US 18/428,627", "Customized anomaly monitor for compute system performance metrics"],
+      ["CN116785718A", "面向 MOBA 游戏的新手能力探测算法"],
+      ["CN116850601A", "面向 MOBA 匹配与位置分配的多目标优化算法"],
+    ]
+  : [
+      ["US12244467B2", "Distributed network traffic data decomposition method (granted)"],
+      ["US 18/428,627", "Customized anomaly monitor for compute system performance metrics"],
+      ["CN116785718A", "Novice skill detection for MOBA games"],
+      ["CN116850601A", "Multi-objective optimization for MOBA matchmaking and position assignment"],
+    ];
 const head = "mb-4 flex items-center gap-2.5";
 const iconBox = "grid h-8 w-8 place-items-center rounded-lg bg-accent/10 text-accent-ink";
 ---
 
-<Section id="service" title="Service & Honors">
+<Section id="service" title={UI[lang].titles.service}>
   <div class="grid gap-6 md:grid-cols-3">
     {
       GROUPS.map((g) => (
@@ -82,7 +103,7 @@ const iconBox = "grid h-8 w-8 place-items-center rounded-lg bg-accent/10 text-ac
     <div class="glow-card surface surface-hover card">
       <div class={head}>
         <span class={iconBox}><Award size={16} /></span>
-        <h3 class="t-label text-[0.9375rem]">Awards</h3>
+        <h3 class="t-label text-[0.9375rem]">{zh ? "奖项" : "Awards"}</h3>
       </div>
       <ul class="divide-y divide-hairline">
         {
@@ -98,7 +119,7 @@ const iconBox = "grid h-8 w-8 place-items-center rounded-lg bg-accent/10 text-ac
     <div class="glow-card surface surface-hover card">
       <div class={head}>
         <span class={iconBox}><ScrollText size={16} /></span>
-        <h3 class="t-label text-[0.9375rem]">Patents</h3>
+        <h3 class="t-label text-[0.9375rem]">{zh ? "专利" : "Patents"}</h3>
       </div>
       <ul class="divide-y divide-hairline">
         {

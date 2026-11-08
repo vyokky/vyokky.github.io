@@ -1,0 +1,39 @@
+---
+import Base from "../layouts/Base.astro";
+import Nav from "../sections/Nav.astro";
+import Hero from "../sections/Hero.astro";
+import About from "../sections/About.astro";
+import Experience from "../sections/Experience.astro";
+import News from "../sections/News.astro";
+import Projects from "../sections/Projects.astro";
+import Books from "../sections/Books.astro";
+import Service from "../sections/Service.astro";
+import Footer from "../sections/Footer.astro";
+import Section from "./Section.astro";
+import Publications from "../islands/Publications";
+import { UI, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const ui = UI[lang];
+---
+
+<Base lang={lang} title={ui.meta.title} description={ui.meta.description}>
+  <a href="#content" class="skip-link">{ui.skip}</a>
+  <Nav lang={lang} />
+  <Hero lang={lang} />
+  <main id="content" class="container mx-auto max-w-6xl px-5 pt-24 pb-12 md:px-8 md:pt-32">
+    <About lang={lang} />
+    <Experience lang={lang} />
+    <News lang={lang} />
+    <Projects lang={lang} />
+    <Section id="publications" title={ui.titles.publications}>
+      <Publications client:visible lang={lang} />
+    </Section>
+    <Books lang={lang} />
+    <Service lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Base>

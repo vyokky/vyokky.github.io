@@ -1,84 +1,90 @@
 ---
 import { ChevronDown } from "lucide-react";
-import A from "../components/A.astro";
 import Section from "../components/Section.astro";
+import { UI, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const zh = lang === "zh";
+
+const a = (href: string, text: string) => `<a href="${href}" target="_blank" rel="noopener noreferrer">${text}</a>`;
+const NC = "https://arxiv.org/abs/2611.02102";
+const HF = "https://huggingface.co/beipo-ai";
+const UFO3 = "https://arxiv.org/abs/2511.11332";
+const JQZX_UFO3 = "https://www.jiqizhixin.com/articles/2025-12-03-7";
+const LAM = "https://arxiv.org/pdf/2412.10047";
+const SURVEY = "https://arxiv.org/pdf/2411.18279";
+
+type Item = { date: string; html: string; isNew?: boolean };
+const ITEMS: Item[] = zh
+  ? [
+      { date: "2026.11", isNew: true, html: `${a(NC, "NorthCUA")} 技术报告发布，NorthCUA <b>Nano / Mini / Pro</b> 模型已在 ${a(HF, "Hugging Face")} 开源。` },
+      { date: "2026", html: "论文被 <b>NeurIPS 2026</b>、<b>EMNLP 2026</b>（主会与 Findings）、<b>CIKM 2026</b>、<b>ICLR 2026</b>（2 篇）、<b>Findings of ACL 2026</b>、<b>FSE 2026</b> 和 <b>TOSEM</b> 接收，<b>UFO²</b> 发表于 <b>TMLR</b>。" },
+      { date: "2026.02", html: "加入<b>北坡</b>，担任计算机使用智能体（CUA）负责人，主导 NorthCUA。" },
+      { date: "2025.12", html: `${a(UFO3, "UFO³: Weaving the Digital Agent Galaxy")} 获${a(JQZX_UFO3, "机器之心")}报道。` },
+      { date: "2025", html: "著作<b>《大语言模型 GUI 智能体：人机交互新时代》</b>由电子工业出版社出版，是市面上首本系统介绍 GUI 智能体的著作。" },
+      { date: "2025.09", html: "两篇论文被 <b>NeurIPS 2025</b> 接收，一篇被 <b>ASE 2025</b> 接收。" },
+      { date: "2025.05", html: "一篇论文被 <b>ACL 2025</b> 接收，一篇被 <b>KDD ADS 2025</b> 接收。" },
+      { date: "2025.01", html: "两篇论文被 <b>ICLR 2025</b> 接收，一篇被 <b>NAACL 2025</b> 接收。" },
+      { date: "2025.01", html: `${a(LAM, "Large Action Models")} 工作发布，获${a("https://mp.weixin.qq.com/s/6FHrOMXTCUmKS2GrWrzzrA", "机器之心")}与${a("https://mp.weixin.qq.com/s/BVFV8v6KGcpKoz_TYdBdAA", "新智元")}报道。` },
+      { date: "2024.11", html: `LLM 驱动 GUI 智能体${a(SURVEY, "综述")}发布，获${a("https://baijiahao.baidu.com/s?id=1820751448950288867&wfr=spider&for=pc", "机器之心")}报道。` },
+    ]
+  : [
+      { date: "November 2026", isNew: true, html: `The ${a(NC, "NorthCUA")} technical report is out, and the NorthCUA <b>Nano / Mini / Pro</b> models are open on ${a(HF, "Hugging Face")}.` },
+      { date: "2026", html: "Papers accepted at <b>NeurIPS 2026</b>, <b>EMNLP 2026</b> (main and Findings), <b>CIKM 2026</b>, <b>ICLR 2026</b> (×2), <b>Findings of ACL 2026</b>, <b>FSE 2026</b> and <b>TOSEM</b>, and <b>UFO²</b> in <b>TMLR</b>." },
+      { date: "February 2026", html: "Joined <b>Beipo</b> as Head of Computer-Using Agents to build NorthCUA." },
+      { date: "December 2025", html: `${a(UFO3, "UFO³: Weaving the Digital Agent Galaxy")} is reported by ${a(JQZX_UFO3, "机器之心")}.` },
+      { date: "2025", html: "Our book <b>大语言模型 GUI 智能体：人机交互新时代</b>, the first book that systematically introduces GUI agents, is published by Publishing House of Electronics Industry." },
+      { date: "September 2025", html: "Two papers accepted at <b>NeurIPS 2025</b> and one paper accepted at <b>ASE 2025</b>." },
+      { date: "May 2025", html: "One paper accepted at <b>ACL 2025</b>, and one paper accepted at <b>KDD ADS 2025</b>." },
+      { date: "January 2025", html: "Two papers accepted at <b>ICLR 2025</b> and one paper accepted at <b>NAACL 2025</b>." },
+      { date: "January 2025", html: `Our work on ${a(LAM, "Large Action Models")} is released and has been reported by ${a("https://mp.weixin.qq.com/s/6FHrOMXTCUmKS2GrWrzzrA", "机器之心")} and ${a("https://mp.weixin.qq.com/s/BVFV8v6KGcpKoz_TYdBdAA", "新智元")}.` },
+      { date: "November 2024", html: `Our ${a(SURVEY, "survey")} on Large Language Model-Brained <b>GUI Agents</b> is released, and it is reported by ${a("https://baijiahao.baidu.com/s?id=1820751448950288867&wfr=spider&for=pc", "机器之心")}.` },
+    ];
+const VISIBLE = 5;
+const more = ITEMS.length - VISIBLE;
+const row = "grid gap-1 py-5 sm:grid-cols-[160px_minmax(0,1fr)] sm:gap-8";
 ---
 
-<Section id="news" title="Latest News">
+<Section id="news" title={UI[lang].titles.news}>
   <ol class="divide-y divide-hairline border-y border-hairline">
-    <li class="grid gap-1 py-5 sm:grid-cols-[160px_minmax(0,1fr)] sm:gap-8">
-      <p class="t-meta flex items-center gap-2 sm:pt-1">
-        November 2026
-        <span class="chip"><span class="pulse-dot inline-block h-1 w-1 rounded-full bg-accent"></span>New</span>
-      </p>
-      <p class="text-gray-700 leading-relaxed">
-        The <A href="https://arxiv.org/abs/2611.02102">NorthCUA</A> technical report is out, and the NorthCUA <strong class="font-semibold text-gray-900">Nano / Mini / Pro</strong>
-        models are open on <A href="https://huggingface.co/beipo-ai">Hugging Face</A>
-      </p>
-    </li>
-    <li class="grid gap-1 py-5 sm:grid-cols-[160px_minmax(0,1fr)] sm:gap-8">
-      <p class="t-meta sm:pt-1">2026</p>
-      <p class="text-gray-700 leading-relaxed">
-        Papers accepted at <strong class="font-semibold text-gray-900">NeurIPS 2026</strong>, <strong class="font-semibold text-gray-900">EMNLP 2026</strong> (main and Findings), <strong class="font-semibold text-gray-900">CIKM 2026</strong>,
-        <strong class="font-semibold text-gray-900">ICLR 2026</strong> (×2), <strong class="font-semibold text-gray-900">Findings of ACL 2026</strong>, <strong class="font-semibold text-gray-900">FSE 2026</strong> and <strong class="font-semibold text-gray-900">TOSEM</strong>, and
-        <strong class="font-semibold text-gray-900">UFO²</strong> in <strong class="font-semibold text-gray-900">TMLR</strong>.
-      </p>
-    </li>
-    <li class="grid gap-1 py-5 sm:grid-cols-[160px_minmax(0,1fr)] sm:gap-8">
-      <p class="t-meta sm:pt-1">February 2026</p>
-      <p class="text-gray-700 leading-relaxed">Joined <strong class="font-semibold text-gray-900">Beipo</strong> as Head of Computer-Using Agents to build NorthCUA.</p>
-    </li>
-    <li class="grid gap-1 py-5 sm:grid-cols-[160px_minmax(0,1fr)] sm:gap-8">
-      <p class="t-meta sm:pt-1">December 2025</p>
-      <p class="text-gray-700 leading-relaxed">
-        <A href="https://arxiv.org/abs/2511.11332">UFO³: Weaving the Digital Agent Galaxy</A> is reported by
-        <A href="https://www.jiqizhixin.com/articles/2025-12-03-7">机器之心</A>
-      </p>
-    </li>
-    <li class="grid gap-1 py-5 sm:grid-cols-[160px_minmax(0,1fr)] sm:gap-8">
-      <p class="t-meta sm:pt-1">2025</p>
-      <p class="text-gray-700 leading-relaxed">
-        Our book <strong class="font-semibold text-gray-900">大语言模型 GUI 智能体：人机交互新时代</strong>, the first book that systematically introduces GUI agents, is published by
-        Publishing House of Electronics Industry
-      </p>
-    </li>
+    {
+      ITEMS.slice(0, VISIBLE).map((n) => (
+        <li class={row}>
+          <p class="t-meta flex items-center gap-2 sm:pt-1">
+            {n.date}
+            {n.isNew && (
+              <span class="chip">
+                <span class="pulse-dot inline-block h-1 w-1 rounded-full bg-accent" />
+                {zh ? "新" : "New"}
+              </span>
+            )}
+          </p>
+          <p class="rich leading-relaxed text-gray-700" set:html={n.html} />
+        </li>
+      ))
+    }
   </ol>
 
-  <details class="group mt-0">
+  <details class="group">
     <summary
       class="mt-5 inline-flex min-h-[44px] items-center gap-1.5 rounded-lg border border-hairline bg-white px-4 text-sm font-medium whitespace-nowrap text-gray-600 transition hover:border-accent hover:text-accent-ink"
     >
-      <span class="group-open:hidden">Show 5 earlier updates</span>
-      <span class="hidden group-open:inline">Show less</span>
+      <span class="group-open:hidden">{zh ? `展开更早的 ${more} 条` : `Show ${more} earlier updates`}</span>
+      <span class="hidden group-open:inline">{zh ? "收起" : "Show less"}</span>
       <ChevronDown size={16} className="transition-transform duration-300 group-open:rotate-180" />
     </summary>
     <ol class="mt-5 divide-y divide-hairline border-y border-hairline">
-      <li class="grid gap-1 py-5 sm:grid-cols-[160px_minmax(0,1fr)] sm:gap-8">
-        <p class="t-meta sm:pt-1">September 2025</p>
-        <p class="text-gray-700 leading-relaxed">Two papers accepted at <strong class="font-semibold text-gray-900">NeurIPS 2025</strong> and one paper accepted at <strong class="font-semibold text-gray-900">ASE 2025</strong>.</p>
-      </li>
-      <li class="grid gap-1 py-5 sm:grid-cols-[160px_minmax(0,1fr)] sm:gap-8">
-        <p class="t-meta sm:pt-1">May 2025</p>
-        <p class="text-gray-700 leading-relaxed">One paper accepted at <strong class="font-semibold text-gray-900">ACL 2025</strong>, and one paper accepted at <strong class="font-semibold text-gray-900">KDD ADS 2025</strong>.</p>
-      </li>
-      <li class="grid gap-1 py-5 sm:grid-cols-[160px_minmax(0,1fr)] sm:gap-8">
-        <p class="t-meta sm:pt-1">January 2025</p>
-        <p class="text-gray-700 leading-relaxed">Two papers accepted at <strong class="font-semibold text-gray-900">ICLR 2025</strong> and one paper accepted at <strong class="font-semibold text-gray-900">NAACL 2025</strong>.</p>
-      </li>
-      <li class="grid gap-1 py-5 sm:grid-cols-[160px_minmax(0,1fr)] sm:gap-8">
-        <p class="t-meta sm:pt-1">January 2025</p>
-        <p class="text-gray-700 leading-relaxed">
-          Our work on <A href="https://arxiv.org/pdf/2412.10047">Large Action Models</A> is released and has been reported by
-          <A href="https://mp.weixin.qq.com/s/6FHrOMXTCUmKS2GrWrzzrA">机器之心</A> and <A href="https://mp.weixin.qq.com/s/BVFV8v6KGcpKoz_TYdBdAA">新智元</A>
-        </p>
-      </li>
-      <li class="grid gap-1 py-5 sm:grid-cols-[160px_minmax(0,1fr)] sm:gap-8">
-        <p class="t-meta sm:pt-1">November 2024</p>
-        <p class="text-gray-700 leading-relaxed">
-          Our <A href="https://arxiv.org/pdf/2411.18279">survey</A> on Large Language Model-Brained <strong class="font-semibold text-gray-900">GUI Agents</strong> is released, and it
-          is reported by <A href="https://baijiahao.baidu.com/s?id=1820751448950288867&wfr=spider&for=pc">机器之心</A>
-        </p>
-      </li>
+      {
+        ITEMS.slice(VISIBLE).map((n) => (
+          <li class={row}>
+            <p class="t-meta sm:pt-1">{n.date}</p>
+            <p class="rich leading-relaxed text-gray-700" set:html={n.html} />
+          </li>
+        ))
+      }
     </ol>
   </details>
 </Section>

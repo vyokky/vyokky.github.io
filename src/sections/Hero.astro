@@ -6,20 +6,48 @@ import BrandIcon from "../components/BrandIcon.astro";
 import profile from "../assets/profile.jpg";
 import { publications } from "../data/publications";
 import { EMAIL, GITHUB, LINKEDIN, SCHOLAR } from "../data/links";
+import type { Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const zh = lang === "zh";
+
+const T = zh
+  ? {
+      eyebrow: "Chaoyun Zhang",
+      name: "张朝运",
+      role: ["北坡", " 计算机使用智能体（CUA）负责人"],
+      previously: "曾任微软首席研究员（Principal Researcher）",
+      lead: "我构建能操作真实桌面软件与网页的智能体，以及让它们在实践中持续变强的经验闭环。",
+      cta: "正在负责 NorthCUA",
+      scholar: "谷歌学术",
+      email: "邮箱",
+      stats: ["Google Scholar 引用", "UFO GitHub Stars", "论文", "开源 NorthCUA 模型"],
+    }
+  : {
+      eyebrow: "张朝运",
+      name: "Chaoyun Zhang",
+      role: ["Head of Computer-Using Agents at ", "Beipo"],
+      previously: "Previously Principal Researcher at Microsoft",
+      lead: "I build agents that operate real desktop software and the web, and the experience loops that make them better with practice.",
+      cta: "Now leading NorthCUA",
+      scholar: "Scholar",
+      email: "Email",
+      stats: ["Citations", "UFO GitHub stars", "Publications", "Open NorthCUA models"],
+    };
 
 // Proof band: every number links to where it comes from.
 const STATS = [
-  { value: "8,100+", label: "Citations", href: SCHOLAR },
-  { value: "10K+", label: "UFO GitHub stars", href: "https://github.com/microsoft/UFO" },
-  { value: String(publications.length), label: "Publications", href: "#publications" },
-  { value: "3", label: "Open NorthCUA models", href: "https://huggingface.co/beipo-ai" },
+  { value: "8,100+", label: T.stats[0], href: SCHOLAR },
+  { value: "10K+", label: T.stats[1], href: "https://github.com/microsoft/UFO" },
+  { value: String(publications.length), label: T.stats[2], href: "#publications" },
+  { value: "3", label: T.stats[3], href: "https://huggingface.co/beipo-ai" },
 ];
 ---
 
 <header id="top" class="relative overflow-hidden bg-accent-soft/10">
-  <div aria-hidden="true" class="grid-floor">
-    <div class="grid-floor__plane"><div class="grid-floor__lines"></div></div>
-  </div>
   <NetworkField client:idle className="absolute inset-0 h-full w-full" />
   <!-- veil: keeps the lines faint behind the text, livelier toward the edges -->
   <div
@@ -33,24 +61,21 @@ const STATS = [
     <div class="flex flex-1 flex-col-reverse items-center gap-12 pt-14 md:flex-row md:gap-16 md:pt-10">
       <div class="w-full min-w-0 flex-1">
         <p class="intro t-meta mb-5 flex items-center gap-2 text-accent-ink" style="--d: 0ms">
-          <span class="h-px w-8 bg-accent"></span> 张朝运
+          <span class="h-px w-8 bg-accent"></span> {T.eyebrow}
         </p>
-        <h1 class="intro t-display" style="--d: 80ms">Chaoyun Zhang</h1>
+        <h1 class="intro t-display" style="--d: 80ms">{T.name}</h1>
         <p class="intro mt-6 text-xl tracking-[-0.015em] text-gray-700 md:text-[1.375rem]" style="--d: 180ms">
-          Head of Computer-Using Agents at <span class="font-semibold text-gray-900">Beipo</span>
-          <span class="mt-1 block text-[0.85em] text-gray-500">Previously Principal Researcher at Microsoft</span>
+          {zh ? <><span class="font-semibold text-gray-900">{T.role[0]}</span>{T.role[1]}</> : <>{T.role[0]}<span class="font-semibold text-gray-900">{T.role[1]}</span></>}
+          <span class="mt-1 block text-[0.85em] text-gray-500">{T.previously}</span>
         </p>
-        <p class="intro t-lead mt-4 max-w-[34rem] text-gray-600" style="--d: 260ms">
-          I build agents that operate real desktop software and the web, and the experience loops that make them better
-          with practice.
-        </p>
+        <p class="intro t-lead mt-4 max-w-[34rem] text-gray-600" style="--d: 260ms">{T.lead}</p>
         <div class="intro mt-9 flex flex-wrap items-center gap-x-6 gap-y-3" style="--d: 360ms">
           <a
             href="#northcua"
             class="btn-primary group inline-flex min-h-[44px] items-center gap-2 rounded-full py-2 pr-3.5 pl-4 text-sm font-medium whitespace-nowrap"
           >
             <span class="pulse-dot inline-block h-1.5 w-1.5 rounded-full bg-accent-soft"></span>
-            Now leading NorthCUA
+            {T.cta}
             <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-0.5" />
           </a>
           <a href={GITHUB} target="_blank" rel="noopener noreferrer" class="group flex min-h-[44px] items-center gap-2 whitespace-nowrap text-gray-600 transition-colors hover:text-accent-ink">
@@ -63,11 +88,11 @@ const STATS = [
           </a>
           <a href={SCHOLAR} target="_blank" rel="noopener noreferrer" class="group flex min-h-[44px] items-center gap-2 whitespace-nowrap text-gray-600 transition-colors hover:text-accent-ink">
             <BrandIcon name="scholar" class="transition-transform duration-300 group-hover:scale-110" />
-            <span class="text-sm font-medium">Scholar</span>
+            <span class="text-sm font-medium">{T.scholar}</span>
           </a>
           <a href={`mailto:${EMAIL}`} class="group flex min-h-[44px] items-center gap-2 whitespace-nowrap text-gray-600 transition-colors hover:text-accent-ink">
             <Mail size={20} className="transition-transform duration-300 group-hover:scale-110" />
-            <span class="text-sm font-medium">Email</span>
+            <span class="text-sm font-medium">{T.email}</span>
           </a>
         </div>
       </div>
@@ -80,7 +105,7 @@ const STATS = [
             <circle cx="120" cy="120" r="116" fill="none" stroke="#70c1b3" stroke-opacity="0.28" stroke-width="1"></circle>
           </svg>
           <div class="relative h-full w-full overflow-hidden rounded-full ring-4 ring-white" style="box-shadow: 0 30px 60px -24px rgb(19 78 70 / 0.45), 0 0 0 1px rgb(19 78 70 / 0.06)">
-            <Image src={profile} alt="Chaoyun Zhang" width={240} height={240} loading="eager" fetchpriority="high" class="h-full w-full object-cover" />
+            <Image src={profile} alt={zh ? "张朝运" : "Chaoyun Zhang"} width={240} height={240} loading="eager" fetchpriority="high" class="h-full w-full object-cover" />
             <div aria-hidden="true" class="pointer-events-none absolute inset-0 rounded-full" style="background: linear-gradient(160deg, rgb(255 255 255 / 0.28), rgb(255 255 255 / 0) 42%)"></div>
           </div>
           <!-- orbital plane: tilted in 3D so it passes behind and in front of the portrait -->
@@ -99,7 +124,7 @@ const STATS = [
       </div>
     </div>
 
-    <dl class="intro glass mt-12 mb-10 grid grid-cols-2 overflow-hidden rounded-2xl md:grid-cols-4" style="--d: 480ms">
+    <div class="intro glass mt-12 mb-10 grid grid-cols-2 overflow-hidden rounded-2xl md:grid-cols-4" style="--d: 480ms">
       {
         STATS.map((s, i) => (
           <a
@@ -113,14 +138,14 @@ const STATS = [
               i > 1 && "border-t border-hairline md:border-t-0",
             ]}
           >
-            <dt class="t-meta flex items-center gap-1 transition-colors group-hover:text-accent-ink">
+            <span class="t-meta flex items-center gap-1 transition-colors group-hover:text-accent-ink">
               {s.label}
               <ArrowUpRight size={12} className="opacity-0 transition-opacity group-hover:opacity-100" />
-            </dt>
-            <dd class="text-[1.75rem] leading-tight font-semibold tracking-[-0.035em] text-gray-900 tabular-nums md:text-[2.25rem]">{s.value}</dd>
+            </span>
+            <span class="text-[1.75rem] leading-tight font-semibold tracking-[-0.035em] text-gray-900 tabular-nums md:text-[2.25rem]">{s.value}</span>
           </a>
         ))
       }
-    </dl>
+    </div>
   </div>
 </header>
