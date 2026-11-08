@@ -6,7 +6,7 @@ interface Props {
 const { id, title } = Astro.props;
 ---
 
-<section id={id} data-reveal class="relative mb-28">
-  <h2 class="trace-title mb-8 text-2xl font-bold tracking-tight text-gray-800 md:text-[1.7rem]">{title}</h2>
+<section id={id} data-reveal class="relative mb-28 md:mb-36">
+  <h2 class="trace-title t-h2 mb-10">{title}</h2>
   <slot />
 </section>

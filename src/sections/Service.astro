@@ -2,29 +2,39 @@
 import { Award, BookOpenCheck, FileText, ScrollText, Users } from "lucide-react";
 import Section from "../components/Section.astro";
 
-const PC = [
-  ["ICSE 2027", "International Conference on Software Engineering"],
-  ["FSE 2025 Industry Track", "Foundations of Software Engineering"],
-  ["ACM DistributedML Workshop 2020", "Distributed Machine Learning"],
-  ["IEEE CCNC 2020", "Consumer Communications & Networking"],
-];
-const PREMIER = [
-  ["NeurIPS 2025", "Neural Information Processing Systems"],
-  ["ICLR 2025", "International Conference on Learning Representations"],
-  ["KDD ADS Track 2025", "Applied Data Science Track"],
-  ["ACL ARR", "Association for Computational Linguistics"],
-];
-const SPECIAL = [
-  ["IEEE TMA", "Traffic Measurement and Analysis"],
-  ["IEEE WCNC", "Wireless Communications and Networking"],
-  ["IEEE WoWMoM", "World of Wireless, Mobile and Multimedia Networks"],
-];
-const JOURNALS = [
-  ["ACM Computing Surveys", "CSUR"],
-  ["IEEE Communications Letters", "ComLet"],
-  ["IEEE Trans. Mobile Computing", "TMC"],
-  ["IEEE Trans. Smart Grid", "TSG"],
-  ["IEEE SECOM", "Systems Engineering"],
+const GROUPS = [
+  {
+    title: "Program committee",
+    icon: "users",
+    items: [
+      ["ICSE 2027", "International Conference on Software Engineering"],
+      ["FSE 2025 Industry Track", "Foundations of Software Engineering"],
+      ["ACM DistributedML 2020", "Distributed Machine Learning Workshop"],
+      ["IEEE CCNC 2020", "Consumer Communications & Networking"],
+    ],
+  },
+  {
+    title: "Reviewing",
+    icon: "review",
+    items: [
+      ["NeurIPS 2025", "Neural Information Processing Systems"],
+      ["ICLR 2025", "Learning Representations"],
+      ["KDD ADS 2025", "Applied Data Science Track"],
+      ["ACL ARR", "Association for Computational Linguistics"],
+      ["IEEE TMA · WCNC · WoWMoM", "Networking and measurement venues"],
+    ],
+  },
+  {
+    title: "Journals",
+    icon: "journal",
+    items: [
+      ["ACM Computing Surveys", "CSUR"],
+      ["IEEE Trans. Mobile Computing", "TMC"],
+      ["IEEE Trans. Smart Grid", "TSG"],
+      ["IEEE Communications Letters", "ComLet"],
+      ["IEEE SECOM", "Systems Engineering"],
+    ],
+  },
 ];
 const AWARDS = [
   ["2018", "Best Student Paper Award, MLN"],
@@ -33,127 +43,73 @@ const AWARDS = [
   ["2016", "Edinburgh Global Research Scholarship"],
 ];
 const PATENTS = [
-  ["US12244467B2", "Distributed Network Traffic Data Decomposition Method (granted)"],
+  ["US12244467B2", "Distributed network traffic data decomposition method (granted)"],
   ["US 18/428,627", "Customized anomaly monitor for compute system performance metrics"],
-  ["CN116785718A", "Novice skill detection for MOBA games (面向 MOBA 游戏的新手能力探测算法)"],
+  ["CN116785718A", "Novice skill detection for MOBA games"],
   ["CN116850601A", "Multi-objective optimization for MOBA matchmaking and position assignment"],
 ];
-const card = "glow-card surface surface-hover rounded-2xl p-6 md:p-8";
-const row = "flex items-start gap-3 rounded-lg border border-transparent bg-gray-50/80 p-3 transition-colors hover:border-hairline hover:bg-white";
+const head = "mb-4 flex items-center gap-2.5";
+const iconBox = "grid h-8 w-8 place-items-center rounded-lg bg-accent/10 text-accent-ink";
 ---
 
 <Section id="service" title="Service & Honors">
-  <div class="grid gap-6 md:grid-cols-2 md:gap-8">
-    <div class={card}>
-      <div class="mb-6 flex items-center gap-3">
-        <div class="rounded-lg bg-accent/10 p-2"><Users className="text-accent" size={24} /></div>
-        <h3 class="text-xl font-semibold tracking-tight text-gray-800">Program Committee</h3>
-      </div>
-      <div class="space-y-3">
-        {
-          PC.map(([t, s]) => (
-            <div class={row}>
-              <Award className="mt-1 shrink-0 text-accent" size={16} />
-              <div>
-                <p class="font-medium text-gray-800">{t}</p>
-                <p class="text-sm text-gray-600">{s}</p>
-              </div>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-
-    <div class={card}>
-      <div class="mb-6 flex items-center gap-3">
-        <div class="rounded-lg bg-accent/10 p-2"><BookOpenCheck className="text-accent" size={24} /></div>
-        <h3 class="text-xl font-semibold tracking-tight text-gray-800">Reviewing Service</h3>
-      </div>
-      <h4 class="mb-3 text-xs font-semibold tracking-wide text-gray-500 uppercase">Premier Conferences</h4>
-      <div class="space-y-3">
-        {
-          PREMIER.map(([t, s]) => (
-            <div class={row}>
-              <FileText className="mt-1 shrink-0 text-accent" size={16} />
-              <div>
-                <p class="font-medium text-gray-800">{t}</p>
-                <p class="text-sm text-gray-600">{s}</p>
-              </div>
-            </div>
-          ))
-        }
-      </div>
-      <h4 class="mt-6 mb-3 text-xs font-semibold tracking-wide text-gray-500 uppercase">Specialized Conferences</h4>
-      <div class="space-y-3">
-        {
-          SPECIAL.map(([t, s]) => (
-            <div class={row}>
-              <FileText className="mt-1 shrink-0 text-accent" size={16} />
-              <div>
-                <p class="font-medium text-gray-800">{t}</p>
-                <p class="text-sm text-gray-600">{s}</p>
-              </div>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-
-    <div class:list={[card, "md:col-span-2"]}>
-      <div class="mb-6 flex items-center gap-3">
-        <div class="rounded-lg bg-accent/10 p-2"><FileText className="text-accent" size={24} /></div>
-        <h3 class="text-xl font-semibold tracking-tight text-gray-800">Journal Editorial Service</h3>
-      </div>
-      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {
-          JOURNALS.map(([t, s]) => (
-            <div class={row}>
-              <FileText className="mt-1 shrink-0 text-accent" size={16} />
-              <div>
-                <p class="font-medium text-gray-800">{t}</p>
-                <p class="text-sm text-gray-600">{s}</p>
-              </div>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-
-    <div class="rounded-2xl border border-accent/20 bg-linear-to-br from-accent/5 to-accent-soft/15 p-6 shadow-[inset_0_1px_0_rgb(255_255_255/0.8)] md:col-span-2 md:p-8">
-      <div class="grid gap-8 md:grid-cols-2">
-        <div>
-          <div class="mb-5 flex items-center gap-3">
-            <div class="rounded-lg bg-accent/20 p-2"><Award className="text-accent" size={24} /></div>
-            <h3 class="text-xl font-semibold tracking-tight text-gray-800">Awards</h3>
+  <div class="grid gap-6 md:grid-cols-3">
+    {
+      GROUPS.map((g) => (
+        <div class="glow-card surface surface-hover card">
+          <div class={head}>
+            <span class={iconBox}>
+              {g.icon === "users" && <Users size={16} />}
+              {g.icon === "review" && <BookOpenCheck size={16} />}
+              {g.icon === "journal" && <FileText size={16} />}
+            </span>
+            <h3 class="t-label text-[0.9375rem]">{g.title}</h3>
           </div>
-          <ul class="space-y-3">
-            {
-              AWARDS.map(([y, t]) => (
-                <li class="flex gap-3 rounded-lg border border-hairline bg-white/80 p-3">
-                  <span class="pt-0.5 text-xs font-medium text-accent-ink tabular-nums">{y}</span>
-                  <span class="text-sm text-gray-700">{t}</span>
-                </li>
-              ))
-            }
+          <ul class="divide-y divide-hairline">
+            {g.items.map(([t, s]) => (
+              <li class="py-2.5">
+                <p class="text-[15px] font-medium tracking-[-0.01em] text-gray-900">{t}</p>
+                <p class="t-small text-gray-500">{s}</p>
+              </li>
+            ))}
           </ul>
         </div>
-        <div>
-          <div class="mb-5 flex items-center gap-3">
-            <div class="rounded-lg bg-accent/20 p-2"><ScrollText className="text-accent" size={24} /></div>
-            <h3 class="text-xl font-semibold tracking-tight text-gray-800">Patents</h3>
-          </div>
-          <ul class="space-y-3">
-            {
-              PATENTS.map(([id, t]) => (
-                <li class="rounded-lg border border-hairline bg-white/80 p-3">
-                  <p class="font-mono text-xs text-accent-ink">{id}</p>
-                  <p class="text-sm text-gray-700">{t}</p>
-                </li>
-              ))
-            }
-          </ul>
-        </div>
+      ))
+    }
+  </div>
+
+  <div class="mt-6 grid gap-6 md:grid-cols-2">
+    <div class="glow-card surface surface-hover card">
+      <div class={head}>
+        <span class={iconBox}><Award size={16} /></span>
+        <h3 class="t-label text-[0.9375rem]">Awards</h3>
       </div>
+      <ul class="divide-y divide-hairline">
+        {
+          AWARDS.map(([y, t]) => (
+            <li class="grid grid-cols-[3.5rem_minmax(0,1fr)] items-baseline gap-3 py-2.5">
+              <span class="t-meta">{y}</span>
+              <span class="text-[15px] text-gray-800">{t}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div class="glow-card surface surface-hover card">
+      <div class={head}>
+        <span class={iconBox}><ScrollText size={16} /></span>
+        <h3 class="t-label text-[0.9375rem]">Patents</h3>
+      </div>
+      <ul class="divide-y divide-hairline">
+        {
+          PATENTS.map(([id, t]) => (
+            <li class="grid items-baseline gap-x-3 gap-y-0.5 py-2.5 sm:grid-cols-[8.5rem_minmax(0,1fr)]">
+              <span class="t-meta text-accent-ink">{id}</span>
+              <span class="text-[15px] text-gray-800">{t}</span>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </div>
 </Section>

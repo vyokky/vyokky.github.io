@@ -5,6 +5,8 @@ import { publications, type Publication } from "../data/publications";
 const GROUP_ORDER = ["preprints", "2026", "2025", "2024", "2023", "2022", "2021", "2020", "2019", "2018", "2017", "2015"];
 const GROUP_LABEL: Record<string, string> = { preprints: "Preprints" };
 const ME = "Chaoyun Zhang";
+// Short pill labels keep the link column to one tidy row.
+const SHORT: Record<string, string> = { Documentation: "Docs", YouTube: "Video", HuggingFace: "HF", Website: "Site", Leaderboard: "Board" };
 
 function Authors({ text }: { text: string }) {
   const parts = text.split(ME);
@@ -22,12 +24,12 @@ function Authors({ text }: { text: string }) {
 
 function PubRow({ p }: { p: Publication }) {
   return (
-    <li className="group -mx-3 rounded-xl px-3 py-5 transition-[background-color,box-shadow] duration-300 hover:bg-white hover:shadow-card">
+    <li className="group relative isolate py-5 before:absolute before:-inset-x-4 before:inset-y-1.5 before:-z-10 before:rounded-xl before:bg-white before:opacity-0 before:shadow-card before:transition-opacity before:duration-300 hover:before:opacity-100">
       <div className="grid gap-x-6 gap-y-3 md:grid-cols-[minmax(0,1fr)_auto]">
         <div className="min-w-0">
-          <h4 className="text-[17px] font-semibold leading-snug text-gray-800 transition-colors group-hover:text-accent-deep">
+          <h4 className="text-[16.5px] font-semibold leading-snug tracking-[-0.012em] text-gray-900 transition-colors group-hover:text-accent-deep">
             {p.selected && (
-              <span className="mr-2 inline-flex -translate-y-0.5 items-center gap-1 rounded-full bg-accent/15 px-2 py-0.5 align-middle text-[11px] font-medium text-accent-ink">
+              <span className="chip mr-2 -translate-y-0.5 align-middle">
                 <Star size={10} className="fill-current" /> Selected
               </span>
             )}
@@ -36,21 +38,21 @@ function PubRow({ p }: { p: Publication }) {
           <p className="mt-1.5 text-sm leading-relaxed text-gray-600">
             <Authors text={p.authors} />
           </p>
-          <p className="mt-1 text-sm font-medium text-accent-ink">
+          <p className="mt-1 text-[13px] font-medium text-accent-ink">
             {p.venue} ({p.year}){p.accepted ? " · Accepted" : ""}
           </p>
         </div>
         {p.links.length > 0 && (
-          <div className="flex flex-wrap content-start gap-2 md:max-w-[220px] md:justify-end">
+          <div className="flex flex-wrap content-start gap-1.5 md:max-w-[240px] md:justify-end">
             {p.links.map((l) => (
               <a
                 key={l.label + l.href}
                 href={l.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="surface whitespace-nowrap rounded-md px-2.5 py-1 text-xs font-medium text-accent-ink transition hover:border-accent hover:text-accent-deep"
+                className="surface whitespace-nowrap rounded-md px-2.5 py-1 font-mono text-[11px] uppercase tracking-wider text-accent-ink transition hover:border-accent hover:text-accent-deep"
               >
-                {l.label}
+                {SHORT[l.label] ?? l.label}
               </a>
             ))}
           </div>
@@ -116,7 +118,7 @@ export default function Publications() {
           >
             <Star size={14} className={onlySelected ? "fill-current" : ""} /> Selected
           </button>
-          <span className="pub-count whitespace-nowrap text-sm text-gray-500 tabular-nums" aria-live="polite">
+          <span className="pub-count t-meta whitespace-nowrap" aria-live="polite">
             {shown} of {publications.length} papers
           </span>
         </div>
@@ -130,17 +132,17 @@ export default function Publications() {
           return (
             <section key={g} className="border-t border-hairline md:grid md:grid-cols-[150px_minmax(0,1fr)] md:gap-8">
               {/* Year rail: sticks under the nav while its papers scroll by */}
-              <div className="sticky top-[var(--nav-h)] z-10 -mx-4 bg-paper/90 px-4 backdrop-blur-sm md:static md:mx-0 md:bg-transparent md:px-0 md:backdrop-blur-none">
+              <div className="sticky top-[var(--nav-h)] z-10 -mx-5 bg-paper/90 px-5 backdrop-blur-sm md:static md:mx-0 md:bg-transparent md:px-0 md:backdrop-blur-none">
                 <button
                   type="button"
                   onClick={() => toggle(g)}
                   aria-expanded={open}
                   className="group flex w-full items-center gap-2 py-4 text-left md:sticky md:top-[calc(var(--nav-h)+16px)] md:py-6"
                 >
-                  <h3 className="text-xl font-bold tracking-tight text-gray-800 transition-colors group-hover:text-accent-ink md:text-2xl">
+                  <h3 className="text-xl font-semibold tracking-[-0.03em] text-gray-900 transition-colors group-hover:text-accent-ink md:text-[1.625rem]">
                     {GROUP_LABEL[g] ?? g}
                   </h3>
-                  <span className="text-sm text-gray-500 tabular-nums">{items.length}</span>
+                  <span className="t-meta">{items.length}</span>
                   <ChevronDown size={18} className={`ml-auto text-gray-500 transition-transform duration-300 md:ml-0 ${open ? "" : "-rotate-90"}`} />
                 </button>
               </div>

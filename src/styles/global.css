@@ -1,10 +1,29 @@
 @import "tailwindcss";
+/* Geist (OFL): a precise, modern sans for text and display; Geist Mono only for metadata
+ * (dates, counts, IDs). Latin subsets only; Chinese falls back to the system UI font. */
+@import "@fontsource-variable/geist/wght.css";
+@import "@fontsource-variable/geist-mono/wght.css";
 
 /*
  * Tokens. One accent owns the page: `accent` is the site's teal for fills, borders and underlines;
  * `accent-ink` / `accent-deep` are the same hue darkened so text passes WCAG AA on white (5.1:1 / 9:1).
  */
 @theme {
+  --font-sans: "Geist Variable", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Neutrals tinted a hair toward the accent hue, so greys belong to the palette. */
+  --color-gray-50: oklch(0.985 0.004 180);
+  --color-gray-100: oklch(0.966 0.006 180);
+  --color-gray-200: oklch(0.925 0.008 180);
+  --color-gray-300: oklch(0.87 0.01 180);
+  --color-gray-400: oklch(0.708 0.013 180);
+  --color-gray-500: oklch(0.548 0.015 180);
+  --color-gray-600: oklch(0.444 0.016 180);
+  --color-gray-700: oklch(0.37 0.016 180);
+  --color-gray-800: oklch(0.275 0.015 180);
+  --color-gray-900: oklch(0.205 0.013 180);
+
   --color-accent: #70c1b3;
   --color-accent-soft: #81d8d0;
   --color-accent-ink: #2a7a6e;
@@ -68,6 +87,118 @@
     outline: 2px solid var(--color-accent-ink);
     outline-offset: 3px;
     border-radius: 6px;
+  }
+}
+
+/* ======================================================================
+ * Type system. One scale, used everywhere:
+ *   display  hero name          clamp(2.75rem, 6.4vw, 5.25rem) / 600 / -0.045em / 0.95
+ *   h2       section titles     2rem / 600 / -0.032em / 1.15
+ *   h3       card titles        1.25rem / 600 / -0.02em / 1.3
+ *   lead     intro paragraphs   1.125rem / 1.7
+ *   body     text               1rem / 1.72
+ *   small    secondary          0.875rem / 1.6
+ *   meta     dates, IDs, counts Geist Mono 0.75rem / +0.01em
+ * ====================================================================== */
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.72;
+    font-feature-settings: "ss01", "cv11";
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--color-gray-900);
+    font-weight: 600;
+  }
+}
+@layer components {
+  .t-display {
+    font-size: clamp(2.75rem, 6.4vw, 5.25rem);
+    font-weight: 600;
+    letter-spacing: -0.045em;
+    line-height: 0.95;
+  }
+  .t-h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.032em;
+    line-height: 1.15;
+  }
+  @media (min-width: 768px) {
+    .t-h2 {
+      font-size: 2rem;
+    }
+  }
+  .t-h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+  }
+  .t-lead {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: var(--color-gray-700);
+  }
+  .t-small {
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+  .t-meta {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.01em;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-gray-500);
+  }
+  .t-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    color: var(--color-gray-800);
+  }
+  /* one chip */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 9999px;
+    border: 1px solid rgb(112 193 179 / 0.32);
+    background: rgb(112 193 179 / 0.1);
+    padding: 0.125rem 0.625rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.02em;
+    color: var(--color-accent-ink);
+    white-space: nowrap;
+  }
+  /* one card */
+  .card {
+    border-radius: 1rem;
+    padding: 1.5rem;
+  }
+  @media (min-width: 768px) {
+    .card {
+      padding: 2rem;
+    }
+  }
+  /* press: outlet links separated by hairline dots */
+  .press a {
+    color: var(--color-accent-ink);
+    text-underline-offset: 3px;
+  }
+  .press a:hover {
+    color: var(--color-accent-deep);
+    text-decoration: underline;
+  }
+  .press li + li::before {
+    content: "·";
+    margin: 0 0.5rem;
+    color: var(--color-gray-400);
   }
 }
 

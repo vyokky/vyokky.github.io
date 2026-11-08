@@ -83,16 +83,19 @@ export default function ModelBench() {
         </a>
       </p>
 
-      <dl className="mt-5 grid grid-cols-3 gap-2 border-t border-hairline pt-4">
-        {PRO_EXTRA.map((g) => (
-          <div key={g.k} className="flex flex-col-reverse">
-            <dt className="text-[11px] leading-tight text-gray-500">
-              Pro · {g.k} <span className="text-gray-400">{g.tag}</span>
-            </dt>
-            <dd className="text-xl font-semibold tracking-tight tabular-nums text-gray-800">{g.v.toFixed(1)}</dd>
-          </div>
-        ))}
-      </dl>
+      <div className="mt-5 border-t border-hairline pt-4">
+        <p className="t-meta mb-2">NorthCUA-Pro · grounding &amp; long horizon</p>
+        <dl className="grid grid-cols-3 gap-3">
+          {PRO_EXTRA.map((g) => (
+            <div key={g.k} className="flex flex-col-reverse justify-end">
+              <dt className="text-[11px] leading-snug text-gray-500">
+                {g.k} <span className="text-gray-400">{g.tag}</span>
+              </dt>
+              <dd className="text-xl font-semibold tracking-tight tabular-nums text-gray-900">{g.v.toFixed(1)}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
       <p className="mt-3 text-[11px] leading-relaxed text-gray-500">
         Scores (%) from the technical report under its reported settings; bars are RL checkpoints, SFT marks SFT checkpoints,
         OSWorld 2.0 is the average partial score.

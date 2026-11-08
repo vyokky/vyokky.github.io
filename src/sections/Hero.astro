@@ -29,22 +29,22 @@ const STATS = [
   >
   </div>
 
-  <div class="relative container mx-auto flex max-w-6xl flex-col px-4 md:min-h-[calc(100dvh-var(--nav-h))]">
+  <div class="relative container mx-auto flex max-w-6xl flex-col px-5 md:min-h-[calc(100dvh-var(--nav-h))] md:px-8">
     <div class="flex flex-1 flex-col-reverse items-center gap-12 pt-14 md:flex-row md:gap-16 md:pt-10">
       <div class="w-full min-w-0 flex-1">
-        <h1 class="intro text-[clamp(2.6rem,6.2vw,5rem)] leading-[0.98] font-bold tracking-[-0.035em] text-gray-800" style="--d: 80ms">
-          Chaoyun Zhang
-          <span class="mt-2 block text-[0.42em] leading-tight font-medium tracking-normal text-gray-500 md:mt-0 md:ml-3 md:inline">张朝运</span>
-        </h1>
-        <p class="intro mt-5 text-xl tracking-tight text-gray-600" style="--d: 180ms">
-          Head of Computer-Using Agents at <strong class="font-semibold text-gray-800">Beipo</strong>
-          <span class="text-gray-500"> · previously Principal Researcher at Microsoft</span>
+        <p class="intro t-meta mb-5 flex items-center gap-2 text-accent-ink" style="--d: 0ms">
+          <span class="h-px w-8 bg-accent"></span> 张朝运
         </p>
-        <p class="intro mt-4 max-w-xl text-lg leading-relaxed text-gray-600" style="--d: 260ms">
+        <h1 class="intro t-display" style="--d: 80ms">Chaoyun Zhang</h1>
+        <p class="intro mt-6 text-xl tracking-[-0.015em] text-gray-700 md:text-[1.375rem]" style="--d: 180ms">
+          Head of Computer-Using Agents at <span class="font-semibold text-gray-900">Beipo</span>
+          <span class="mt-1 block text-[0.85em] text-gray-500">Previously Principal Researcher at Microsoft</span>
+        </p>
+        <p class="intro t-lead mt-4 max-w-[34rem] text-gray-600" style="--d: 260ms">
           I build agents that operate real desktop software and the web, and the experience loops that make them better
           with practice.
         </p>
-        <div class="intro mt-7 flex flex-wrap items-center gap-x-6 gap-y-3" style="--d: 360ms">
+        <div class="intro mt-9 flex flex-wrap items-center gap-x-6 gap-y-3" style="--d: 360ms">
           <a
             href="#northcua"
             class="btn-primary group inline-flex min-h-[44px] items-center gap-2 rounded-full py-2 pr-3.5 pl-4 text-sm font-medium whitespace-nowrap"
@@ -113,11 +113,11 @@ const STATS = [
               i > 1 && "border-t border-hairline md:border-t-0",
             ]}
           >
-            <dt class="flex items-center gap-1 text-xs text-gray-500 transition-colors group-hover:text-accent-ink">
+            <dt class="t-meta flex items-center gap-1 transition-colors group-hover:text-accent-ink">
               {s.label}
               <ArrowUpRight size={12} className="opacity-0 transition-opacity group-hover:opacity-100" />
             </dt>
-            <dd class="text-3xl font-semibold tracking-tight text-gray-800 tabular-nums md:text-4xl">{s.value}</dd>
+            <dd class="text-[1.75rem] leading-tight font-semibold tracking-[-0.035em] text-gray-900 tabular-nums md:text-[2.25rem]">{s.value}</dd>
           </a>
         ))
       }
