@@ -28,6 +28,7 @@ const T = zh
         "经验驱动的计算机使用智能体系统，覆盖桌面应用与网页：统一 Harness 负责长程任务的执行与验证，经验数据飞轮把模型薄弱点持续转化为训练数据，分阶段后训练再把这些经验变成更强的策略。开源模型在 GUI 定位、桌面执行与 Web 交互三个方向达到开源模型 SOTA（按技术报告的评测设置）。",
       ncLinks: ["技术报告", "项目主页", "模型", "代码"],
       loopAria: "NorthCUA 经验闭环",
+      loopBack: "更新后的策略回到真实软件，开启下一轮实践",
       ultrafast: "Ultrafast：平均任务提速 2.3 倍（基于 RL 前的 Nano，WebArena-Verified 中固定的 320 个成功任务；成功率 60.6%，对照 64.2%）。",
       press: "媒体报道",
     }
@@ -40,6 +41,7 @@ const T = zh
         "An experience-driven computer-use agent system for desktop applications and the web: a unified harness that executes and verifies long-horizon tasks, an experience flywheel that turns weak spots into training data, and staged post-training that turns it into stronger policies. Its open models are state-of-the-art among open-source models (reported settings) in GUI grounding, desktop execution and web interaction.",
       ncLinks: ["Technical report", "Project page", "Models", "Code"],
       loopAria: "The NorthCUA experience loop",
+      loopBack: "Updated policies go back to real software for the next round",
       ultrafast: "Ultrafast: 2.3× lower mean task time (pre-RL Nano, 320 fixed successful WebArena-Verified tasks, 60.6% vs 64.2% success).",
       press: "Press",
     };
@@ -59,13 +61,11 @@ const NC_LOOP = zh
       { k: "统一 Harness", s: "执行 · 验证 · 留存", d: "准备工作区，在桌面与网页上执行长程任务，检查真实结果并留存轨迹。" },
       { k: "经验数据飞轮", s: "任务 · 技能 · 里程碑", d: "构造可执行任务，筛选经过评估的轨迹，用可复用技能与经验证的里程碑攻克难题。" },
       { k: "分阶段学习", s: "mid-training · SFT · RL", d: "广泛 GUI 中期训练、经验证的长程 SFT，再到桌面与网页联合强化学习。" },
-      { k: "更强的策略", s: "Nano · Mini · Pro", d: "更新后的策略回到真实软件，开始下一轮实践。" },
     ]
   : [
       { k: "Harness", s: "execute · verify · keep", d: "Prepares the workspace, acts over long horizons on desktop and web, checks the real outcome and keeps the trajectory." },
       { k: "Experience flywheel", s: "tasks · skills · milestones", d: "Builds executable tasks, curates assessed trajectories and mines hard cases with reusable skills and verified milestones." },
       { k: "Staged learning", s: "mid-training · SFT · RL", d: "Broad GUI mid-training, verified long-horizon SFT, then joint desktop and web reinforcement learning." },
-      { k: "Stronger policies", s: "Nano · Mini · Pro", d: "Updated policies go back to real software for the next round of practice." },
     ];
 
 // UFO family, newest first: three equal cards in one row.
@@ -210,12 +210,12 @@ const btn = "btn-tonal inline-flex items-center rounded-lg px-3.5 py-1.5 text-sm
           </div>
 
           <div class="lg:col-span-2">
-            <ol class="loop-strip grid grid-cols-2 gap-2 sm:grid-cols-[repeat(4,minmax(0,1fr))_auto] sm:items-center sm:gap-0" aria-label={T.loopAria}>
+            <ol class="loop-strip grid grid-cols-1 gap-2 sm:grid-cols-[repeat(3,minmax(0,1fr))_auto] sm:items-center sm:gap-0" aria-label={T.loopAria}>
               {
                 NC_LOOP.map((st, i) => (
                   <li class="loop-step surface flex items-center gap-2.5 rounded-xl px-2.5 py-2.5 sm:mr-4" style={`--i:${i}`} title={st.d}>
                     <span class="loop-icon">
-                      <LoopIcon kind={(["layers", "ring", "bars", "sphere"] as const)[i]} />
+                      <LoopIcon kind={(["layers", "ring", "bars"] as const)[i]} />
                     </span>
                     <span class="min-w-0">
                       <span class="block text-sm font-semibold tracking-[-0.01em] text-gray-900">{st.k}</span>
@@ -224,7 +224,10 @@ const btn = "btn-tonal inline-flex items-center rounded-lg px-3.5 py-1.5 text-sm
                   </li>
                 ))
               }
-              <li aria-hidden="true" class="hidden text-accent-ink sm:block">↺</li>
+              <li class="hidden text-accent-ink sm:block" title={T.loopBack}>
+                <span aria-hidden="true">↺</span>
+                <span class="sr-only">{T.loopBack}</span>
+              </li>
             </ol>
             <p class="t-caption mt-3 leading-relaxed">
               {T.ultrafast}
