@@ -9,15 +9,15 @@ import Section from "../components/Section.astro";
     <div aria-hidden="true" class="timeline-fill absolute top-3 bottom-3 left-[11px] w-px bg-linear-to-b from-accent to-accent-soft md:left-[15px]"></div>
     <ol class="space-y-6">
       <li class="relative" data-reveal>
-        <span aria-hidden="true" class="absolute top-6 -left-9 flex h-[23px] w-[23px] items-center justify-center rounded-full border border-accent/60 bg-white md:-left-11 md:h-[31px] md:w-[31px]">
-          <span class="pulse-dot h-2 w-2 rounded-full bg-accent"></span>
+        <span aria-hidden="true" class="absolute top-6 -left-9 flex h-[23px] w-[23px] items-center justify-center rounded-full border border-accent/50 bg-white shadow-card md:-left-11 md:h-[31px] md:w-[31px]">
+          <span class="pulse-dot node-glow h-2 w-2 rounded-full bg-accent-ink"></span>
         </span>
-        <div class="glow-card rounded-xl border border-hairline bg-gray-50/80 p-6 transition-shadow duration-300 hover:shadow-card">
+        <div class="glow-card surface surface-hover rounded-xl p-6">
           <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
             <h3 class="text-xl font-semibold tracking-tight text-gray-800">Head of Computer-Using Agents (CUA)</h3>
             <span class="text-sm text-gray-500 tabular-nums">Feb 2026 – Present <span class="ml-2 rounded-full bg-accent/15 px-2 py-0.5 text-[11px] font-medium text-accent-ink">Now</span></span>
           </div>
-          <p class="font-medium text-accent-ink">Beipo (北坡) · Shanghai Qiji Zhifeng Intelligent Technology</p>
+          <p class="font-medium text-accent-ink">Beipo (北坡) · Shanghai Qiji Zhifeng Intelligent Technology · NorthCUA / Nex-N2.5</p>
           <ul class="mt-2 ml-5 list-outside list-disc space-y-1 text-gray-600">
             <li>
               Lead <strong>NorthCUA</strong> from zero to one: the CUA post-training and model roadmap, combining GUI mid-training, long-horizon SFT
@@ -28,14 +28,15 @@ import Section from "../components/Section.astro";
               verification and training-data curation.
             </li>
             <li>Released the open NorthCUA Nano, Mini and Pro models, and NorthCUA-Ultrafast for low-latency execution.</li>
+            <li>Responsible for the CUA and Web Agent capabilities of <A href="https://nex-agi.com" bold={false}>Nex-N2.5</A>.</li>
           </ul>
         </div>
       </li>
       <li class="relative" data-reveal>
-        <span aria-hidden="true" class="absolute top-6 -left-9 flex h-[23px] w-[23px] items-center justify-center rounded-full border border-accent/60 bg-white md:-left-11 md:h-[31px] md:w-[31px]">
-          <span class="h-2 w-2 rounded-full bg-accent"></span>
+        <span aria-hidden="true" class="absolute top-6 -left-9 flex h-[23px] w-[23px] items-center justify-center rounded-full border border-accent/50 bg-white shadow-card md:-left-11 md:h-[31px] md:w-[31px]">
+          <span class="node-glow h-2 w-2 rounded-full bg-accent"></span>
         </span>
-        <div class="glow-card rounded-xl border border-hairline bg-gray-50/80 p-6 transition-shadow duration-300 hover:shadow-card">
+        <div class="glow-card surface surface-hover rounded-xl p-6">
           <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
             <h3 class="text-xl font-semibold tracking-tight text-gray-800">Principal Researcher</h3>
             <span class="text-sm text-gray-500 tabular-nums">Jul 2022 – Feb 2026</span>
@@ -74,10 +75,10 @@ import Section from "../components/Section.astro";
           },
         ].map((it) => (
           <li class="relative" data-reveal>
-            <span aria-hidden="true" class="absolute top-6 -left-9 flex h-[23px] w-[23px] items-center justify-center rounded-full border border-accent/60 bg-white md:-left-11 md:h-[31px] md:w-[31px]">
-              <span class="h-2 w-2 rounded-full bg-accent" />
+            <span aria-hidden="true" class="absolute top-6 -left-9 flex h-[23px] w-[23px] items-center justify-center rounded-full border border-accent/50 bg-white shadow-card md:-left-11 md:h-[31px] md:w-[31px]">
+              <span class="node-glow h-2 w-2 rounded-full bg-accent" />
             </span>
-            <div class="glow-card rounded-xl border border-hairline bg-gray-50/80 p-6 transition-shadow duration-300 hover:shadow-card">
+            <div class="glow-card surface surface-hover rounded-xl p-6">
               <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                 <h3 class="text-xl font-semibold tracking-tight text-gray-800">{it.t}</h3>
                 <span class="text-sm text-gray-500 tabular-nums">{it.p}</span>

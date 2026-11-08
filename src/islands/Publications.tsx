@@ -22,7 +22,7 @@ function Authors({ text }: { text: string }) {
 
 function PubRow({ p }: { p: Publication }) {
   return (
-    <li className="group -mx-3 rounded-lg px-3 py-5 transition-colors duration-300 hover:bg-accent/[0.05]">
+    <li className="group -mx-3 rounded-xl px-3 py-5 transition-[background-color,box-shadow] duration-300 hover:bg-white hover:shadow-card">
       <div className="grid gap-x-6 gap-y-3 md:grid-cols-[minmax(0,1fr)_auto]">
         <div className="min-w-0">
           <h4 className="text-[17px] font-semibold leading-snug text-gray-800 transition-colors group-hover:text-accent-deep">
@@ -48,7 +48,7 @@ function PubRow({ p }: { p: Publication }) {
                 href={l.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="whitespace-nowrap rounded-md border border-hairline bg-white px-2.5 py-1 text-xs font-medium text-accent-ink transition hover:border-accent hover:bg-accent/10"
+                className="surface whitespace-nowrap rounded-md px-2.5 py-1 text-xs font-medium text-accent-ink transition hover:border-accent hover:text-accent-deep"
               >
                 {l.label}
               </a>
@@ -92,7 +92,7 @@ export default function Publications() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Filter by title, author, venue or year"
-            className="w-full rounded-lg border border-hairline bg-white py-2.5 pl-9 pr-9 text-sm text-gray-700 placeholder:text-gray-500 outline-hidden transition focus:border-accent focus:ring-2 focus:ring-accent/20"
+            className="w-full rounded-lg border border-hairline bg-white py-2.5 shadow-[inset_0_1px_2px_rgb(19_78_70/0.06)] pl-9 pr-9 text-sm text-gray-700 placeholder:text-gray-500 outline-hidden transition focus:border-accent focus:ring-2 focus:ring-accent/20"
           />
           {query && (
             <button

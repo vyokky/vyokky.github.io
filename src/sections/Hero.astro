@@ -17,6 +17,9 @@ const STATS = [
 ---
 
 <header id="top" class="relative overflow-hidden bg-accent-soft/10">
+  <div aria-hidden="true" class="grid-floor">
+    <div class="grid-floor__plane"><div class="grid-floor__lines"></div></div>
+  </div>
   <NetworkField client:idle className="absolute inset-0 h-full w-full" />
   <!-- veil: keeps the lines faint behind the text, livelier toward the edges -->
   <div
@@ -44,7 +47,7 @@ const STATS = [
         <div class="intro mt-7 flex flex-wrap items-center gap-x-6 gap-y-3" style="--d: 360ms">
           <a
             href="#northcua"
-            class="group inline-flex min-h-[44px] items-center gap-2 rounded-full bg-accent-ink py-2 pr-3.5 pl-4 text-sm font-medium whitespace-nowrap text-white shadow-card transition hover:bg-accent-deep"
+            class="btn-primary group inline-flex min-h-[44px] items-center gap-2 rounded-full py-2 pr-3.5 pl-4 text-sm font-medium whitespace-nowrap"
           >
             <span class="pulse-dot inline-block h-1.5 w-1.5 rounded-full bg-accent-soft"></span>
             Now leading NorthCUA
@@ -69,21 +72,34 @@ const STATS = [
         </div>
       </div>
 
-      <div class="intro relative h-44 w-44 shrink-0 md:h-60 md:w-60" style="--d: 0ms">
-        <svg aria-hidden="true" viewBox="0 0 240 240" class="absolute -inset-6 h-[calc(100%+3rem)] w-[calc(100%+3rem)]">
-          <circle cx="120" cy="120" r="104" fill="none" stroke="#70c1b3" stroke-opacity="0.22" stroke-width="1"></circle>
-          <g class="orbit">
-            <circle cx="120" cy="120" r="114" fill="none" stroke="#70c1b3" stroke-opacity="0.5" stroke-width="1" stroke-dasharray="2 6"></circle>
-            <circle cx="120" cy="6" r="3.5" fill="#2a7a6e"></circle>
-          </g>
-        </svg>
-        <div class="relative h-full w-full overflow-hidden rounded-full shadow-lift ring-4 ring-white">
-          <Image src={profile} alt="Chaoyun Zhang" width={240} height={240} loading="eager" fetchpriority="high" class="h-full w-full object-cover" />
+      <div class="intro avatar-scene shrink-0 p-6 md:p-10" style="--d: 0ms">
+        <div class="avatar-rig h-44 w-44 md:h-60 md:w-60">
+          <div aria-hidden="true" class="avatar-halo"></div>
+          <!-- flat halo ring, sitting just behind the portrait -->
+          <svg aria-hidden="true" viewBox="0 0 240 240" class="absolute -inset-[9%] h-[118%] w-[118%]" style="transform: translateZ(-20px)">
+            <circle cx="120" cy="120" r="116" fill="none" stroke="#70c1b3" stroke-opacity="0.28" stroke-width="1"></circle>
+          </svg>
+          <div class="relative h-full w-full overflow-hidden rounded-full ring-4 ring-white" style="box-shadow: 0 30px 60px -24px rgb(19 78 70 / 0.45), 0 0 0 1px rgb(19 78 70 / 0.06)">
+            <Image src={profile} alt="Chaoyun Zhang" width={240} height={240} loading="eager" fetchpriority="high" class="h-full w-full object-cover" />
+            <div aria-hidden="true" class="pointer-events-none absolute inset-0 rounded-full" style="background: linear-gradient(160deg, rgb(255 255 255 / 0.28), rgb(255 255 255 / 0) 42%)"></div>
+          </div>
+          <!-- orbital plane: tilted in 3D so it passes behind and in front of the portrait -->
+          <div aria-hidden="true" class="orbit-plane">
+            <div class="orbit-spin">
+              <svg viewBox="0 0 200 200" class="absolute inset-0 h-full w-full overflow-visible">
+                <circle cx="100" cy="100" r="98" fill="none" stroke="#ffffff" stroke-opacity="0.7" stroke-width="2.2"></circle>
+                <circle cx="100" cy="100" r="98" fill="none" stroke="#2a7a6e" stroke-opacity="0.8" stroke-width="1" stroke-dasharray="2 4"></circle>
+                <circle cx="100" cy="2" r="9" fill="#70c1b3" fill-opacity="0.3"></circle>
+                <circle cx="100" cy="2" r="3.8" fill="#2a7a6e" stroke="#ffffff" stroke-width="1.2"></circle>
+                <circle cx="100" cy="198" r="2" fill="#70c1b3"></circle>
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <dl class="intro mt-14 grid grid-cols-2 border-t border-hairline md:grid-cols-4" style="--d: 480ms">
+    <dl class="intro glass mt-12 mb-10 grid grid-cols-2 overflow-hidden rounded-2xl md:grid-cols-4" style="--d: 480ms">
       {
         STATS.map((s, i) => (
           <a
@@ -91,9 +107,8 @@ const STATS = [
             target={s.href.startsWith("#") ? undefined : "_blank"}
             rel="noopener noreferrer"
             class:list={[
-              "group flex flex-col-reverse gap-1 py-6 pr-4 md:px-6",
-              i === 0 && "md:pl-0",
-              i % 2 === 1 && "border-l border-hairline pl-4 md:pl-6",
+              "group flex flex-col-reverse gap-1 px-5 py-5 transition-colors hover:bg-white/60 md:px-7 md:py-6",
+              i % 2 === 1 && "border-l border-hairline",
               i === 2 && "md:border-l md:border-hairline",
               i > 1 && "border-t border-hairline md:border-t-0",
             ]}

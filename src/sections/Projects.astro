@@ -1,13 +1,30 @@
 ---
 import { Picture } from "astro:assets";
+import { ArrowUpRight, FileText, Globe, Layers } from "lucide-react";
 import Section from "../components/Section.astro";
+import BrandIcon from "../components/BrandIcon.astro";
+import ModelBench from "../islands/ModelBench";
 import poster from "../assets/poster.webp";
 import agentos from "../assets/agentos.webp";
-import survey from "../assets/survey.webp";
-import lam from "../assets/lam.webp";
+import ufo from "../assets/ufo.webp";
 
 type Link = { label: string; href: string };
 
+/* ---------- NorthCUA (public sources only: CV, arXiv 2611.02102, beipo.top/blog/northcua, HF beipo-ai, GitHub beipo-ai/NorthCUA) */
+const NC_LINKS = [
+  { label: "Technical report", href: "https://arxiv.org/abs/2611.02102", icon: "report", primary: true },
+  { label: "Project page", href: "https://beipo.top/blog/northcua/en/", icon: "globe" },
+  { label: "Models", href: "https://huggingface.co/beipo-ai", icon: "layers" },
+  { label: "Code", href: "https://github.com/beipo-ai/NorthCUA", icon: "github" },
+];
+const NC_LOOP = [
+  { k: "Harness", s: "execute · verify · keep", d: "Prepares the workspace, acts over long horizons on desktop and web, checks the real outcome and keeps the trajectory." },
+  { k: "Experience flywheel", s: "tasks · skills · milestones", d: "Builds executable tasks, curates assessed trajectories and mines hard cases with reusable skills and verified milestones." },
+  { k: "Staged learning", s: "mid-training · SFT · RL", d: "Broad GUI mid-training, verified long-horizon SFT, then joint desktop and web reinforcement learning." },
+  { k: "Stronger policies", s: "Nano · Mini · Pro", d: "Updated policies go back to real software for the next round of practice." },
+];
+
+/* ---------- UFO family */
 const UFO3_PRINCIPLES = [
   ["🌟", "Declarative Decomposition into Dynamic DAG", "Requests decomposed into structured DAG with TaskStars and dependencies for automated scheduling and runtime rewriting."],
   ["🔄", "Continuous Result-Driven Graph Evolution", "Living constellation that adapts to execution feedback through controlled rewrites and dynamic adjustments."],
@@ -22,14 +39,27 @@ const UFO3_LINKS: Link[] = [
   { label: "YouTube", href: "https://www.youtube.com/watch?v=NGrVWGcJL8o" },
 ];
 
-const CARDS = [
+const PAIR = [
   {
+    tag: "TMLR 2026",
     title: "UFO²: The Desktop AgentOS",
     image: agentos,
     alt: "UFO² Desktop AgentOS architecture",
     desc: "UFO² is a next-generation AgentOS that brings deeply integrated, system-level intelligence to Windows desktop automation: a centralized <b>HostAgent</b> for natural language task orchestration, application-specialized <b>AppAgents</b> that combine GUI actions with native APIs, hybrid control detection (vision + UI Automation), speculative multi-action planning and a non-disruptive Picture-in-Picture interface.",
+    media: [{ label: "微软正式开源UFO²，Windows桌面迈入「AgentOS 时代」", href: "https://www.jiqizhixin.com/articles/2025-05-06-13" }],
+    links: [
+      { label: "GitHub Code", href: "https://github.com/microsoft/UFO/" },
+      { label: "Docs", href: "https://microsoft.github.io/UFO/" },
+      { label: "Paper", href: "https://arxiv.org/pdf/2504.14603" },
+    ],
+  },
+  {
+    tag: "NAACL 2025",
+    title: "UFO: A UI-Focused Agent for Windows OS Interaction",
+    image: ufo,
+    alt: "UFO takes a user request and works across Word, Photos, PowerPoint and Outlook: extract, observe, summarize, click, edit and send",
+    desc: "The first open-source Windows GUI agent / CUA framework, built around UI perception, control grounding, task planning and action selection. From one natural-language request, UFO works across applications such as Word, Photos, PowerPoint and Outlook, and started the line of work that became UFO² and UFO³.",
     media: [
-      { label: "微软正式开源UFO²，Windows桌面迈入「AgentOS 时代」", href: "https://www.jiqizhixin.com/articles/2025-05-06-13" },
       { label: "下一代Windows系统曝光：基于GPT-4V，Agent跨应用调度，代号UFO", href: "https://baijiahao.baidu.com/s?id=1790938358152188625&wfr=spider&for=pc" },
       { label: "下一代智能版 Windows 要来了？微软推出首个 Windows Agent，命名为 UFO！", href: "https://blog.csdn.net/csdnnews/article/details/136161570" },
       { label: "Microsoft's UFO abducts traditional user interfaces for a smarter Windows experience", href: "https://the-decoder.com/microsofts-ufo-abducts-traditional-user-interfaces-for-a-smarter-windows-experience/" },
@@ -37,60 +67,105 @@ const CARDS = [
     links: [
       { label: "GitHub Code", href: "https://github.com/microsoft/UFO/" },
       { label: "Docs", href: "https://microsoft.github.io/UFO/" },
-      { label: "UFO² Paper", href: "https://arxiv.org/pdf/2504.14603" },
-      { label: "UFO Paper", href: "https://arxiv.org/pdf/2402.07939" },
-    ],
-  },
-  {
-    title: "LLM-Brained GUI Agent Survey",
-    image: survey,
-    alt: "Overview figure of the LLM-brained GUI agent survey",
-    desc: "A comprehensive (90+ pages) survey on <b>large language model-powered GUI agents</b>, AI agents that operate graphical user interfaces from natural language instructions. It covers over 500 research papers, and both the paper and its website are updated as the field moves.",
-    media: [
-      { label: "引领人机交互革命？微软研究团队发布80页的大模型GUI智能体综述", href: "https://baijiahao.baidu.com/s?id=1820751448950288867&wfr=spider&for=pc" },
-      { label: "Agent操纵手机/电脑屏幕的全面综述", href: "https://news.qq.com/rain/a/20241224A07J3R00" },
-      { label: "[LLM-Brained GUI Agents] A Survey: Revolutionizing Human-Computer Interaction", href: "https://medium.com/advancedai/survey-gui-agents-revolutionizing-human-computer-interaction-a-comprehensive-survey-on-27ae2b4a8965" },
-    ],
-    links: [
-      { label: "Paper", href: "https://arxiv.org/pdf/2411.18279" },
-      { label: "GitHub Code", href: "https://github.com/vyokky/LLM-Brained-GUI-Agents-Survey" },
-      { label: "Website", href: "https://vyokky.github.io/LLM-Brained-GUI-Agents-Survey/" },
-    ],
-  },
-  {
-    title: "Large Action Models for GUI Agents",
-    image: lam,
-    alt: "Large Action Model training pipeline",
-    desc: "LLMs are good at generating text, but not at executing actions? Not anymore. A detailed pipeline for training <b>Large Action Models</b> (LAMs) from inception to implementation: data collection and preprocessing, model training and evaluation, and tools for deploying LAMs in real applications, as part of the <b>UFO</b> initiative.",
-    media: [
-      { label: "微软华人团队最新研究：从LLM到LAM，让大模型真正具有「行动力」！", href: "https://mp.weixin.qq.com/s/BVFV8v6KGcpKoz_TYdBdAA" },
-      { label: "无直接数据可用，AI怎么学会「干活」？微软团队揭秘AI从语言到行动的进化之路", href: "https://mp.weixin.qq.com/s/6FHrOMXTCUmKS2GrWrzzrA" },
-      { label: "Microsoft's new Large Action Model can perform some tasks in Word", href: "https://the-decoder.com/microsofts-new-large-action-model-can-perform-some-tasks-in-word/" },
-    ],
-    links: [
-      { label: "GitHub Code", href: "https://github.com/microsoft/UFO/tree/main/dataflow" },
-      { label: "Docs", href: "https://microsoft.github.io/UFO/dataflow/overview/" },
-      { label: "Paper", href: "https://arxiv.org/pdf/2412.10047" },
+      { label: "Paper", href: "https://arxiv.org/pdf/2402.07939" },
     ],
   },
 ];
 
-const btn =
-  "rounded-lg bg-accent-soft/60 px-4 py-2 text-sm font-medium whitespace-nowrap text-accent-deep shadow-xs transition hover:bg-accent hover:text-white";
+const btn = "btn-tonal rounded-lg px-4 py-2 text-sm font-medium whitespace-nowrap";
 const mediaLink = "text-accent-ink hover:text-accent-deep hover:underline";
+const chip = "inline-flex items-center rounded-full border border-accent/30 bg-accent/10 px-2.5 py-0.5 text-xs font-medium text-accent-ink";
 ---
 
 <Section id="projects" title="Featured Projects">
-  <p class="-mt-1 mb-6 text-gray-600">
-    The UFO family (UFO, UFO², UFO³) has <strong class="text-gray-800">10K+ GitHub stars</strong> and <strong class="text-gray-800">1K+ forks</strong>;
-    the survey and Large Action Models grew around it.
+  <p class="-mt-2 mb-8 max-w-[72ch] text-gray-600">
+    NorthCUA, which I lead at Beipo, and the UFO family I built at Microsoft (UFO, UFO², UFO³), which has
+    <strong class="text-gray-800">10K+ GitHub stars</strong> and <strong class="text-gray-800">1K+ forks</strong>.
   </p>
 
-  <div class="space-y-6">
-    <!-- UFO³: the feature, full width -->
+  <div class="space-y-8">
+    <!-- ================= NorthCUA (compact) ================= -->
+    <article id="northcua" data-reveal class="beam-border shadow-lift">
+      <div class="relative overflow-clip rounded-[15px] bg-white">
+        <div aria-hidden="true" class="dot-grid absolute inset-0"></div>
+        <div aria-hidden="true" class="absolute -top-28 -right-28 h-80 w-80 rounded-full bg-accent-soft/25 blur-3xl"></div>
+
+        <div class="relative grid gap-8 p-6 sm:p-8 md:p-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-12">
+          <div class="min-w-0">
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-gray-500">
+              <span class={chip}>
+                <span class="pulse-dot mr-2 inline-block h-1.5 w-1.5 rounded-full bg-accent"></span>
+                Open source, Nov 2026
+              </span>
+              <span>Project lead · co-first author · Beipo</span>
+            </div>
+            <h3 class="mt-4 text-4xl leading-[0.95] font-bold tracking-[-0.035em] text-gray-800 md:text-5xl">
+              North<span class="text-accent">CUA</span>
+            </h3>
+            <p class="mt-2 tracking-tight text-gray-600 md:text-lg">Turbocharging Computer-Use Agents through Experience at Scale</p>
+            <p class="mt-4 leading-relaxed text-gray-600">
+              An experience-driven computer-use agent system for desktop applications and the web: a unified harness that
+              executes and verifies long-horizon tasks, an experience flywheel that turns weak spots into training data, and
+              staged post-training that turns it into stronger policies. Its open models are state-of-the-art among open-source
+              models (reported settings) in GUI grounding, desktop execution and web interaction.
+            </p>
+            <div class="mt-6 flex flex-wrap gap-3">
+              {
+                NC_LINKS.map((l) => (
+                  <a
+                    href={l.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class:list={[
+                      "group inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium whitespace-nowrap",
+                      l.primary ? "btn-primary" : "surface surface-hover text-accent-ink hover:-translate-y-px",
+                    ]}
+                  >
+                    {l.icon === "report" && <FileText size={15} />}
+                    {l.icon === "globe" && <Globe size={15} />}
+                    {l.icon === "layers" && <Layers size={15} />}
+                    {l.icon === "github" && <BrandIcon name="github" size={14} />}
+                    {l.label}
+                    <ArrowUpRight size={13} className="opacity-70 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </a>
+                ))
+              }
+            </div>
+          </div>
+
+          <div class="glow-card surface self-start rounded-xl p-5 md:p-6">
+            <ModelBench client:visible />
+          </div>
+
+          <!-- The experience loop, one line: a signal passes stage to stage and back to the start -->
+          <div class="lg:col-span-2">
+            <ol class="loop-strip grid grid-cols-2 gap-2 sm:grid-cols-[repeat(4,minmax(0,1fr))_auto] sm:items-center sm:gap-0" aria-label="The NorthCUA experience loop">
+              {
+                NC_LOOP.map((st, i) => (
+                  <li class="loop-step surface flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm sm:mr-5" style={`--i:${i}`} title={st.d}>
+                    <span class="loop-num grid h-6 w-6 shrink-0 place-items-center rounded-full text-[11px] font-semibold tabular-nums">{i + 1}</span>
+                    <span class="min-w-0">
+                      <span class="block font-medium text-gray-800">{st.k}</span>
+                      <span class="block truncate text-xs text-gray-500">{st.s}</span>
+                    </span>
+                  </li>
+                ))
+              }
+              <li aria-hidden="true" class="hidden text-accent-ink sm:block" title="back to the harness">↺</li>
+            </ol>
+            <p class="mt-3 text-xs leading-relaxed text-gray-500">
+              2.3× lower mean task time with NorthCUA-Ultrafast (pre-RL Nano, 320 fixed successful WebArena-Verified tasks, 60.6% vs 64.2% success).
+            </p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ================= UFO³ (wide) ================= -->
     <article
       data-reveal
-      class="glow-card grid gap-8 rounded-xl border border-hairline bg-gray-50/80 p-6 shadow-card transition duration-500 hover:-translate-y-1 hover:shadow-lift md:p-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]"
+      data-tilt="0.4"
+      class="tilt glow-card surface surface-hover grid gap-8 rounded-2xl p-6 md:p-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]"
     >
       <div class="self-center lg:order-2">
         <Picture
@@ -100,11 +175,12 @@ const mediaLink = "text-accent-ink hover:text-accent-deep hover:underline";
           widths={[480, 800, 1200, 1600]}
           sizes="(min-width: 1024px) 540px, 92vw"
           alt="UFO³ Galaxy: one agent orchestrating Windows, Linux, phones, tablets and cloud devices"
-          class="h-auto w-full rounded-lg shadow-card"
+          class="h-auto w-full rounded-xl shadow-lift ring-1 ring-black/5"
         />
       </div>
       <div class="min-w-0 lg:order-1">
-        <h3 class="mb-3 text-2xl font-semibold tracking-tight text-gray-800">UFO³: Galaxy, Multi-Device Orchestration Framework</h3>
+        <span class={chip}>arXiv 2025</span>
+        <h3 class="mt-3 mb-3 text-2xl font-semibold tracking-tight text-gray-800">UFO³: Galaxy, Multi-Device Orchestration Framework</h3>
         <p class="mb-4 text-gray-600">
           UFO³ introduces Galaxy, a multi-device orchestration framework that coordinates intelligent agents across heterogeneous platforms. It
           is built on five tightly integrated design principles:
@@ -133,27 +209,26 @@ const mediaLink = "text-accent-ink hover:text-accent-deep hover:underline";
       </div>
     </article>
 
-    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <!-- ================= UFO² + UFO ================= -->
+    <div class="grid gap-8 md:grid-cols-2">
       {
-        CARDS.map((p) => (
-          <article
-            data-reveal
-            class="glow-card flex flex-col rounded-xl border border-hairline bg-gray-50/80 p-6 shadow-card transition duration-500 hover:-translate-y-1 hover:shadow-lift"
-          >
-            <h3 class="mb-3 text-xl font-semibold tracking-tight text-gray-800">{p.title}</h3>
-            <div class="mb-4">
+        PAIR.map((p) => (
+          <article data-reveal class="tilt glow-card surface surface-hover flex flex-col rounded-2xl p-6 md:p-7">
+            <span class:list={[chip, "self-start"]}>{p.tag}</span>
+            <h3 class="mt-3 mb-4 text-xl font-semibold tracking-tight text-gray-800">{p.title}</h3>
+            <div class="mb-5">
               <Picture
                 src={p.image}
                 formats={["avif", "webp"]}
                 fallbackFormat="webp"
-                widths={[400, 700, 1000]}
-                sizes="(min-width: 1024px) 340px, (min-width: 768px) 45vw, 92vw"
+                widths={[400, 700, 1000, 1400]}
+                sizes="(min-width: 768px) 520px, 92vw"
                 alt={p.alt}
-                class="h-auto w-full rounded-lg shadow-card"
+                class="h-auto w-full rounded-xl bg-white shadow-card ring-1 ring-black/5"
               />
             </div>
-            <p class="mb-4 text-[15px] leading-relaxed text-gray-600" set:html={p.desc} />
-            <div class="mb-5">
+            <p class="mb-5 text-[15px] leading-relaxed text-gray-600" set:html={p.desc} />
+            <div class="mb-6">
               <h4 class="mb-2 text-sm font-semibold text-gray-800">Media coverage</h4>
               <ul class="ml-4 list-outside list-disc space-y-1 text-sm text-gray-600">
                 {p.media.map((m) => (
@@ -165,7 +240,7 @@ const mediaLink = "text-accent-ink hover:text-accent-deep hover:underline";
                 ))}
               </ul>
             </div>
-            <div class="mt-auto flex flex-wrap gap-3 pt-1">
+            <div class="mt-auto flex flex-wrap gap-3">
               {p.links.map((l) => (
                 <a class={btn} href={l.href} target="_blank" rel="noopener noreferrer">
                   {l.label}

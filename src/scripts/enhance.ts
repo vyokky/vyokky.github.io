@@ -92,3 +92,52 @@ if (FINE && !REDUCED) {
     { passive: true },
   );
 }
+
+/* Pointer tilt for project cards: ±5° toward the cursor; CSS eases it home on leave. */
+if (FINE && !REDUCED) {
+  document.querySelectorAll<HTMLElement>(".tilt").forEach((card) => {
+    card.addEventListener("pointermove", (e) => {
+      const r = card.getBoundingClientRect();
+      const k = Number(card.dataset.tilt || 1); // wide cards tilt less
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      card.dataset.tilting = "";
+      card.style.setProperty("--tx", `${(-py * 5 * k).toFixed(2)}deg`);
+      card.style.setProperty("--ty", `${(px * 6 * k).toFixed(2)}deg`);
+    });
+    card.addEventListener("pointerleave", () => {
+      delete card.dataset.tilting;
+      card.style.removeProperty("--tx");
+      card.style.removeProperty("--ty");
+    });
+  });
+}
+
+/* Hero depth: the avatar rig turns toward the pointer and the floor's vanishing point follows. */
+if (FINE && !REDUCED) {
+  const hero = document.getElementById("top");
+  const rig = document.querySelector<HTMLElement>(".avatar-rig");
+  const floor = document.querySelector<HTMLElement>(".grid-floor");
+  if (hero && rig) {
+    let tx = 0, ty = 0, cx = 0, cy = 0, raf = 0;
+    const step = () => {
+      cx += (tx - cx) * 0.08;
+      cy += (ty - cy) * 0.08;
+      rig.style.setProperty("--ry", `${(cx * 14).toFixed(2)}deg`);
+      rig.style.setProperty("--rx", `${(-cy * 10).toFixed(2)}deg`);
+      floor?.style.setProperty("--po", `${(50 + cx * 18).toFixed(1)}%`);
+      raf = Math.abs(tx - cx) + Math.abs(ty - cy) > 0.001 ? requestAnimationFrame(step) : 0;
+    };
+    hero.addEventListener("pointermove", (e) => {
+      const r = hero.getBoundingClientRect();
+      tx = (e.clientX - r.left) / r.width - 0.5;
+      ty = (e.clientY - r.top) / r.height - 0.5;
+      if (!raf) raf = requestAnimationFrame(step);
+    });
+    hero.addEventListener("pointerleave", () => {
+      tx = 0;
+      ty = 0;
+      if (!raf) raf = requestAnimationFrame(step);
+    });
+  }
+}

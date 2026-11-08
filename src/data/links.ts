@@ -4,7 +4,6 @@ export const LINKEDIN = "https://www.linkedin.com/in/chaoyun-zhang-8221b012a/?or
 export const EMAIL = "vyokky@163.com";
 
 export const SECTIONS = [
-  { id: "northcua", title: "NorthCUA" },
   { id: "about", title: "About" },
   { id: "experience", title: "Experience" },
   { id: "news", title: "News" },
