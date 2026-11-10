@@ -24,7 +24,7 @@ const T = zh
       cta: "正在负责 NorthCUA",
       scholar: "谷歌学术",
       email: "邮箱",
-      stats: ["Google Scholar 引用", "UFO GitHub Stars", "论文", "开源 NorthCUA 模型"],
+      stats: ["UFO GitHub Stars", "论文", "开源 NorthCUA 模型"],
     }
   : {
       eyebrow: "张朝运",
@@ -34,15 +34,14 @@ const T = zh
       cta: "Now leading NorthCUA",
       scholar: "Scholar",
       email: "Email",
-      stats: ["Citations", "UFO GitHub stars", "Publications", "Open NorthCUA models"],
+      stats: ["UFO GitHub stars", "Publications", "Open NorthCUA models"],
     };
 
 // Proof band: every number links to where it comes from.
 const STATS = [
-  { value: "8,100+", label: T.stats[0], href: SCHOLAR },
-  { value: "10K+", label: T.stats[1], href: "https://github.com/microsoft/UFO" },
-  { value: String(publications.length), label: T.stats[2], href: "#publications" },
-  { value: "3", label: T.stats[3], href: "https://huggingface.co/beipo-ai" },
+  { value: "10K+", label: T.stats[0], href: "https://github.com/microsoft/UFO" },
+  { value: String(publications.length), label: T.stats[1], href: "#publications" },
+  { value: "3", label: T.stats[2], href: "https://huggingface.co/beipo-ai" },
 ];
 ---
 
@@ -123,7 +122,7 @@ const STATS = [
       </div>
     </div>
 
-    <div class="intro glass mt-12 mb-10 grid grid-cols-2 overflow-hidden rounded-2xl md:grid-cols-4" style="--d: 480ms">
+    <div class="intro glass mt-12 mb-10 grid grid-cols-3 overflow-hidden rounded-2xl" style="--d: 480ms">
       {
         STATS.map((s, i) => (
           <a
@@ -131,10 +130,8 @@ const STATS = [
             target={s.href.startsWith("#") ? undefined : "_blank"}
             rel="noopener noreferrer"
             class:list={[
-              "group flex flex-col-reverse gap-1 px-5 py-5 transition-colors hover:bg-white/60 md:px-7 md:py-6",
-              i % 2 === 1 && "border-l border-hairline",
-              i === 2 && "md:border-l md:border-hairline",
-              i > 1 && "border-t border-hairline md:border-t-0",
+              "group flex flex-col-reverse justify-end gap-1 px-4 py-5 transition-colors hover:bg-white/60 md:px-7 md:py-6",
+              i > 0 && "border-l border-hairline",
             ]}
           >
             <span class="t-caption flex items-center gap-1 transition-colors group-hover:text-accent-ink">
