@@ -1,11 +1,10 @@
 ---
 import { Image } from "astro:assets";
-import { ArrowRight, ArrowUpRight, Mail } from "lucide-react";
+import { ArrowRight, Mail } from "lucide-react";
 import NetworkField from "../islands/NetworkField";
 import BrandIcon from "../components/BrandIcon.astro";
 import DotFrame from "../components/DotFrame.astro";
 import profile from "../assets/profile.jpg";
-import { publications } from "../data/publications";
 import { EMAIL, GITHUB, LINKEDIN, SCHOLAR } from "../data/links";
 import type { Lang } from "../i18n";
 
@@ -24,7 +23,6 @@ const T = zh
       cta: "正在负责 NorthCUA",
       scholar: "谷歌学术",
       email: "邮箱",
-      stats: ["UFO GitHub Stars", "论文", "开源 NorthCUA 模型"],
     }
   : {
       eyebrow: "张朝运",
@@ -34,15 +32,7 @@ const T = zh
       cta: "Now leading NorthCUA",
       scholar: "Scholar",
       email: "Email",
-      stats: ["UFO GitHub stars", "Publications", "Open NorthCUA models"],
     };
-
-// Proof band: every number links to where it comes from.
-const STATS = [
-  { value: "10K+", label: T.stats[0], href: "https://github.com/microsoft/UFO" },
-  { value: String(publications.length), label: T.stats[1], href: "#publications" },
-  { value: "3", label: T.stats[2], href: "https://huggingface.co/beipo-ai" },
-];
 ---
 
 <header id="top" class="relative overflow-hidden bg-accent-soft/10">
@@ -55,7 +45,7 @@ const STATS = [
   >
   </div>
 
-  <div class="relative container mx-auto flex max-w-6xl flex-col px-5 md:min-h-[calc(100dvh-var(--nav-h))] md:px-8">
+  <div class="relative container mx-auto flex max-w-6xl flex-col px-5 pb-16 md:min-h-[min(48rem,calc(100dvh-var(--nav-h)))] md:px-8 md:pb-12">
     <div class="flex flex-1 flex-col-reverse items-center gap-12 pt-14 md:flex-row md:gap-16 md:pt-10">
       <div class="w-full min-w-0 flex-1">
         <p class="intro t-meta mb-5 flex items-center gap-2 text-accent-ink" style="--d: 0ms">
@@ -120,28 +110,6 @@ const STATS = [
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="intro glass mt-12 mb-10 grid grid-cols-3 overflow-hidden rounded-2xl" style="--d: 480ms">
-      {
-        STATS.map((s, i) => (
-          <a
-            href={s.href}
-            target={s.href.startsWith("#") ? undefined : "_blank"}
-            rel="noopener noreferrer"
-            class:list={[
-              "group flex flex-col-reverse justify-end gap-1 px-4 py-5 transition-colors hover:bg-white/60 md:px-7 md:py-6",
-              i > 0 && "border-l border-hairline",
-            ]}
-          >
-            <span class="t-caption flex items-center gap-1 transition-colors group-hover:text-accent-ink">
-              {s.label}
-              <ArrowUpRight size={12} className="opacity-0 transition-opacity group-hover:opacity-100" />
-            </span>
-            <span class="text-[1.75rem] leading-tight font-semibold tracking-[-0.035em] text-gray-900 tabular-nums md:text-[2.25rem]">{s.value}</span>
-          </a>
-        ))
-      }
     </div>
   </div>
 </header>
